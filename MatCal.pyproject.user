@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 9.0.1, 2023-03-14T10:24:46. -->
+<!-- Written by QtCreator 9.0.1, 2023-03-14T23:13:02. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -99,9 +99,16 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Python.PysideBuildStep</value>
-      <value type="QString" key="Python.PySideProjectTool">/home/twistingcamel/miniconda3/bin/pyside6-project</value>
+      <value type="QString" key="Python.PySideProjectTool">/home/twistingcamel/penv/PySide6/bin/pyside6-project</value>
      </valuemap>
-     <value type="qlonglong" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
+     <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">
+      <value type="bool" key="ProjectExplorer.BuildStep.Enabled">false</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">uiCompiler.py</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Command">python</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}</value>
+      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.ProcessStep</value>
+     </valuemap>
+     <value type="qlonglong" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Build</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">ProjectExplorer.BuildSteps.Build</value>
@@ -144,7 +151,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">MainWindow.py</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">PythonEditor.RunConfiguration./home/twistingcamel/programs/kmitl/2/2/SEP/MatCal/MatCal/MainWindow.py</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/twistingcamel/programs/kmitl/2/2/SEP/MatCal/MatCal/MainWindow.py</value>
-    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{b62d022e-536d-41d7-83e3-28eaa35aabe7}</value>
+    <value type="QString" key="PythonEditor.RunConfiguation.Interpreter">{f54e7eec-df4a-4f10-b9c4-d80b80768eea}</value>
     <value type="QString" key="PythonEditor.RunConfiguation.Script">/home/twistingcamel/programs/kmitl/2/2/SEP/MatCal/MatCal/MainWindow.py</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>

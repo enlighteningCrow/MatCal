@@ -22,6 +22,9 @@ class DimensionEditor(QWidget):
         # self.hl0 = QHBoxLayout(self)
         # self.hl0 = QHBoxLayout(self)
 
+    def updateFrameMatrix(self):
+        self.frameEditor.updateMatrix()
+
     def incrementDimensions(self):
         print("inc")
         self.dimensions += 1
@@ -30,7 +33,8 @@ class DimensionEditor(QWidget):
             self.dimIndSpins.append(QSpinBox(self))
             self.vl.addWidget(self.dimIndSpins[-1])
         else:
-            self.frameEditor.updateMatrix()
+            pass
+        self.updateFrameMatrix()
         # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dimIndSpins)
 
     def decrementDimensions(self):

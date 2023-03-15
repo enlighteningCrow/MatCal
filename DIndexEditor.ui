@@ -25,10 +25,10 @@
     </widget>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="dimSize"/>
+    <widget class="QSpinBox" name="dimSize"/>
    </item>
    <item>
-    <widget class="QDoubleSpinBox" name="curInd"/>
+    <widget class="QSpinBox" name="curInd"/>
    </item>
   </layout>
  </widget>

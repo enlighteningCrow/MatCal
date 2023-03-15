@@ -1,4 +1,7 @@
 # This Python file uses the following encoding: utf-8
+
+from uiCompiler import compileUi
+compileUi()
 import os
 from pathlib import Path
 import sys
