@@ -1,6 +1,11 @@
 # This Python file uses the following encoding: utf-8
 
+import pip
+
+failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
+
 from uiCompiler import compileUi
+
 compileUi()
 import os
 from pathlib import Path
@@ -11,7 +16,6 @@ from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
 from DimensionEditor import DimensionEditor
 from MatrixEditor import MatrixEditor
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
