@@ -4,13 +4,16 @@ import sys
 
 from glob import glob
 import PySide6
+from PySide6.QtCore import QDirIterator
 
 
 def compileUi():
     uicPath = Path(PySide6.__file__).parent / "Qt" / "libexec" / "uic"
     if not uicPath.exists():
+        uicPath = Path(PySide6.__file__).parent / "Qt" / "libexec" / "uic"
         print("uic executable not found at path: \"" + str(uicPath))
-        sys.exit(1)
+        return
+        # sys.exit(1)
     print("uic executable exists at path: \"" + str(uicPath))
     for i in glob("*.ui"):
         path = Path(i)
