@@ -4,6 +4,7 @@ from ui_DIndexEditor import Ui_Form
 from torch import Tensor
 
 
+#TODO: Make it hide the curIndex if the frameEditor is set to this dimension
 class DIndexEditor(QWidget):
     instances = 0
 
