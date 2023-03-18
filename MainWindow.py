@@ -2,11 +2,11 @@
 
 import pip
 
-failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
+# failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
 
 from uiCompiler import compileUi
 
-compileUi()
+# compileUi()
 import os
 from pathlib import Path
 import sys
