@@ -21,14 +21,14 @@ class Binding:
         self.index = index
         self.prevValue = None
 
-    def __call__(self, value, firstCall = False):
+    def __call__(self, value, firstCall=False):
         self.frame.matrix[self.index[: len(self.matrix.shape)]] = value
 
 
 class FrameEditor(QWidget):
 
     def __init__(
-        self, mat: Tensor, dimensionEditor: 'DimensionEditor', parent = None
+        self, mat: Tensor, dimensionEditor: 'DimensionEditor', parent=None
     ):
         super().__init__(parent)
         self.dimensionEditor = dimensionEditor
@@ -61,6 +61,7 @@ class FrameEditor(QWidget):
         self.dimensionEditor.updateDimensions(
             self.xDimSpin.value(), self.yDimSpin.value()
         )
+
         if self.prevXVal is not None:
             self.dimensionEditor.dindEditors[self.prevXVal].showCurInd()
 
@@ -77,6 +78,8 @@ class FrameEditor(QWidget):
             "(prevXVal: %d, prevYVal: %d)" %
             (self.xDimSpin.value(), self.yDimSpin.value())
         )
+        self.dimensionEditor.updateDimensions(
+            self.xDimSpin.value(), self.yDimSpin.value())
         # print(value)
 
     def updateDimensionsCount(self, dimensions: int):
@@ -118,7 +121,7 @@ class FrameEditor(QWidget):
                 wid.setParent(None)
                 self.gl.removeWidget(wid)
                 counterI += 1
-        for i in self.spinboxes[shapen :]:
+        for i in self.spinboxes[shapen:]:
             for j in i:
                 wid = i.pop()
                 wid.disconnect()
@@ -126,7 +129,8 @@ class FrameEditor(QWidget):
                 self.gl.removeWidget(wid)
         self.spinboxes = self.spinboxes[: shapen]
         while len(self.spinboxes) < shapem:
-            self.spinboxes.append([QDoubleSpinBox(self) for i in range(shapen)])
+            self.spinboxes.append([QDoubleSpinBox(self)
+                                  for i in range(shapen)])
             for i in range(shapen):
                 self.spinboxes[-1][i].valueChanged.connect(
                     Binding(self, (len(self.spinboxes) - 1, i))

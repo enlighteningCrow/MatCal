@@ -3,10 +3,14 @@ from PySide6.QtWidgets import QWidget
 from ui_DIndexEditor import Ui_Form
 from torch import Tensor
 
+from PySide6.QtCore import Signal
+
 
 # TODO: Make it hide the curIndex if the frameEditor is set to this dimension
 class DIndexEditor(QWidget):
     instances = 0
+    sizeChange = Signal()
+    curIndChange = Signal()
 
     def __init__(
         self, tensor: Tensor, dimension: int, parent: 'DimensionEditor' = None
@@ -17,6 +21,8 @@ class DIndexEditor(QWidget):
         self.dimension = dimension
         self.__ui = Ui_Form()
         self.__ui.setupUi(self)
+        self.__ui.curInd.setValue(0)
+        self.__ui.dimSize.setValue(1)
         self.updateDimension()
 
     def __del__(self):

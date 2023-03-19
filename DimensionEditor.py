@@ -7,8 +7,36 @@ import torch
 
 from typing import List
 
-
 # TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
+
+
+class Binding:
+
+    def __init__(self, dimEdit: 'DimensionEditor', dim: int) -> None:
+        self.dimEdit = dimEdit
+        self.dim = dim
+
+    def updateSize(self, val: int) -> None:
+        #TODO: Make this change the dimensions
+        if val < self.dimEdit.matrix.shape[self.dim]:
+            self.dimEdit.matrix = self.dimEdit.matrix[(
+                (slice(None, None) if i != self.dim else slice(None, val))
+                for i in range(self.dim)
+            )]
+        elif val < self.dimEdit.matrix.shape[self.dim]:
+            shape = list(self.dimEdit.matrix.shape)
+            shape[self.dim] = self.dimEdit.matrix.shape[self.dim] - val
+            self.dimEdit.matrix = torch.cat(
+                (
+                    self.dimEdit.matrix,
+                    torch.ones(shape, device = self.dimEdit.matrix.device)
+                ), self.dim
+            )
+
+    def __call__(self, val: int) -> None:
+        return self.updateSize(val)
+
+
 class DimensionEditor(QWidget):
 
     def __init__(self, parent = None):
@@ -55,10 +83,14 @@ class DimensionEditor(QWidget):
         # else:
         #     pass
         # # self.
+        print(f"shape: {self.matrix.shape}; matrix: {self.matrix}")
         self.matrix = self.matrix.reshape(self.matrix.shape + tuple([1]))
+        b = Binding(self, len(self.dindEditors))
         self.dindEditors.append(
             DIndexEditor(self.matrix, self.dimensions, self)
         )
+        self.dindEditors[-1].sizeChange.connect(b)
+        self.dindEditors[-1].curIndChange.connect(self.updateFrameMatrix)
         self.vl.addWidget(self.dindEditors[-1])
         self.updateFrameMatrix()
         # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)

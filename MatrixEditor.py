@@ -12,7 +12,7 @@ from ui_MatrixEditor import Ui_Form
 
 class MatrixEditor(QWidget):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         # loader = QUiLoader()
         # path = Path(__file__).resolve().parent / "MatrixEditor.ui"
