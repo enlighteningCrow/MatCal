@@ -13,6 +13,9 @@ from PySide6.QtWidgets import (
 # In case you are reading this, there is NO ML or DL or any sort of AI in here; this is used solely for matrix calculations
 from torch import Tensor, tensor
 
+from typing import List
+from math import inf
+
 
 class Binding:
 
@@ -29,12 +32,17 @@ class Binding:
 class FrameEditor(QWidget):
 
     def __init__(
-        self, mat: Tensor, dimensionEditor: 'DimensionEditor', parent = None
+        self,
+        mat: Tensor,
+        dimensionEditor: 'DimensionEditor',
+        dimensions,
+        parent = None
     ):
-        super().__init__(parent)
+        self.initialized = False
+        super().__init__(parent if parent is not None else dimensionEditor)
         self.dimensionEditor = dimensionEditor
         self.matrix = mat
-        self.spinboxes = []
+        self.spinboxes: List[QDoubleSpinBox] = []
         self.glOuter = QGridLayout(self)
         self.scrArea = QScrollArea(self)
         self.gl = QGridLayout(self.scrArea)
@@ -54,14 +62,15 @@ class FrameEditor(QWidget):
         # self.dimX
         # self.glOuter.addWidget(self.gl, 0, 1)
         self.updateBindings()
-        self.updateDimensionsCount(0)
+        self.updateDimensionsCount(dimensions)
+        self.initialized = True
 
     def updateDimensions(self):
         # shape = self.dimensionEditor.matrix.shape
         # self.updateBindings()
-        self.dimensionEditor.updateDimensions(
-            self.xDimSpin.value(), self.yDimSpin.value()
-        )
+        # self.dimensionEditor.updateDimensions(
+        #     self.xDimSpin.value(), self.yDimSpin.value()
+        # )
 
         if self.prevXVal is not None:
             self.dimensionEditor.dindEditors[self.prevXVal].showCurInd()
@@ -75,16 +84,18 @@ class FrameEditor(QWidget):
         self.dimensionEditor.dindEditors[self.yDimSpin.value()].hideCurInd()
         self.prevYVal = self.yDimSpin.value()
 
-        print(
-            "(prevXVal: %d, prevYVal: %d)" %
-            (self.xDimSpin.value(), self.yDimSpin.value())
-        )
+        # print(
+        #     "(prevXVal: %d, prevYVal: %d)" %
+        #     (self.xDimSpin.value(), self.yDimSpin.value())
+        # )
         self.dimensionEditor.updateDimensions(
             self.xDimSpin.value(), self.yDimSpin.value()
         )
         # print(value)
 
     def updateDimensionsCount(self, dimensions: int):
+        self.xDimSpin.setMaximum(dimensions - 1)
+        self.yDimSpin.setMaximum(dimensions - 1)
         if dimensions >= 2:
             self.yDimLabel.show()
             self.yDimSpin.show()
@@ -97,7 +108,7 @@ class FrameEditor(QWidget):
         else:
             self.xDimLabel.hide()
             self.xDimSpin.hide()
-        if dimensions > 0:
+        if self.initialized:
             self.updateDimensions()
 
     def updateBindings(self):
@@ -116,6 +127,8 @@ class FrameEditor(QWidget):
                 i[-1].valueChanged.connect(
                     Binding(self, (counterI, len(i) - 1))
                 )
+                i[-1].setMaximum(inf)
+                i[-1].setMinimum(-inf)
                 self.gl.addWidget(i[-1], len(i) - 1, counterI)
             while len(i) > shapem:
                 wid = i.pop()
@@ -136,6 +149,8 @@ class FrameEditor(QWidget):
                 self.spinboxes[-1][i].valueChanged.connect(
                     Binding(self, (len(self.spinboxes) - 1, i))
                 )
+                self.spinboxes[-1][i].setMaximum(inf)
+                self.spinboxes[-1][i].setMinimum(-inf)
                 self.gl.addWidget(
                     self.spinboxes[-1][i], i,
                     len(self.spinboxes) - 1

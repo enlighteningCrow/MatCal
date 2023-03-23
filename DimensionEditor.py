@@ -41,7 +41,7 @@ class Binding:
 
 class DimensionEditor(QWidget):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent: 'MatrixEditor' = None):
         super().__init__(parent)
         self.hl = QHBoxLayout(self)
         self.vl = QVBoxLayout(self)
@@ -50,7 +50,9 @@ class DimensionEditor(QWidget):
         self.dindEditors: List[DIndexEditor] = []
         print("DimensionEditor")
         self.matrix = torch.empty(())
-        self.frameEditor = FrameEditor(self.matrix, self)
+        self.frameEditor = FrameEditor(
+            self.matrix, self, parent.getDimensions()
+        )
         self.hl.addWidget(self.frameEditor)
         self.dim0 = None
         self.dim1 = None
@@ -144,5 +146,4 @@ class DimensionEditor(QWidget):
         # self.dindEditors[dim1].hideCurInd()
         self.dim0 = dim0
         self.dim1 = dim1
-        if dim0 == dim1:
-            self.updateFrameMatrix(True)
+        self.updateFrameMatrix(dim0 == dim1)
