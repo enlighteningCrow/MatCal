@@ -1,27 +1,28 @@
 # This Python file uses the following encoding: utf-8
 
+from ui_MainWindow import Ui_MainWindow
+from MatrixEditor import MatrixEditor
+from DimensionEditor import DimensionEditor
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtCore import QFile
+from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
+import sys
+from pathlib import Path
+import os
 import pip
 
-failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
+# failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
 
 from uiCompiler import compileUi
 
 compileUi()
-import os
-from pathlib import Path
-import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
-from PySide6.QtCore import QFile
-from PySide6.QtUiTools import QUiLoader
-from DimensionEditor import DimensionEditor
-from MatrixEditor import MatrixEditor
-from ui_MainWindow import Ui_MainWindow
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

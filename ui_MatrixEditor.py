@@ -29,6 +29,8 @@ class Ui_Form(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.spinBox = QSpinBox(Form)
         self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMinimum(1)
+        self.spinBox.setValue(2)
 
         self.gridLayout.addWidget(self.spinBox, 1, 2, 1, 1)
 

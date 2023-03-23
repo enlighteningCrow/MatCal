@@ -21,14 +21,15 @@ class Binding:
         self.index = index
         self.prevValue = None
 
-    def __call__(self, value, firstCall=False):
+    def __call__(self, value, firstCall = False):
         self.frame.matrix[self.index[: len(self.matrix.shape)]] = value
 
 
+# TODO: Maybe rename to MatrixView
 class FrameEditor(QWidget):
 
     def __init__(
-        self, mat: Tensor, dimensionEditor: 'DimensionEditor', parent=None
+        self, mat: Tensor, dimensionEditor: 'DimensionEditor', parent = None
     ):
         super().__init__(parent)
         self.dimensionEditor = dimensionEditor
@@ -37,7 +38,7 @@ class FrameEditor(QWidget):
         self.glOuter = QGridLayout(self)
         self.scrArea = QScrollArea(self)
         self.gl = QGridLayout(self.scrArea)
-        self.glOuter.addWidget(self.scrArea, 1, 1, 2, 2)
+        self.glOuter.addWidget(self.scrArea, 1, 2, 1, 2)
         self.xDimLabel = QLabel("Dimension X:", self)
         self.yDimLabel = QLabel("Dimension Y:", self)
         self.xDimSpin = QSpinBox(self)
@@ -46,10 +47,10 @@ class FrameEditor(QWidget):
         self.yDimSpin.valueChanged.connect(self.updateDimensions)
         self.prevXVal = None
         self.prevYVal = None
-        self.glOuter.addWidget(self.xDimLabel, 0, 1)
+        self.glOuter.addWidget(self.xDimLabel, 0, 2)
         self.glOuter.addWidget(self.yDimLabel, 1, 0)
-        self.glOuter.addWidget(self.xDimSpin, 0, 2)
-        self.glOuter.addWidget(self.yDimSpin, 2, 0)
+        self.glOuter.addWidget(self.xDimSpin, 0, 3)
+        self.glOuter.addWidget(self.yDimSpin, 1, 1)
         # self.dimX
         # self.glOuter.addWidget(self.gl, 0, 1)
         self.updateBindings()
@@ -79,7 +80,8 @@ class FrameEditor(QWidget):
             (self.xDimSpin.value(), self.yDimSpin.value())
         )
         self.dimensionEditor.updateDimensions(
-            self.xDimSpin.value(), self.yDimSpin.value())
+            self.xDimSpin.value(), self.yDimSpin.value()
+        )
         # print(value)
 
     def updateDimensionsCount(self, dimensions: int):
@@ -121,7 +123,7 @@ class FrameEditor(QWidget):
                 wid.setParent(None)
                 self.gl.removeWidget(wid)
                 counterI += 1
-        for i in self.spinboxes[shapen:]:
+        for i in self.spinboxes[shapen :]:
             for j in i:
                 wid = i.pop()
                 wid.disconnect()
@@ -129,8 +131,7 @@ class FrameEditor(QWidget):
                 self.gl.removeWidget(wid)
         self.spinboxes = self.spinboxes[: shapen]
         while len(self.spinboxes) < shapem:
-            self.spinboxes.append([QDoubleSpinBox(self)
-                                  for i in range(shapen)])
+            self.spinboxes.append([QDoubleSpinBox(self) for i in range(shapen)])
             for i in range(shapen):
                 self.spinboxes[-1][i].valueChanged.connect(
                     Binding(self, (len(self.spinboxes) - 1, i))

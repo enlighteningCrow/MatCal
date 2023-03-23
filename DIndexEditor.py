@@ -23,6 +23,10 @@ class DIndexEditor(QWidget):
         self.__ui.setupUi(self)
         self.__ui.curInd.setValue(0)
         self.__ui.dimSize.setValue(1)
+        sp = self.__ui.curInd.sizePolicy()
+        sp.setRetainSizeWhenHidden(True)
+        self.__ui.curInd.setSizePolicy(sp)
+        # self.setSizePolicy(sp)
         self.updateDimension()
 
     def __del__(self):
