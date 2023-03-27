@@ -40,7 +40,7 @@ class FrameEditor(QWidget):
     ):
         self.initialized = False
         super().__init__(parent if parent is not None else dimensionEditor)
-        # self.dimensionEditor = dimensionEditor
+        self.dimensionEditor = dimensionEditor
         self.matrix = mat
         self.spinboxes: List[QDoubleSpinBox] = []
         self.glOuter = QGridLayout(self)
@@ -50,9 +50,11 @@ class FrameEditor(QWidget):
         self.xDimLabel = QLabel("Dimension X:", self)
         self.yDimLabel = QLabel("Dimension Y:", self)
         self.xDimSpin = QSpinBox(self)
-        # self.xDimSpin.valueChanged.connect(self.updateDimensions)
+        self.xDimSpin.valueChanged.connect(self.updateDimensions)
         self.yDimSpin = QSpinBox(self)
-        # self.yDimSpin.valueChanged.connect(self.updateDimensions)
+        self.yDimSpin.valueChanged.connect(self.updateDimensions)
+        self.prevXVal = None
+        self.prevYVal = None
         self.glOuter.addWidget(self.xDimLabel, 0, 2)
         self.glOuter.addWidget(self.yDimLabel, 1, 0)
         self.glOuter.addWidget(self.xDimSpin, 0, 3)
@@ -60,8 +62,54 @@ class FrameEditor(QWidget):
         # self.dimX
         # self.glOuter.addWidget(self.gl, 0, 1)
         self.updateBindings()
-        # self.updateDimensionsCount(dimensions)
+        self.updateDimensionsCount(dimensions)
         self.initialized = True
+
+    def updateDimensions(self):
+        # shape = self.dimensionEditor.matrix.shape
+        # self.updateBindings()
+        # self.dimensionEditor.updateDimensions(
+        #     self.xDimSpin.value(), self.yDimSpin.value()
+        # )
+
+        if self.prevXVal is not None:
+            self.dimensionEditor.dindEditors[self.prevXVal].showCurInd()
+
+        if self.prevYVal is not None:
+            self.dimensionEditor.dindEditors[self.prevYVal].showCurInd()
+
+        self.dimensionEditor.dindEditors[self.xDimSpin.value()].hideCurInd()
+        self.prevXVal = self.xDimSpin.value()
+
+        self.dimensionEditor.dindEditors[self.yDimSpin.value()].hideCurInd()
+        self.prevYVal = self.yDimSpin.value()
+
+        # print(
+        #     "(prevXVal: %d, prevYVal: %d)" %
+        #     (self.xDimSpin.value(), self.yDimSpin.value())
+        # )
+        self.dimensionEditor.updateDimensions(
+            self.xDimSpin.value(), self.yDimSpin.value()
+        )
+        # print(value)
+
+    def updateDimensionsCount(self, dimensions: int):
+        self.xDimSpin.setMaximum(dimensions - 1)
+        self.yDimSpin.setMaximum(dimensions - 1)
+        if dimensions >= 2:
+            self.yDimLabel.show()
+            self.yDimSpin.show()
+        else:
+            self.yDimLabel.hide()
+            self.yDimSpin.hide()
+        if dimensions >= 1:
+            self.xDimLabel.show()
+            self.xDimSpin.show()
+        else:
+            self.xDimLabel.hide()
+            self.xDimSpin.hide()
+        if self.initialized:
+            self.updateDimensions()
 
     def updateBindings(self):
         shape = self.matrix.shape

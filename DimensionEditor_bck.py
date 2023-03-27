@@ -13,7 +13,7 @@ from ui_DimensionEditor import Ui_Form
 # TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 
 
-class SizeBinding:
+class Binding:
 
     def __init__(self, dimEdit: 'DimensionEditor', dim: int) -> None:
         self.dimEdit = dimEdit
@@ -44,28 +44,36 @@ class DimensionEditor(QWidget):
 
     def __init__(self, parent: 'MatrixEditor' = None):
         super().__init__(parent)
-        self.initialized = False
+        self.hl = QHBoxLayout(self)
+        self.vl = QVBoxLayout(self)
+        self.hl.addLayout(self.vl)
         self.dimensions = 0
         self.dindEditors: List[DIndexEditor] = []
+        print("DimensionEditor")
         self.matrix = torch.zeros(())
-        self.__ui = Ui_Form()
-        self.__ui.setupUi(self)
         self.frameEditor = FrameEditor(
             self.matrix, self, parent.getDimensions()
         )
-        self.__ui.scrollArea.setWidget(self.frameEditor)
+        self.hl.addWidget(self.frameEditor)
         self.dim0 = None
         self.dim1 = None
-        # self.prevXVal = None
-        # self.prevYVal = None
+        # self.hl0 = QHBoxLayout(self)
+        # self.hl0 = QHBoxLayout(self)
 
-        self.xDimLabel = self.__ui.selectionXLabel
-        self.xDimSpin = self.__ui.selectionXSpinbox
-        self.yDimLabel = self.__ui.selectionYLabel
-        self.yDimSpin = self.__ui.selectionYSpinbox
+        # self.widg = QWidget(self)
+        # self.widg_hl = QHBoxLayout(self.widg)
+        # self.widg_DimensionLabel = QLabel("Dimension #", self.widg)
+        # self.widg_DimensionSize = QLabel("Dimension Size")
+        # self.widg_CurrentIndex = QLabel("Current Index")
+        # self.widg_hl.addWidget(self.widg_DimensionLabel)
+        # self.widg_hl.addWidget(self.widg_DimensionSize)
+        # self.widg_hl.addWidget(self.widg_CurrentIndex)
 
+        self.widg = QWidget(self)
+        self.labelsUi = Ui_Form()
+        self.labelsUi.setupUi(self.widg)
+        self.vl.addWidget(self.widg)
         self.changeDimensions(parent.getDimensions())
-        self.initialized = True
 
     def getCurrentFrame(self):
         currentFrame = tuple()
@@ -97,28 +105,13 @@ class DimensionEditor(QWidget):
         # # self.
         print(f"shape: {self.matrix.shape}; matrix: {self.matrix}")
         self.matrix = self.matrix.reshape(self.matrix.shape + tuple([1]))
-        b = SizeBinding(self, len(self.dindEditors))
-        self.dindEditors.append(DIndexEditor(self.dimensions, self))
-        #-TODO: Change this to connect directly to the spinboxes directly
-        curInd, dimSize = self.dindEditors[-1].getWidgets()
-
-        # self.dindEditors[-1].sizeChange.connect(b)
-        dimSize.valueChanged.connect(b)
-        """
-        TODO: Check if this is already handled by the connection of 
-        this slot to FrameEditor, which should have a slot that calls 
-        this updateDimensions (self.updateDimensions(dim0, dim1))
-        """
-        # self.dindEditors[-1].curIndChange.connect(self.updateFrameMatrix)
-        # curInd.valueChanged.connect(self.updateFrameMatrix)
-        # self.vl.addWidget(self.dindEditors[-1])
-        rowCount = self.__ui.tableWidget.rowCount()
-        self.__ui.tableWidget.insertRow(rowCount)
-        self.__ui.tableWidget.setCellWidget(
-            rowCount, 0, QLabel("%d" % (self.dimensions - 1), self)
+        b = Binding(self, len(self.dindEditors))
+        self.dindEditors.append(
+            DIndexEditor(self.matrix, self.dimensions, self)
         )
-        self.__ui.tableWidget.setCellWidget(rowCount, 1, dimSize)
-        self.__ui.tableWidget.setCellWidget(rowCount, 2, curInd)
+        self.dindEditors[-1].sizeChange.connect(b)
+        self.dindEditors[-1].curIndChange.connect(self.updateFrameMatrix)
+        self.vl.addWidget(self.dindEditors[-1])
         self.updateFrameMatrix()
         # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
 
@@ -134,12 +127,8 @@ class DimensionEditor(QWidget):
         #     self.dindEditors.pop(-1).setParent(None)
         #     # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
         self.matrix = self.matrix.reshape(self.matrix.shape[:-1])
-        # self.vl.removeWidget(self.dindEditors[-1])
-        de = self.dindEditors.pop(-1)
-        for i in de.getWidgets():
-            #TODO: Check if the signals from this are all disconnected
-            i.setParent(None)
-        self.__ui.tableWidget.removeRow(self.__ui.tableWidget.rowCount() - 1)
+        self.vl.removeWidget(self.dindEditors[-1])
+        self.dindEditors.pop(-1).setParent(None)
         self.dimensions -= 1
         self.updateFrameMatrix()
 
@@ -150,67 +139,12 @@ class DimensionEditor(QWidget):
             ) if self.dimensions < dim else self.decrementDimensions()
             # if self.dimensions < 2:
             #     self.frameEditor.updateMatrix(self.matrix)
-
-        # self.frameEditor.updateDimensionsCount(dim)
-        self.updateDimensionsCount(currentDimensions, dim)
-
+        self.frameEditor.updateDimensionsCount(dim)
         self.frameEditor.updateBindings()
 
-    def updateDimensions(self, currentDimensions: int, dimensions: int):
-        # shape = self.dimensionEditor.matrix.shape
-        # self.updateBindings()
-        # self.dimensionEditor.updateDimensions(
-        #     self.xDimSpin.value(), self.yDimSpin.value()
-        # )
-
-        if self.dim0 is not None and self.dim0 < dimensions:
-            self.dindEditors[self.dim0].showCurInd()
-            # if currentDimensions == dimensions:
-            #     self.dindEditors[self.dim0].setCurInd(0)
-
-        if self.dim1 is not None and self.dim1 < dimensions:
-            self.dindEditors[self.dim1].showCurInd()
-
-        if dimensions >= 1:
-            self.dindEditors[self.xDimSpin.value()].hideCurInd()
-            self.dim0 = self.xDimSpin.value()
-
-        if dimensions >= 2:
-            self.dindEditors[self.yDimSpin.value()].hideCurInd()
-            self.dim1 = self.yDimSpin.value()
-
-        # print(
-        #     "(prevXVal: %d, prevYVal: %d)" %
-        #     (self.xDimSpin.value(), self.yDimSpin.value())
-        # )
-        # self.updateDimensions(
-        #     self.xDimSpin.value(), self.yDimSpin.value()
-        # )
-        # print(value)
-
-        self.updateFrameMatrix(self.dim0 == self.dim1)
-
-    # def updateDimensions(self, dim0, dim1):
-    #     # self.dindEditors[dim0].hideCurInd()
-    #     # self.dindEditors[dim1].hideCurInd()
-    #     self.dim0 = dim0
-    #     self.dim1 = dim1
-    #     self.updateFrameMatrix(dim0 == dim1)
-
-    def updateDimensionsCount(self, currentDimensions: int, dimensions: int):
-        self.xDimSpin.setMaximum(dimensions - 1)
-        self.yDimSpin.setMaximum(dimensions - 1)
-        if dimensions >= 2:
-            self.yDimLabel.show()
-            self.yDimSpin.show()
-        else:
-            self.yDimLabel.hide()
-            self.yDimSpin.hide()
-        if dimensions >= 1:
-            self.xDimLabel.show()
-            self.xDimSpin.show()
-        else:
-            self.xDimLabel.hide()
-            self.xDimSpin.hide()
-        if self.initialized:
-            self.updateDimensions(currentDimensions, dimensions)
+    def updateDimensions(self, dim0, dim1):
+        # self.dindEditors[dim0].hideCurInd()
+        # self.dindEditors[dim1].hideCurInd()
+        self.dim0 = dim0
+        self.dim1 = dim1
+        self.updateFrameMatrix(dim0 == dim1)

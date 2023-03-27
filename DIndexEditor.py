@@ -1,56 +1,51 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QSpinBox
 from ui_DIndexEditor import Ui_Form
 from torch import Tensor
 
 from PySide6.QtCore import Signal
+from typing import Tuple
 
 
 # TODO: Make it hide the curIndex if the frameEditor is set to this dimension
 class DIndexEditor(QWidget):
-    instances = 0
     sizeChange = Signal()
     curIndChange = Signal()
 
     def __init__(
-        self, tensor: Tensor, dimension: int, parent: 'DimensionEditor' = None
+        #TODO: Look at removing this tensor from the initializer arguments
+        self,
+        tensor: Tensor,
+        dimension: int,
+        parent: 'DimensionEditor' = None
     ):
         super().__init__(parent)
-        self.tensor = tensor
-        self.instances += 1
+        # self.tensor = tensor
         self.dimension = dimension
-        self.__ui = Ui_Form()
-        self.__ui.setupUi(self)
-        self.__ui.curInd.setValue(0)
-        self.__ui.dimSize.setValue(1)
-        sp = self.__ui.curInd.sizePolicy()
-        sp.setRetainSizeWhenHidden(True)
-        self.__ui.curInd.setSizePolicy(sp)
+        self.curInd = QSpinBox(parent)
+        self.dimSize = QSpinBox(parent)
+        self.curInd.setValue(0)
+        self.dimSize.setValue(1)
         # self.setSizePolicy(sp)
-        self.updateDimension()
 
-    def __del__(self):
-        self.instances -= 1
+    def getWidgets(self) -> Tuple[QSpinBox, QSpinBox]:
+        return self.curInd, self.dimSize
 
-    def dimLabelName(self):
-        return str(self.dimension)
-        # return "Dimension #" + str(dimension)
+    # def dimLabelName(self):
+    #     return str(self.dimension)
+    # return "Dimension #" + str(dimension)
 
-    def updateDimension(self):
-        self.__ui.dimInd.setText(self.dimLabelName())
-        self.__ui.curInd.setValue(0)
-
-    def updateDimensionSize(self):
-        print(self.tensor.shape[self.dimension])
+    # def updateDimensionSize(self):
+    #     print(self.tensor.shape[self.dimension])
 
     def hideCurInd(self):
-        self.__ui.curInd.hide()
+        self.curInd.hide()
 
     def showCurInd(self):
-        self.__ui.curInd.show()
+        self.curInd.show()
 
     def getCurInd(self) -> int:
-        return self.__ui.curInd.value()
+        return self.curInd.value()
 
     def setCurInd(self, val: int):
-        self.__ui.curInd.setValue(val)
+        self.curInd.setValue(val)

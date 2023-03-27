@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'MatrixEditor.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 6.4.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -29,8 +29,9 @@ class Ui_Form(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.spinBox = QSpinBox(Form)
         self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimum(1)
-        self.spinBox.setValue(2)
+        self.spinBox.setMinimum(0)
+        self.spinBox.setMaximum(1000000000)
+        self.spinBox.setValue(0)
 
         self.gridLayout.addWidget(self.spinBox, 1, 2, 1, 1)
 
