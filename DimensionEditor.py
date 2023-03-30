@@ -22,7 +22,7 @@ class SizeBinding:
     def updateSize(self, val: int) -> None:
         # TODO: Make this change the dimensions
         if val < self.dimEdit.matrix.shape[self.dim]:
-            self.dimEdit.matrix = self.dimEdit.matrix[(
+            self.dimEdit.matrix = self.dimEdit.matrix[tuple(
                 (slice(None, None) if i != self.dim else slice(None, val))
                 for i in range(self.dim)
             )]
@@ -198,19 +198,21 @@ class DimensionEditor(QWidget):
     #     self.updateFrameMatrix(dim0 == dim1)
 
     def updateDimensionsCount(self, currentDimensions: int, dimensions: int):
-        self.xDimSpin.setMaximum(dimensions - 1)
-        self.yDimSpin.setMaximum(dimensions - 1)
+        self.xDimSpin.setMaximum(max(0, dimensions - 1))
+        self.yDimSpin.setMaximum(max(0, dimensions - 1))
         if dimensions >= 2:
             self.yDimLabel.show()
             self.yDimSpin.show()
         else:
-            self.yDimLabel.hide()
-            self.yDimSpin.hide()
+            # self.yDimLabel.hide()
+            # self.yDimSpin.hide()
+            pass
         if dimensions >= 1:
             self.xDimLabel.show()
             self.xDimSpin.show()
         else:
-            self.xDimLabel.hide()
-            self.xDimSpin.hide()
+            # self.xDimLabel.hide()
+            # self.xDimSpin.hide()
+            pass
         if self.initialized:
             self.updateDimensions(currentDimensions, dimensions)
