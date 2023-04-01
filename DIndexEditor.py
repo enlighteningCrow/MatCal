@@ -26,6 +26,7 @@ class DIndexEditor(QWidget):
         self.dimSize = QSpinBox(parent)
         self.curInd.setValue(0)
         self.dimSize.setValue(1)
+        self.dimSize.setMaximum(1_000_000_000)
         # self.setSizePolicy(sp)
 
     def getWidgets(self) -> Tuple[QSpinBox, QSpinBox]:

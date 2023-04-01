@@ -91,7 +91,10 @@ class DimensionEditor(QWidget):
             self.__ui.dimensionsTable.horizontalHeader().length() +
             self.__ui.dimensionsTable.verticalHeader().width() +
             self.__ui.dimensionsTable.frameWidth() * 2 + margins.left() +
-            margins.right()
+            margins.right() + 6 + (
+                self.__ui.dimensionsTable.verticalScrollBar().width() if
+                self.__ui.dimensionsTable.verticalScrollBar().isVisible() else 0
+            )
             # margins.left() + margins.right() + 2
         )
 
