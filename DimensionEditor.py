@@ -67,10 +67,19 @@ class DimensionEditor(QWidget):
         self.yDimSpin = self.__ui.selectionYSpinbox
 
         self.changeDimensions(parent.getDimensions())
-        self.updateDimensionsTableMaxSize()
+        # self.updateDimensionsTableMaxSize()
 
         # self.__ui.splitterEditor.setSizes(
         #     [self.__ui.dimensionsTable.width(), 0]
+        # )
+        self.__ui.dimensionsTable.horizontalHeader().geometriesChanged.connect(
+            self.udtmsImpl
+        )
+        self.__ui.dimensionsTable.verticalHeader().geometriesChanged.connect(
+            self.udtmsImpl
+        )
+        # self.__ui.dimensionsTable.layout().contentsMargins().connect(
+        #     self.udtmsImpl
         # )
         self.initialized = True
 
@@ -85,60 +94,6 @@ class DimensionEditor(QWidget):
             margins.right()
             # margins.left() + margins.right() + 2
         )
-
-    def updateDimensionsTableMaxSize(self):
-        # self.__ui.dimensionsTable.resizeColumnsToContents()
-        # self.__ui.dimensionsTable.setMaximumWidth(
-        #     self.__ui.dimensionsTable.maximumS()
-        # )
-        # print(
-        #     self.__ui.dimensionsTable.setSizeAdjustPolicy(
-        #         self.__ui.dimensionsTable.SizeAdjustPolicy.AdjustToContents
-        #     )
-        # )
-        # self.__ui.dimensionsLabel.setMaximumWidth(
-        #     self.__ui.dimensionsTable.horizontalHeader().length() + 2
-        # )
-        # self.__ui.dimensionsTable.setMaximumWidth(
-        #     self.__ui.dimensionsTable.horizontalHeader().length() + 2
-        # )
-
-        t = QTimer(self)
-        t.setSingleShot(True)
-        # t.setInterval(2000)
-        t.timeout.connect(self.udtmsImpl)
-        t.start(0)
-        # self.udtmsImpl()
-
-        # print(self.__ui.dimensionsTable.minimumSizeHint())
-
-        # self.__ui.dimensionWidget.setMaximumWidth(
-        #     self.__ui.dimensionsTable.minimumSizeHint().width()
-        # )
-
-        # self.__ui.dimensionWidget.setMaximumWidth(
-        #     sum(
-        #         [
-        #             self.__ui.dimensionsTable.sizeHintForColumn(
-        #                 self.__ui.dimensionsTable.columnCount()
-        #             ) for i in range(3)
-        #         ]
-        #     )
-        # )
-        # print(
-        #     "Set the max size to :",
-        #     sum(
-        #         [
-        #             self.__ui.dimensionsTable.sizeHintForColumn(
-        #                 self.__ui.dimensionsTable.columnCount()
-        #             ) for i in range(3)
-        #         ]
-        #     ), [
-        #         self.__ui.dimensionsTable.sizeHintForColumn(
-        #             self.__ui.dimensionsTable.columnCount()
-        #         ) for i in range(3)
-        #     ]
-        # )
 
     def getCurrentFrame(self):
         currentFrame = tuple()
@@ -230,7 +185,7 @@ class DimensionEditor(QWidget):
         self.updateDimensionsCount(currentDimensions, dim)
 
         self.frameEditor.updateBindings()
-        self.updateDimensionsTableMaxSize()
+        # self.updateDimensionsTableMaxSize()
 
     def updateDimensions(self, currentDimensions: int, dimensions: int):
         # shape = self.dimensionEditor.matrix.shape
