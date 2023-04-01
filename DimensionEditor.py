@@ -1,6 +1,8 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel
 
+from PySide6.QtCore import QTimer
+
 from FrameEditor import FrameEditor
 from DIndexEditor import DIndexEditor
 import torch
@@ -53,7 +55,7 @@ class DimensionEditor(QWidget):
         self.frameEditor = FrameEditor(
             self.matrix, self, parent.getDimensions()
         )
-        self.__ui.scrollArea.setWidget(self.frameEditor)
+        self.__ui.scrollAreaFE.setWidget(self.frameEditor)
         self.dim0 = None
         self.dim1 = None
         # self.prevXVal = None
@@ -65,7 +67,78 @@ class DimensionEditor(QWidget):
         self.yDimSpin = self.__ui.selectionYSpinbox
 
         self.changeDimensions(parent.getDimensions())
+        self.updateDimensionsTableMaxSize()
+
+        # self.__ui.splitterEditor.setSizes(
+        #     [self.__ui.dimensionsTable.width(), 0]
+        # )
         self.initialized = True
+
+    def udtmsImpl(self):
+        margins = self.__ui.dimensionWidget.layout().contentsMargins()
+        print("width =", self.__ui.dimensionsTable.verticalHeader().width())
+        print(margins)
+        self.__ui.dimensionWidget.setMaximumWidth(
+            self.__ui.dimensionsTable.horizontalHeader().length() +
+            self.__ui.dimensionsTable.verticalHeader().width() +
+            self.__ui.dimensionsTable.frameWidth() * 2 + margins.left() +
+            margins.right()
+            # margins.left() + margins.right() + 2
+        )
+
+    def updateDimensionsTableMaxSize(self):
+        # self.__ui.dimensionsTable.resizeColumnsToContents()
+        # self.__ui.dimensionsTable.setMaximumWidth(
+        #     self.__ui.dimensionsTable.maximumS()
+        # )
+        # print(
+        #     self.__ui.dimensionsTable.setSizeAdjustPolicy(
+        #         self.__ui.dimensionsTable.SizeAdjustPolicy.AdjustToContents
+        #     )
+        # )
+        # self.__ui.dimensionsLabel.setMaximumWidth(
+        #     self.__ui.dimensionsTable.horizontalHeader().length() + 2
+        # )
+        # self.__ui.dimensionsTable.setMaximumWidth(
+        #     self.__ui.dimensionsTable.horizontalHeader().length() + 2
+        # )
+
+        t = QTimer(self)
+        t.setSingleShot(True)
+        # t.setInterval(2000)
+        t.timeout.connect(self.udtmsImpl)
+        t.start(0)
+        # self.udtmsImpl()
+
+        # print(self.__ui.dimensionsTable.minimumSizeHint())
+
+        # self.__ui.dimensionWidget.setMaximumWidth(
+        #     self.__ui.dimensionsTable.minimumSizeHint().width()
+        # )
+
+        # self.__ui.dimensionWidget.setMaximumWidth(
+        #     sum(
+        #         [
+        #             self.__ui.dimensionsTable.sizeHintForColumn(
+        #                 self.__ui.dimensionsTable.columnCount()
+        #             ) for i in range(3)
+        #         ]
+        #     )
+        # )
+        # print(
+        #     "Set the max size to :",
+        #     sum(
+        #         [
+        #             self.__ui.dimensionsTable.sizeHintForColumn(
+        #                 self.__ui.dimensionsTable.columnCount()
+        #             ) for i in range(3)
+        #         ]
+        #     ), [
+        #         self.__ui.dimensionsTable.sizeHintForColumn(
+        #             self.__ui.dimensionsTable.columnCount()
+        #         ) for i in range(3)
+        #     ]
+        # )
 
     def getCurrentFrame(self):
         currentFrame = tuple()
@@ -112,13 +185,13 @@ class DimensionEditor(QWidget):
         # self.dindEditors[-1].curIndChange.connect(self.updateFrameMatrix)
         # curInd.valueChanged.connect(self.updateFrameMatrix)
         # self.vl.addWidget(self.dindEditors[-1])
-        rowCount = self.__ui.tableWidget.rowCount()
-        self.__ui.tableWidget.insertRow(rowCount)
-        self.__ui.tableWidget.setCellWidget(
-            rowCount, 0, QLabel("%d" % (self.dimensions - 1), self)
-        )
-        self.__ui.tableWidget.setCellWidget(rowCount, 1, dimSize)
-        self.__ui.tableWidget.setCellWidget(rowCount, 2, curInd)
+        rowCount = self.__ui.dimensionsTable.rowCount()
+        self.__ui.dimensionsTable.insertRow(rowCount)
+        # self.__ui.dimensionsTable.setCellWidget(
+        #     rowCount, 0, QLabel("%d" % (self.dimensions - 1), self)
+        # )
+        self.__ui.dimensionsTable.setCellWidget(rowCount, 0, dimSize)
+        self.__ui.dimensionsTable.setCellWidget(rowCount, 1, curInd)
         self.updateFrameMatrix()
         # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
 
@@ -139,7 +212,9 @@ class DimensionEditor(QWidget):
         for i in de.getWidgets():
             #TODO: Check if the signals from this are all disconnected
             i.setParent(None)
-        self.__ui.tableWidget.removeRow(self.__ui.tableWidget.rowCount() - 1)
+        self.__ui.dimensionsTable.removeRow(
+            self.__ui.dimensionsTable.rowCount() - 1
+        )
         self.dimensions -= 1
         self.updateFrameMatrix()
 
@@ -155,6 +230,7 @@ class DimensionEditor(QWidget):
         self.updateDimensionsCount(currentDimensions, dim)
 
         self.frameEditor.updateBindings()
+        self.updateDimensionsTableMaxSize()
 
     def updateDimensions(self, currentDimensions: int, dimensions: int):
         # shape = self.dimensionEditor.matrix.shape
@@ -204,15 +280,15 @@ class DimensionEditor(QWidget):
             self.yDimLabel.show()
             self.yDimSpin.show()
         else:
-            # self.yDimLabel.hide()
-            # self.yDimSpin.hide()
-            pass
+            self.yDimLabel.hide()
+            self.yDimSpin.hide()
+            # pass
         if dimensions >= 1:
             self.xDimLabel.show()
             self.xDimSpin.show()
         else:
-            # self.xDimLabel.hide()
-            # self.xDimSpin.hide()
-            pass
+            self.xDimLabel.hide()
+            self.xDimSpin.hide()
+            # pass
         if self.initialized:
             self.updateDimensions(currentDimensions, dimensions)
