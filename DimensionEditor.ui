@@ -40,7 +40,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QTableWidget" name="dimensionsTable">
+           <widget class="QTableView" name="dimensionsTable">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>1</horstretch>
@@ -53,16 +53,6 @@
             <property name="horizontalScrollMode">
              <enum>QAbstractItemView::ScrollPerPixel</enum>
             </property>
-            <column>
-             <property name="text">
-              <string>Size</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Selection</string>
-             </property>
-            </column>
            </widget>
           </item>
          </layout>
