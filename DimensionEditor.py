@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel, QTableView
 
-from PySide6.QtCore import QTimer, QModelIndex
+from PySide6.QtCore import QTimer, QModelIndex, Qt
 
 from PySide6.QtGui import QStandardItem, QStandardItemModel
 
@@ -99,6 +99,11 @@ class DimensionEditor(QWidget):
         self.__selectionItem = NNIntSI(0)
 
         self.changeDimensions(parent.getDimensions())
+        self.model.dataChanged.connect(
+            lambda x: self.model.itemFromIndex(x).setValue()
+        )
+        # self.model.dataChanged.connect(lambda x: print(self.model.data(x)))
+        # self.model.dataChanged.connect(lambda x: print(type(self.model.data(x))))
         self.initialized = True
 
     def udtmsImpl(self):
@@ -123,13 +128,13 @@ class DimensionEditor(QWidget):
                 currentFrame += tuple([slice(None, None)])
             else:
                 currentFrame += tuple([self.model.item(i, 1).getValue()])
-        print(currentFrame)
+        # print(currentFrame)
         return currentFrame
 
     def updateFrameMatrix(self, empty: bool = False):
         # mat = self.
-        print(self.matrix)
-        print(self.matrix.shape)
+        # print(self.matrix)
+        # print(self.matrix.shape)
         if empty:
             self.frameEditor.updateMatrix(torch.zeros(()))
         else:
@@ -238,16 +243,10 @@ class DimensionEditor(QWidget):
         self.frameEditor.updateBindings()
         # self.updateDimensionsTableMaxSize()
 
-    class __showHideDTWidgets():
-
-        def __init__(self, table, index: QModelIndex, show: bool):
-            self.index = index
-            self.show = show
-            self.table = table
-
-        def __call__(self):
-            op = QWidget.show if self.show else QWidget.hide
-            op(self.table.indexWidget(self.index))
+    # def __showHideDTWidgets(self, index: QModelIndex, show: bool):
+    #     # op = QWidget.show if show else QWidget.hide
+    #     # op(self.__ui.dimensionsTable.indexWidget(index))
+    #     self.model.item
 
     def updateDimensions(self, currentDimensions: int, dimensions: int):
         # shape = self.dimensionEditor.matrix.shape
@@ -256,15 +255,12 @@ class DimensionEditor(QWidget):
         #     self.xDimSpin.value(), self.yDimSpin.value()
         # )
 
-        t = QTimer(self)
-        t.setSingleShot(True)
+        # t = QTimer(self)
+        # t.setSingleShot(True)
         if self.dim0 is not None and self.dim0 < dimensions:
-            t.timeout.connect(
-                self.__showHideDTWidgets(
-                    self.__ui.dimensionsTable, self.model.index(self.dim0, 1),
-                    True
-                )
-            )
+            # t.timeout.connect(
+            self.model.item(self.dim0, 1).setData(Qt.ItemIsEnabled, True)
+            # )
             # self.__ui.dimensionsTable.indexWidget(
             #     self.model.index(self.dim0, 1)
             # ).show()
@@ -273,24 +269,19 @@ class DimensionEditor(QWidget):
             #     self.dindEditors[self.dim0].setCurInd(0)
 
         if self.dim1 is not None and self.dim1 < dimensions:
-            t.timeout.connect(
-                self.__showHideDTWidgets(
-                    self.__ui.dimensionsTable, self.model.index(self.dim1, 1),
-                    True
-                )
-            )
+            # t.timeout.connect(
+            self.model.item(self.dim1, 1).setData(Qt.ItemIsEnabled, True)
+            # )
             # self.__ui.dimensionsTable.indexWidget(
             #     self.model.index(self.dim1, 1)
             # ).show()
             # self.dindEditors[self.dim1].showCurInd()
 
         if dimensions >= 1:
-            t.timeout.connect(
-                self.__showHideDTWidgets(
-                    self.__ui.dimensionsTable,
-                    self.model.index(self.xDimSpin.value(), 1), False
-                )
-            )
+            # t.timeout.connect(
+            self.model.item(self.xDimSpin.value(),
+                            1).setData(Qt.ItemIsEnabled, False)
+            # )
             # self.__ui.dimensionsTable.indexWidget(
             #     self.model.index(self.xDimSpin.value(), 1)
             # ).hide()
@@ -298,12 +289,10 @@ class DimensionEditor(QWidget):
             self.dim0 = self.xDimSpin.value()
 
         if dimensions >= 2:
-            t.timeout.connect(
-                self.__showHideDTWidgets(
-                    self.__ui.dimensionsTable,
-                    self.model.index(self.yDimSpin.value(), 1), False
-                )
-            )
+            # t.timeout.connect(
+            self.model.item(self.yDimSpin.value(),
+                            1).setData(Qt.ItemIsEnabled, False)
+            # )
             # self.__ui.dimensionsTable.indexWidget(
             #     self.model.index(self.yDimSpin.value(), 1)
             # ).hide()
@@ -322,7 +311,7 @@ class DimensionEditor(QWidget):
         # self.__ui.dimensionsTable.sethidden
 
         self.updateFrameMatrix(self.dim0 == self.dim1)
-        t.start(0)
+        # t.start(0)
 
     # def updateDimensions(self, dim0, dim1):
     #     # self.dindEditors[dim0].hideCurInd()
