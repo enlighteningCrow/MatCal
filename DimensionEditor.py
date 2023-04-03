@@ -15,6 +15,7 @@ from typing import List
 from ui_DimensionEditor import Ui_Form
 
 from NNIntSI import NNIntSI, NNIntSIM
+from SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
 
 # TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 
@@ -67,8 +68,10 @@ class DimensionEditor(QWidget):
 
         self.xDimLabel = self.__ui.selectionXLabel
         self.xDimSpin = self.__ui.selectionXSpinbox
+        self.xDimSpin.valueChanged.connect(self.updateDimensions_t)
         self.yDimLabel = self.__ui.selectionYLabel
         self.yDimSpin = self.__ui.selectionYSpinbox
+        self.yDimSpin.valueChanged.connect(self.updateDimensions_t)
         # self.updateDimensionsTableMaxSize()
 
         # self.__ui.splitterEditor.setSizes(
@@ -94,17 +97,36 @@ class DimensionEditor(QWidget):
         self.__ui.dimensionsTable.setModel(self.model)
         self.model.setColumnCount(2)
         self.model.setHorizontalHeaderLabels(["Size", "Selection"])
-        self.__ui.dimensionsTable.setEditTriggers(QTableView.DoubleClicked)
+        # self.__ui.dimensionsTable.setEditTriggers(QTableView.DoubleClicked)
         self.__sizeItem = NNIntSI(1)
         self.__selectionItem = NNIntSI(0)
+        # self.model.item(1, 3).getValue()
 
         self.changeDimensions(parent.getDimensions())
-        self.model.dataChanged.connect(
-            lambda x: self.model.itemFromIndex(x).setValue()
-        )
+        spbidIndex = IndexSpinBoxDelegate(self.__ui.dimensionsTable)
+        spbidSize = SpinBoxDelegate(self.__ui.dimensionsTable, 1)
+        self.__ui.dimensionsTable.setItemDelegateForColumn(0, spbidSize)
+        self.__ui.dimensionsTable.setItemDelegateForColumn(1, spbidIndex)
+
+        self.updateDimensionsCount(self.model.rowCount(), self.model.rowCount())
+        # self.model.dataChanged.connect(
+        #     lambda x: self.model.itemFromIndex(x).setValue()
+        # )
         # self.model.dataChanged.connect(lambda x: print(self.model.data(x)))
+        # self.__ui.dimensionsTable.edi
         # self.model.dataChanged.connect(lambda x: print(type(self.model.data(x))))
+        self.model.dataChanged.connect(self.modelUpdateHandler)
+
         self.initialized = True
+
+    def modelUpdateHandler(
+        self, index0: QModelIndex, index1: QModelIndex, li: list
+    ):
+        # print(index0, index1, li)
+        if index0.column() == 1:
+            self.updateFrameMatrix()
+        elif index0.column() == 2:
+            self.updateSize(self.model.itemFromIndex(index0))
 
     def udtmsImpl(self):
         margins = self.__ui.dimensionWidget.layout().contentsMargins()
@@ -141,76 +163,9 @@ class DimensionEditor(QWidget):
             # print(self.getCurrentFrame())
             self.frameEditor.updateMatrix(self.matrix[self.getCurrentFrame()])
 
-    # def incrementDimensions(self):
-    #     print("inc")
-    #     self.dimensions += 1
-    #     # # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
-    #     # if self.dimensions > 2:
-    #     #     self.dindEditors.append(QSpinBox(self))
-    #     #     self.vl.addWidget(self.dindEditors[-1])
-    #     # else:
-    #     #     pass
-    #     # # self.
-    #     print(f"shape: {self.matrix.shape}; matrix: {self.matrix}")
-    #     self.matrix = self.matrix.reshape(self.matrix.shape + tuple([1]))
-    #     b = SizeBinding(self, len(self.dindEditors))
-    #     self.dindEditors.append(DIndexEditor(self.dimensions, self))
-    #     #-TODO: Change this to connect directly to the spinboxes directly
-    #     curInd, dimSize = self.dindEditors[-1].getWidgets()
-
-    #     # self.dindEditors[-1].sizeChange.connect(b)
-    #     dimSize.valueChanged.connect(b)
-    #     """
-    #     TODO: Check if this is already handled by the connection of
-    #     this slot to FrameEditor, which should have a slot that calls
-    #     this updateDimensions (self.updateDimensions(dim0, dim1))
-    #     """
-    #     # self.dindEditors[-1].curIndChange.connect(self.updateFrameMatrix)
-    #     # curInd.valueChanged.connect(self.updateFrameMatrix)
-    #     # self.vl.addWidget(self.dindEditors[-1])
-    #     rowCount = self.__ui.dimensionsTable.rowCount()
-    #     self.__ui.dimensionsTable.insertRow(rowCount)
-    #     # self.__ui.dimensionsTable.setCellWidget(
-    #     #     rowCount, 0, QLabel("%d" % (self.dimensions - 1), self)
-    #     # )
-    #     self.__ui.dimensionsTable.setCellWidget(rowCount, 0, dimSize)
-    #     self.__ui.dimensionsTable.setCellWidget(rowCount, 1, curInd)
-    #     self.updateFrameMatrix()
-    #     # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
-
-    # def decrementDimensions(self):
-    #     print("dec")
-    #     assert (max(0, self.dimensions) == len(self.dindEditors))
-    #     # if self.dimensions <= 2:
-    #     #     # if self.dimensions == 2:
-    #     #     pass
-    #     # else:
-    #     #     # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
-    #     #     self.vl.removeWidget(self.dindEditors[-1])
-    #     #     self.dindEditors.pop(-1).setParent(None)
-    #     #     # print([self.vl.itemAt(i) for i in range(self.vl.count())], self.dindEditors)
-    #     self.matrix = self.matrix.reshape(self.matrix.shape[:-1])
-    #     # self.vl.removeWidget(self.dindEditors[-1])
-    #     de = self.dindEditors.pop(-1)
-    #     for i in de.getWidgets():
-    #         #TODO: Check if the signals from this are all disconnected
-    #         i.setParent(None)
-    #     self.__ui.dimensionsTable.removeRow(
-    #         self.__ui.dimensionsTable.rowCount() - 1
-    #     )
-    #     self.dimensions -= 1
-    #     self.updateFrameMatrix()
-
     def changeDimensions(self, dim):
-        # currentDimensions = self.dimensions
         currentDimensions = self.model.rowCount()
-        # while self.dimensions != dim:
-        #     self.incrementDimensions(
-        #     ) if self.dimensions < dim else self.decrementDimensions()
-        # #     if self.dimensions < 2:
-        # #         self.frameEditor.updateMatrix(self.matrix)
 
-        # assert (currentDimensions != dim)
         if currentDimensions == dim:
             return
 
@@ -238,6 +193,7 @@ class DimensionEditor(QWidget):
             self.matrix = self.matrix.reshape(self.matrix.shape[: dim])
 
         # self.frameEditor.updateDimensionsCount(dim)
+        print(currentDimensions, dim)
         self.updateDimensionsCount(currentDimensions, dim)
 
         self.frameEditor.updateBindings()
@@ -248,7 +204,10 @@ class DimensionEditor(QWidget):
     #     # op(self.__ui.dimensionsTable.indexWidget(index))
     #     self.model.item
 
-    def updateDimensions(self, currentDimensions: int, dimensions: int):
+    def updateDimensions_t(self, _):
+        return self.updateDimensions(self.model.rowCount())
+
+    def updateDimensions(self, dimensions: int):
         # shape = self.dimensionEditor.matrix.shape
         # self.updateBindings()
         # self.dimensionEditor.updateDimensions(
@@ -257,58 +216,99 @@ class DimensionEditor(QWidget):
 
         # t = QTimer(self)
         # t.setSingleShot(True)
+
+        setHide = set()
+        setShow = set()
+
         if self.dim0 is not None and self.dim0 < dimensions:
-            # t.timeout.connect(
-            self.model.item(self.dim0, 1).setData(Qt.ItemIsEnabled, True)
-            # )
-            # self.__ui.dimensionsTable.indexWidget(
-            #     self.model.index(self.dim0, 1)
-            # ).show()
-            # dindEditors[self.dim0].showCurInd()
-            # if currentDimensions == dimensions:
-            #     self.dindEditors[self.dim0].setCurInd(0)
+            setShow.add(self.dim0)
 
         if self.dim1 is not None and self.dim1 < dimensions:
-            # t.timeout.connect(
-            self.model.item(self.dim1, 1).setData(Qt.ItemIsEnabled, True)
-            # )
-            # self.__ui.dimensionsTable.indexWidget(
-            #     self.model.index(self.dim1, 1)
-            # ).show()
-            # self.dindEditors[self.dim1].showCurInd()
+            setShow.add(self.dim1)
 
         if dimensions >= 1:
-            # t.timeout.connect(
-            self.model.item(self.xDimSpin.value(),
-                            1).setData(Qt.ItemIsEnabled, False)
-            # )
-            # self.__ui.dimensionsTable.indexWidget(
-            #     self.model.index(self.xDimSpin.value(), 1)
-            # ).hide()
-            # self.dindEditors[self.xDimSpin.value()].hideCurInd()
+            setHide.add(self.xDimSpin.value())
             self.dim0 = self.xDimSpin.value()
 
         if dimensions >= 2:
-            # t.timeout.connect(
-            self.model.item(self.yDimSpin.value(),
-                            1).setData(Qt.ItemIsEnabled, False)
-            # )
-            # self.__ui.dimensionsTable.indexWidget(
-            #     self.model.index(self.yDimSpin.value(), 1)
-            # ).hide()
-            # self.dindEditors[self.yDimSpin.value()].hideCurInd()
+            setHide.add(self.yDimSpin.value())
             self.dim1 = self.yDimSpin.value()
 
-        # print(
-        #     "(prevXVal: %d, prevYVal: %d)" %
-        #     (self.xDimSpin.value(), self.yDimSpin.value())
-        # )
-        # self.updateDimensions(
-        #     self.xDimSpin.value(), self.yDimSpin.value()
-        # )
-        # print(value)
+        for i in setHide.difference(setShow):
+            self.model.item(i, 1).setVisibility(False)
 
-        # self.__ui.dimensionsTable.sethidden
+        for i in setShow.difference(setHide):
+            self.model.item(i, 1).setVisibility(True)
+
+        #
+
+        # if self.dim0 is not None and self.dim0 < dimensions:
+        #     # t.timeout.connect(
+        #     # self.model.item(self.dim0, 1).setData(Qt.ItemIsEnabled, True)
+        #     self.model.item(self.dim0, 1).setVisibility(True)
+        #     # self.model.setItem(self.dim0, 1, None)
+        #     # self.model.item(self.dim0, 1).setFlags(Qt.ItemIsEditable)
+        #     # self.model.item(self.dim0, 1).setData(0)
+        #     # )
+        #     # self.__ui.dimensionsTable.indexWidget(
+        #     #     self.model.index(self.dim0, 1)
+        #     # ).show()
+        #     # dindEditors[self.dim0].showCurInd()
+        #     # if currentDimensions == dimensions:
+        #     #     self.dindEditors[self.dim0].setCurInd(0)
+
+        # if self.dim1 is not None and self.dim1 < dimensions:
+        #     # t.timeout.connect(
+        #     # self.model.item(self.dim1, 1).setData(Qt.ItemIsEnabled, True)
+        #     self.model.item(self.dim1, 1).setVisibility(True)
+        #     # self.model.setItem(self.dim1, 1, None)
+        #     # self.model.item(self.dim1, 1).setFlags(Qt.ItemIsEditable)
+        #     # self.model.item(self.dim1, 1).setData(0)
+        #     # )
+        #     # self.__ui.dimensionsTable.indexWidget(
+        #     #     self.model.index(self.dim1, 1)
+        #     # ).show()
+        #     # self.dindEditors[self.dim1].showCurInd()
+
+        # if dimensions >= 1:
+        #     # t.timeout.connect(
+        #     # self.model.item(self.xDimSpin.value(), 1).setData(Qt.ItemIsEnabled, False)
+        #     self.model.item(self.xDimSpin.value(), 1).setVisibility(False)
+        #     # self.model.setItem(self.xDimSpin.value(), 1, None)
+        #     # self.model.item(self.xDimSpin.value(), 1).setFlags(Qt.ItemIsEditable)
+        #     # self.__ui.dimensionsTable.
+        #     # self.model.item(self.xDimSpin.value(), 1).setData(0)
+        #     # )
+        #     # self.__ui.dimensionsTable.indexWidget(
+        #     #     self.model.index(self.xDimSpin.value(), 1)
+        #     # ).hide()
+        #     # self.dindEditors[self.xDimSpin.value()].hideCurInd()
+        #     self.dim0 = self.xDimSpin.value()
+
+        # if dimensions >= 2:
+        #     # t.timeout.connect(
+        #     # self.model.item(self.yDimSpin.value(), 1).setData(Qt.ItemIsEnabled, False)
+        #     self.model.item(self.yDimSpin.value(), 1).setVisibility(False)
+        #     # self.model.setItem(self.yDimSpin.value(), 1, None)
+        #     # self.model.item(self.yDimSpin.value(), 1).setFlags(Qt.ItemIsEditable)
+        #     # self.model.item(self.yDimSpin.value(), 1).setData(0)
+        #     # )
+        #     # self.__ui.dimensionsTable.indexWidget(
+        #     #     self.model.index(self.yDimSpin.value(), 1)
+        #     # ).hide()
+        #     # self.dindEditors[self.yDimSpin.value()].hideCurInd()
+        #     self.dim1 = self.yDimSpin.value()
+
+        # # print(
+        # #     "(prevXVal: %d, prevYVal: %d)" %
+        # #     (self.xDimSpin.value(), self.yDimSpin.value())
+        # # )
+        # # self.updateDimensions(
+        # #     self.xDimSpin.value(), self.yDimSpin.value()
+        # # )
+        # # print(value)
+
+        # # self.__ui.dimensionsTable.sethidden
 
         self.updateFrameMatrix(self.dim0 == self.dim1)
         # t.start(0)
@@ -339,4 +339,21 @@ class DimensionEditor(QWidget):
                 self.xDimSpin.hide()
             # pass
         if self.initialized:
-            self.updateDimensions(currentDimensions, dimensions)
+            self.updateDimensions(dimensions)
+
+    def updateSize(self, val: int) -> None:
+        # TODO: Make this change the dimensions
+        if val < self.dimEdit.matrix.shape[self.dim]:
+            self.dimEdit.matrix = self.dimEdit.matrix[tuple(
+                (slice(None, None) if i != self.dim else slice(None, val))
+                for i in range(self.dim)
+            )]
+        elif val < self.dimEdit.matrix.shape[self.dim]:
+            shape = list(self.dimEdit.matrix.shape)
+            shape[self.dim] = self.dimEdit.matrix.shape[self.dim] - val
+            self.dimEdit.matrix = torch.cat(
+                (
+                    self.dimEdit.matrix,
+                    torch.ones(shape, device = self.dimEdit.matrix.device)
+                ), self.dim
+            )
