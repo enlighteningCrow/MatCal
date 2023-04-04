@@ -18,9 +18,17 @@ class NNIntSI(QStandardItem):
         if self.isVisible != show:
             # print("Made", self, ('' if show else 'in') + "visible")
             self.isVisible = show
-            self.setFlags(~Qt.ItemIsEditable if show else Qt.ItemIsEditable)
+            # self.setFlags(~Qt.ItemIsEditable if show else Qt.ItemIsEditable)
+            # self.setFlags(~Qt.ItemIsEnabled if show else Qt.ItemIsEnabled)
+            # self.setFlags(Qt.)
             if show:
-                self.setData(0)
+                self.setData(1)
+                # self.setFlags(self.flags() | Qt.ItemIsEditable)
+                self.setFlags(self.flags() | Qt.ItemIsEnabled)
+            else:
+                self.setText("-")
+                # self.setFlags(self.flags() & ~Qt.ItemIsEditable)
+                self.setFlags(self.flags() & ~Qt.ItemIsEnabled)
 
     def setData(self, value, role = Qt.EditRole):
         if role == Qt.EditRole:
@@ -65,14 +73,14 @@ class NNIntSIM(QStandardItemModel):
             raise ValueError("Item must be a NonnegativeIntegerStandardItem")
 
     def item(self, row: int, column: int = 0) -> NNIntSI:
-        if super().item(row, column) is None:
-            print(
-                "None in model at row:", row, "with column:", column,
-                "\nwith model:"
-            )
-            for i in self.rowCount():
-                for j in self.columnCount():
-                    print(self.item())
+        # if super().item(row, column) is None:
+        #     print(
+        #         "None in model at row:", row, "with column:", column,
+        #         "\nwith model:"
+        #     )
+        #     for i in range(self.rowCount()):
+        #         for j in range(self.columnCount()):
+        #             print(super().item(i, j))
 
         return super().item(row, column)
 
