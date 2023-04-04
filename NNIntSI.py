@@ -1,5 +1,7 @@
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QModelIndex, QPersistentModelIndex
 from PySide6.QtGui import QStandardItem, QStandardItemModel
+
+from typing import Union
 
 
 class NNIntSI(QStandardItem):
@@ -62,5 +64,19 @@ class NNIntSIM(QStandardItemModel):
         else:
             raise ValueError("Item must be a NonnegativeIntegerStandardItem")
 
-    def item(self, row: int, column: int = ...) -> NNIntSI:
+    def item(self, row: int, column: int = 0) -> NNIntSI:
+        if super().item(row, column) is None:
+            print(
+                "None in model at row:", row, "with column:", column,
+                "\nwith model:"
+            )
+            for i in self.rowCount():
+                for j in self.columnCount():
+                    print(self.item())
+
         return super().item(row, column)
+
+    def itemFromIndex(
+        self, index: Union[QModelIndex, QPersistentModelIndex]
+    ) -> NNIntSI:
+        return super().itemFromIndex(index)

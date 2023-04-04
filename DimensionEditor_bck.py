@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel
 
-from FrameEditor import FrameEditor
+from FrameEditor_bck2 import FrameEditor
 from DIndexEditor import DIndexEditor
 import torch
 

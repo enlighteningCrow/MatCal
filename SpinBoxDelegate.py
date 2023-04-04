@@ -67,7 +67,7 @@ class IndexSpinBoxDelegate(QStyledItemDelegate):
             editor.setMinimum(self.minVal)
             editor.setMaximum(self.maxVal)
         else:
-            editor.setMinimum(0)
+            editor.setMinimum(1)
             # print(type(index.model()))
             item: NNIntSI = index.model().item(index.row(), 0)
             # print(item.text())

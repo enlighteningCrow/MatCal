@@ -80,10 +80,10 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QSpinBox" name="selectionXSpinbox"/>
+           <widget class="UniqueSpinBox" name="selectionXSpinbox"/>
           </item>
           <item row="1" column="1">
-           <widget class="QSpinBox" name="selectionYSpinbox"/>
+           <widget class="UniqueSpinBox" name="selectionYSpinbox"/>
           </item>
           <item row="2" column="0" colspan="2">
            <widget class="QScrollArea" name="scrollAreaFE">
@@ -117,6 +117,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>UniqueSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>UniqueSpinBox</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
