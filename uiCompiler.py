@@ -8,6 +8,8 @@ from PySide6.QtCore import QDirIterator
 
 from shutil import which
 
+import logging
+
 
 def compileUi():
     uicPaths = [
@@ -18,14 +20,16 @@ def compileUi():
     uicPath = None
     for uicPathCurrent in uicPaths:
         if not uicPathCurrent.exists():
-            print("uic executable not found at path: \"" + str(uicPathCurrent))
+            logging.warning(
+                "uic executable not found at path: \"" + str(uicPathCurrent)
+            )
             continue
-        print("uic executable found at path: \"" + str(uicPathCurrent))
+        logging.info("uic executable found at path: \"" + str(uicPathCurrent))
         uicPath = uicPathCurrent
         break
         # for i in glob("*.ui"):
         #     path = Path(i)
-        #     print(
+        #     logging.info(
         #         "Compiling " + str(path) + " to " +
         #         str(path.parent / ("ui_" + path.stem + ".py"))
         #     )
@@ -40,13 +44,13 @@ def compileUi():
         for i in uicPaths:
             a = which(i)
             if a is not None:
-                print("uic executable found in PATH: \"" + str(a))
+                logging.info("uic executable found in PATH: \"" + str(a))
                 uicPath = Path(a)
                 break
     if uicPath is not None:
         for i in glob("*.ui"):
             path = Path(i)
-            print(
+            logging.info(
                 "Compiling " + str(path) + " to " +
                 str(path.parent / ("ui_" + path.stem + ".py"))
             )
@@ -55,5 +59,5 @@ def compileUi():
                 str(path.parent / ("ui_" + path.stem + ".py"))
             )
         return
-    print("uic executable not found in PATH")
+    logging.warning("uic executable not found in PATH")
     sys.exit(1)

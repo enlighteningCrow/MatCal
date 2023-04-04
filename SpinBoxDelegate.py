@@ -4,6 +4,8 @@ from PySide6.QtWidgets import QApplication, QStyledItemDelegate, QItemDelegate, 
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from NNIntSI import NNIntSI, NNIntSIM
 
+import logging
+
 # class SpinBoxDelegate(QStyledItemDelegate):
 
 #     def createEditor(self, parent, option, index):
@@ -45,7 +47,7 @@ class SpinBoxDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.value()
-        print("Model data set on", index, "to", value)
+        logging.info("Model data set on", index, "to", value)
         model.setData(index, value, Qt.EditRole)
 
     def setMax(self, maxVal: int):
@@ -63,16 +65,16 @@ class IndexSpinBoxDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = QSpinBox(parent)
         if (index.model() is None):
-            print("The model is None")
+            logging.info("The model is None")
             editor.setMinimum(self.minVal)
             editor.setMaximum(self.maxVal)
         else:
             editor.setMinimum(1)
-            # print(type(index.model()))
+            # logging.info(type(index.model()))
             item: NNIntSI = index.model().item(index.row(), 0)
-            # print(item.text())
-            # print(type(index.model().item(index.row(), 0)).getValue())
-            # print("Value:", index.model().item(index.row, 0).getValue())
+            # logging.info(item.text())
+            # logging.info(type(index.model().item(index.row(), 0)).getValue())
+            # logging.info("Value:", index.model().item(index.row, 0).getValue())
             editor.setMaximum(item.getValue())
         return editor
 
@@ -83,7 +85,7 @@ if __name__ == '__main__':
     table_model.setHorizontalHeaderLabels(['Name', 'Age'])
     table_view = QTableView()
     table_view.setModel(table_model)
-    delegate = SpinBoxDelegate(table_view)
+    delegate = DoubleSpinBoxDelegate(table_view)
     table_view.setItemDelegateForColumn(1, delegate)
     for row in range(4):
         for column in range(2):

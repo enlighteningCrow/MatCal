@@ -6,6 +6,8 @@ from torch import Tensor
 from PySide6.QtCore import Signal
 from typing import Tuple
 
+import logging
+
 
 # TODO: Make it hide the curIndex if the frameEditor is set to this dimension
 class DIndexEditor(QWidget):
@@ -37,7 +39,7 @@ class DIndexEditor(QWidget):
     # return "Dimension #" + str(dimension)
 
     # def updateDimensionSize(self):
-    #     print(self.tensor.shape[self.dimension])
+    #     logging.info(self.tensor.shape[self.dimension])
 
     def hideCurInd(self):
         self.curInd.hide()

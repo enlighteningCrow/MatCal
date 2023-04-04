@@ -3,6 +3,8 @@ from PySide6.QtCore import QAbstractItemModel
 import torch
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 
+import logging
+
 
 class MultiDimensionalMatrixException(Exception):
 
@@ -11,6 +13,9 @@ class MultiDimensionalMatrixException(Exception):
             "Provided matrix has " + str(message) +
             " dimensions, more than the maximum allowed: 2"
         )
+
+
+#TODO: Make the below option self._onXAxis connected to some sort of configuration file/something
 
 
 class MatrixTableModel(QAbstractTableModel):
@@ -52,12 +57,12 @@ class MatrixTableModel(QAbstractTableModel):
             if self.__matrix.dim() == 1:
                 if self._onXAxis:
                     if column == 0:
-                        return str(self.__matrix[row])
+                        return str(self.__matrix[row].item())
                 else:
                     if row == 0:
-                        return str(self.__matrix[column])
+                        return str(self.__matrix[column].item())
             else:
-                return str(self.__matrix[row][column])
+                return str(self.__matrix[row][column].item())
 
         return None
 
@@ -65,7 +70,7 @@ class MatrixTableModel(QAbstractTableModel):
         if not index.isValid() or role != Qt.EditRole:
             return False
 
-        print(self.__matrix)
+        logging.info(self.__matrix)
 
         row, column = index.row(), index.column()
 

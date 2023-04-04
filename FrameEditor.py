@@ -19,6 +19,10 @@ from math import inf
 
 from MatrixModel import MatrixTableModel
 
+from DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
+
+import logging
+
 # class MatrixModel(QAbstract)
 
 
@@ -40,6 +44,8 @@ class FrameEditor(QWidget):
         self.matrixModel = MatrixTableModel(mat, parent = self)
         self.tableView.setModel(self.matrixModel)
         self.vblo.addWidget(self.tableView)
+        delegate = DoubleSpinBoxDelegate(self.tableView)
+        self.tableView.setItemDelegate(delegate)
         # self.updateBindings()
         self.initialized = True
 
@@ -49,5 +55,5 @@ class FrameEditor(QWidget):
         # self.matrix.copy_(matrix)
         # self.matrix = matrix
         # self.updateBindings()
-        print(matrix)
+        logging.info(matrix)
         self.matrixModel.setMatrix(matrix)

@@ -3,6 +3,8 @@ from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 from typing import Union
 
+import logging
+
 
 class NNIntSI(QStandardItem):
 
@@ -16,7 +18,7 @@ class NNIntSI(QStandardItem):
 
     def setVisibility(self, show: bool):
         if self.isVisible != show:
-            # print("Made", self, ('' if show else 'in') + "visible")
+            # logging.info("Made", self, ('' if show else 'in') + "visible")
             self.isVisible = show
             # self.setFlags(~Qt.ItemIsEditable if show else Qt.ItemIsEditable)
             # self.setFlags(~Qt.ItemIsEnabled if show else Qt.ItemIsEnabled)
@@ -40,7 +42,7 @@ class NNIntSI(QStandardItem):
         super().setData(value, role)
 
     # def setValue(self, value):
-    #     print("setValue called with:", value)
+    #     logging.info("setValue called with:", value)
     #     if isinstance(value, int) and value >= 0:
     #         self.setText(str(value))
     #         self.value = value
@@ -50,12 +52,12 @@ class NNIntSI(QStandardItem):
     # def setText(self, value):
     #     #TODO: Maybe make this also check if it is convertible to an int, raise exception otherwise
     #     #TODO: Make value private
-    #     print("setText called with:", value)
+    #     logging.info("setText called with:", value)
     #     super().setText(value)
 
     def getValue(self):
         # return self.value
-        # print(self.text())
+        # logging.info(self.text())
         # if self.isEnabled():
         #     assert (self.value == int(self.text()))
         return self.value
@@ -74,13 +76,13 @@ class NNIntSIM(QStandardItemModel):
 
     def item(self, row: int, column: int = 0) -> NNIntSI:
         # if super().item(row, column) is None:
-        #     print(
+        #     logging.info(
         #         "None in model at row:", row, "with column:", column,
         #         "\nwith model:"
         #     )
         #     for i in range(self.rowCount()):
         #         for j in range(self.columnCount()):
-        #             print(super().item(i, j))
+        #             logging.info(super().item(i, j))
 
         return super().item(row, column)
 
