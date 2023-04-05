@@ -10,7 +10,6 @@ from uiCompiler import compileUi
 
 compileUi()
 
-
 import os
 from pathlib import Path
 import sys
@@ -21,21 +20,34 @@ from DimensionEditor import DimensionEditor
 from MatrixEditor import MatrixEditor
 from ui_MainWindow import Ui_MainWindow
 
+from PySide6.QtGui import QStandardItem, QStandardItemModel
 
-class MainWindow(QMainWindow, Ui_MainWindow):
+import logging
+
+
+class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        self.__ui = Ui_MainWindow()
+        self.__ui.setupUi(self)
+        # self.setupUi(self)
+        self.matrixList = QStandardItemModel()
+        self.__ui.listView.setModel(self.matrixList)
+        for i in [QStandardItem("ajsio"), QStandardItem("bsdf09h"),
+                  QStandardItem("cjoasidg0")]:
+            self.matrixList.appendRow(i)
+        # self.
 
 
 if __name__ == "__main__":
+    logging.getLogger().setLevel(logging.DEBUG)
     app = QApplication(sys.argv)
-    loader = QUiLoader()
-    uicPath = Path(__file__).resolve().parent / "MainWindow.ui"
-    ui_file = QFile(uicPath)
-    ui_file.open(QFile.ReadOnly)
-    widget = loader.load(ui_file)
+    # loader = QUiLoader()
+    # uicPath = Path(__file__).resolve().parent / "MainWindow.ui"
+    # ui_file = QFile(uicPath)
+    # ui_file.open(QFile.ReadOnly)
+    # widget = loader.load(ui_file)
     editor = MainWindow()
     editor.show()
     # widget.show()

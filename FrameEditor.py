@@ -57,3 +57,5 @@ class FrameEditor(QWidget):
         # self.updateBindings()
         logging.info(matrix)
         self.matrixModel.setMatrix(matrix)
+        # self.tableView.resizeColumnsToContents()
+        # self.tableView.resizeRowsToContents()

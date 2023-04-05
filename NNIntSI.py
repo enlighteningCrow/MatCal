@@ -15,6 +15,7 @@ class NNIntSI(QStandardItem):
         self.value = value
         self.setData(str(value))
         self.isVisible = True
+        self.prev_value = value
 
     def setVisibility(self, show: bool):
         if self.isVisible != show:
@@ -34,12 +35,17 @@ class NNIntSI(QStandardItem):
 
     def setData(self, value, role = Qt.EditRole):
         if role == Qt.EditRole:
-            oldValue = self.value
+            self.prev_value = self.value
             self.value = int(value)
-            if oldValue != self.value:
-                # self.valueChanged.emit(self.value)
-                pass
+            # if self.prev_value != self.value:
+            #     # self.valueChanged.emit(self.value)
+            #     pass
+
         super().setData(value, role)
+
+    def revertValue(self):
+        self.value = self.prev_value
+        self.setData(self.value)
 
     # def setValue(self, value):
     #     logging.info("setValue called with:", value)

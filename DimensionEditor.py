@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel, QTableView
+from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel, QTableView, QMessageBox
 
 from PySide6.QtCore import QTimer, QModelIndex, Qt
 
@@ -107,29 +107,40 @@ class DimensionEditor(QWidget):
 
         self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
 
-        self.modelUpdatesEnabled = True
+        # self.modelUpdatesEnabled = True
         self.initialized = True
 
     def logMatrix(self):
-        logging.info(self.matrix)
+        logging.debug(self.matrix)
+        # pass
 
     def modelUpdateHandler(
         self, index0: QModelIndex, index1: QModelIndex, li: list
     ):
-        if not self.modelUpdatesEnabled:
-            return
+        # if not self.modelUpdatesEnabled:
+        #     return
         # logging.info(index0, index1, li)
         # logging.info(index0.column())
         # assert (
         #     index0.column() == index1.column() and index0.row() == index1.row()
         # )
-        for i in range(index0.row(), index1.row() + 1):
-            # if index0.column() == 0:
-            self.updateSize(i, self.model.item(i, 0).getValue())
-        # for i in range(self.model.columnCount()):
-        #     if self.model.item(index0.row(), i) is None:
-        #         return
-        self.updateFrameMatrix()
+        i = 0
+        try:
+            for i in range(index0.row(), index1.row() + 1):
+                # if index0.column() == 0:
+                self.updateSize(i, self.model.item(i, 0).getValue())
+            # for i in range(self.model.columnCount()):
+            #     if self.model.item(index0.row(), i) is None:
+            #         return
+            self.updateFrameMatrix(
+                self.dim0 == self.dim1,
+                (self.dim0 is not None and self.dim1 is not None) and
+                self.dim0 > self.dim1
+            )
+        except RuntimeError as e:
+            QMessageBox.warning(self, "Error", str(e))
+            print(self.model.item(i, 0).getValue())
+            self.model.item(i, 0).revertValue()
 
     def udtmsImpl(self):
         margins = self.__ui.dimensionWidget.layout().contentsMargins()
@@ -159,15 +170,15 @@ class DimensionEditor(QWidget):
     def updateFrameMatrix(self, empty: bool = False, transpose: bool = False):
         # logging.info(self.matrix)
         # logging.info(self.matrix.shape)
-        if empty:
-            #TODO: Maybe make this do the same as the below; remove the if empty completely
-            self.frameEditor.updateMatrix(torch.zeros(()))
-        else:
-            # logging.info(self.getCurrentFrame())
-            logging.info(self.getCurrentFrame())
-            logging.info(self.matrix)
-            matrix = self.matrix[self.getCurrentFrame()]
-            self.frameEditor.updateMatrix(matrix.T if transpose else matrix)
+        # if empty:
+        #     #TODO: Maybe make this do the same as the below; remove the if empty completely
+        #     self.frameEditor.updateMatrix(torch.zeros(()))
+        # else:
+        # logging.info(self.getCurrentFrame())
+        logging.info(self.getCurrentFrame())
+        logging.info(self.matrix)
+        matrix = self.matrix[self.getCurrentFrame()]
+        self.frameEditor.updateMatrix(matrix.T if transpose else matrix)
 
     def changeDimensions(self, dim):
         currentDimensions = self.model.rowCount()
@@ -175,29 +186,31 @@ class DimensionEditor(QWidget):
         if currentDimensions == dim:
             return
 
-        self.modelUpdatesEnabled = False
+        # self.modelUpdatesEnabled = False
 
-        self.model.setRowCount(dim)
+        # self.model.setRowCount(dim)
         if currentDimensions < dim:
             # self.model.beginInsertRows()
             #TODO: Fix this code and the below else code; find why it does not work
-            logging.info("From:", self.matrix)
+            logging.info("From: %s", self.matrix)
             self.matrix = self.matrix.reshape(
                 self.matrix.shape +
                 tuple((1 for i in range(self.matrix.dim(), dim)))
             )
-            logging.info("To:", self.matrix)
+            logging.info("To: %s", self.matrix)
             for i in range(currentDimensions, dim):
-                self.model.setItem(i, 0, NNIntSI(1))
-                self.model.setItem(i, 1, NNIntSI(1))
+                self.model.appendRow([NNIntSI(1), NNIntSI(1)])
+                # self.model.setItem(i, 0, NNIntSI(1))
+                # self.model.setItem(i, 1, NNIntSI(1))
         else:
+            self.model.setRowCount(dim)
             self.matrix = self.matrix.reshape(self.matrix.shape[: dim])
 
         # self.frameEditor.updateDimensionsCount(dim)
-        logging.info(currentDimensions, dim)
+        logging.info("%s, %s", currentDimensions, dim)
         self.updateDimensionsCount(dim)
 
-        self.modelUpdatesEnabled = True
+        # self.modelUpdatesEnabled = True
 
     def updateDimensions_t(self, _):
         return self.updateDimensions(self.model.rowCount())
