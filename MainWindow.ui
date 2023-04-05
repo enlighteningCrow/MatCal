@@ -54,9 +54,21 @@
      <string>File</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuEditor">
+    <property name="title">
+     <string>Editor</string>
+    </property>
+    <addaction name="actionAdd_to_list"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEditor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAdd_to_list">
+   <property name="text">
+    <string>Store matrix</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

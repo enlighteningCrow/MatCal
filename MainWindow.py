@@ -40,8 +40,13 @@ class MainWindow(QMainWindow):
         # self.
 
 
+#TODO: (PRIORITY): Try removing the current MatrixEditor.py altogether,
+# and replace it with the current DimensionEditor.py. Also consider making
+# the matrix editor only pop up when the list is clicked, such that the user
+# makes an action to modify an existing matrix in the list or create a new one.
+
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.DEBUG)
+    # logging.getLogger().setLevel(logging.DEBUG)
     app = QApplication(sys.argv)
     # loader = QUiLoader()
     # uicPath = Path(__file__).resolve().parent / "MainWindow.ui"

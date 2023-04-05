@@ -27,6 +27,8 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(800, 600)
+        self.actionAdd_to_list = QAction(MainWindow)
+        self.actionAdd_to_list.setObjectName(u"actionAdd_to_list")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
@@ -55,12 +57,16 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 800, 26))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
+        self.menuEditor = QMenu(self.menubar)
+        self.menuEditor.setObjectName(u"menuEditor")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuEditor.menuAction())
+        self.menuEditor.addAction(self.actionAdd_to_list)
 
         self.retranslateUi(MainWindow)
 
@@ -72,8 +78,10 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        self.actionAdd_to_list.setText(QCoreApplication.translate("MainWindow", u"Store matrix", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Tab 1", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
+        self.menuEditor.setTitle(QCoreApplication.translate("MainWindow", u"Editor", None))
     # retranslateUi
 
