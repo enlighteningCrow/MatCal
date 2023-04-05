@@ -105,8 +105,13 @@ class DimensionEditor(QWidget):
         # self.model.dataChanged.connect(lambda x: logging.info(type(self.model.data(x))))
         self.model.dataChanged.connect(self.modelUpdateHandler)
 
+        self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
+
         self.modelUpdatesEnabled = True
         self.initialized = True
+
+    def logMatrix(self):
+        logging.info(self.matrix)
 
     def modelUpdateHandler(
         self, index0: QModelIndex, index1: QModelIndex, li: list

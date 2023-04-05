@@ -51,7 +51,7 @@ class MatrixTableModel(QAbstractTableModel):
 
         row, column = index.row(), index.column()
 
-        if role == Qt.DisplayRole:
+        if role in (Qt.DisplayRole, Qt.EditRole):
             if self.__matrix.dim() == 0:
                 return str(self.__matrix.item())
             if self.__matrix.dim() == 1:
