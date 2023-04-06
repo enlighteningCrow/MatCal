@@ -16,8 +16,6 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget
 from PySide6.QtCore import QFile
 from PySide6.QtUiTools import QUiLoader
-from DimensionEditor import DimensionEditor
-from MatrixEditor import MatrixEditor
 from ui_MainWindow import Ui_MainWindow
 
 from PySide6.QtGui import QStandardItem, QStandardItemModel
@@ -41,7 +39,7 @@ class MainWindow(QMainWindow):
 
 
 #TODO: (PRIORITY): Try removing the current MatrixEditor.py altogether,
-# and replace it with the current DimensionEditor.py. Also consider making
+# and replace it with the current MatrixEditor.py. Also consider making
 # the matrix editor only pop up when the list is clicked, such that the user
 # makes an action to modify an existing matrix in the list or create a new one.
 
@@ -56,6 +54,6 @@ if __name__ == "__main__":
     editor = MainWindow()
     editor.show()
     # widget.show()
-    # deditor = DimensionEditor()
+    # deditor = MatrixEditor()
     # deditor.show()
     sys.exit(app.exec())

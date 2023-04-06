@@ -1,3 +1,3 @@
 {
-    "files": ["DimensionEditor.py","MainWindow.py","MatrixEditor.ui","DIndexEditor.ui","MatrixEditor.py","DimensionEditor.ui","MainWindow.ui","DIndexLabels.ui","FrameEditor.py","DIndexEditor.py"]
+    "files": ["MainWindow.py","MatrixEditor.ui","DIndexEditor.ui","MatrixEditor.py","MainWindow.ui","DIndexLabels.ui","FrameEditor.py","DIndexEditor.py"]
 }

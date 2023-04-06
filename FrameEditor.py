@@ -32,7 +32,6 @@ class FrameEditor(QWidget):
     def __init__(self, mat: Tensor, parent = None):
         self.initialized = False
         super().__init__(parent)
-        # self.dimensionEditor = dimensionEditor
         # self.matrix = mat
         # self.spinboxes: List[QDoubleSpinBox] = []
         # self.glOuter = QGridLayout(self)

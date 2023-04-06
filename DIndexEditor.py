@@ -19,7 +19,7 @@ class DIndexEditor(QWidget):
         self,
         tensor: Tensor,
         dimension: int,
-        parent: 'DimensionEditor' = None
+        parent: 'MatrixEditor' = None
     ):
         super().__init__(parent)
         # self.tensor = tensor
