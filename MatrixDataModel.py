@@ -18,7 +18,7 @@ class MultiDimensionalMatrixException(Exception):
 #TODO: Make the below option self._onXAxis connected to some sort of configuration file/something
 
 
-class MatrixTableModel(QAbstractTableModel):
+class MatrixDataModel(QAbstractTableModel):
 
     def __init__(
         self, matrix: torch.Tensor, onXAxis: bool = True, parent = None

@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Run MainWindow",
+            "label": "Run MatCal",
             "type": "shell",
-            "command": "python ./MainWindow.py",
+            "command": "python ./main.py",
             "problemMatcher": []
         }
     ]

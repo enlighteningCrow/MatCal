@@ -17,7 +17,7 @@ from torch import Tensor, tensor
 from typing import List
 from math import inf
 
-from MatrixModel import MatrixTableModel
+from MatrixDataModel import MatrixDataModel
 
 from DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
 
@@ -40,7 +40,7 @@ class FrameEditor(QWidget):
         # self.glOuter.addWidget(self.scrArea, 1, 2, 1, 2)
         self.vblo = QVBoxLayout(self)
         self.tableView = QTableView(self)
-        self.matrixModel = MatrixTableModel(mat, parent = self)
+        self.matrixModel = MatrixDataModel(mat, parent = self)
         self.tableView.setModel(self.matrixModel)
         self.vblo.addWidget(self.tableView)
         delegate = DoubleSpinBoxDelegate(self.tableView)
