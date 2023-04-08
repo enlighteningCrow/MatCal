@@ -168,9 +168,9 @@ class MatrixEditor(QWidget, CommWidg):
 
     def setMatrix(self, matrix: Tensor):
         self.matrix = matrix.clone()
-        # self.__ui.dimCountSpinBox.blockSignals(True)
+        self.__ui.dimCountSpinBox.blockSignals(True)
         self.__ui.dimCountSpinBox.setValue(matrix.dim())
-        # self.__ui.dimCountSpinBox.blockSignals(False)
+        self.__ui.dimCountSpinBox.blockSignals(False)
         # self.changeDimensions(matrix.dim())
         # self.model.blockSignals(True)
         self.model.removeRows(0, self.model.rowCount())
@@ -288,42 +288,17 @@ class MatrixEditor(QWidget, CommWidg):
 
     def changeDimensions(self, dim):
         currentDimensions = self.model.rowCount()
-
-        if currentDimensions == dim:
-            return
-
-        # self.modelUpdatesEnabled = False
-
-        # self.model.setRowCount(dim)
-        if currentDimensions < dim:
-            # self.model.beginInsertRows()
-            #TODO: Fix this code and the below else code; find why it does not work
-            logging.info("From: %s", self.matrix)
-            self.matrix = self.matrix.reshape(
-                self.matrix.shape +
-                tuple((1 for i in range(self.matrix.dim(), dim)))
-            )
-            logging.info("To: %s", self.matrix)
-            for i in range(currentDimensions, dim):
-                self.model.appendRow([NNIntSI(1), NNIntSI(0)])
-                # self.model.setItem(i, 0, NNIntSI(1))
-                # self.model.setItem(i, 1, NNIntSI(1))
-        else:
-            self.model.setRowCount(dim)
-            # self.matrix = self.matrix.reshape(self.matrix.shape[: dim])
-            print(
-                self.matrix, tuple(slice(None, None) for i in range(dim)),
-                tuple(0 for i in range(dim, currentDimensions))
-            )
-            self.matrix = self.matrix[
-                tuple(slice(None, None) for i in range(dim)) +
-                tuple(0 for i in range(dim, currentDimensions))]
-        return self.updateDimensions(self.model.rowCount())
-        # self.frameEditor.updateDimensionsCount(dim)
+        logging.info("From: %s", self.matrix)
+        self.changeDimensionsMatrix(dim)
+        self.changeDimensionsTable(dim)
+        logging.info("To: %s", self.matrix)
+        print(
+            self.matrix, tuple(slice(None, None) for i in range(dim)),
+            tuple(0 for i in range(dim, currentDimensions))
+        )
         logging.info("%s, %s", currentDimensions, dim)
         self.updateDimensionsCount(dim)
-
-        # self.modelUpdatesEnabled = True
+        return self.updateDimensions(self.model.rowCount())
 
     def updateDimensions_t(self, _ = None):
         return self.updateDimensions(self.model.rowCount())
