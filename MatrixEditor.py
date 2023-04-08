@@ -23,10 +23,6 @@ from MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, Em
 
 from SearchListView import NameProxy
 
-# from ui_matSaveDialog import
-
-# from MainWindow import MainWindow
-
 #- TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
@@ -36,13 +32,9 @@ if 0 != 0:
 
 class MatrixEditor(QWidget, CommWidg):
 
-    # from MainWindow import MainWindow
-
     def __init__(self, parent: 'MainWindow' = None):
         super().__init__(parent)
         self.initialized = False
-        # self.dimensions = 0
-        # self.dindEditors: List[DIndexEditor] = []
         self.matrix = torch.zeros(())
         self.__ui = Ui_Form()
         self.__ui.setupUi(self)
@@ -83,49 +75,21 @@ class MatrixEditor(QWidget, CommWidg):
         self.__ui.dimensionsTable.setItemDelegateForColumn(1, spbidIndex)
 
         self.updateDimensionsCount(self.model.rowCount())
-        # self.model.dataChanged.connect(
-        #     lambda x: self.model.itemFromIndex(x).setValue()
-        # )
-        # self.model.dataChanged.connect(lambda x: logging.info(self.model.data(x)))
-        # self.__ui.dimensionsTable.edi
-        # self.model.dataChanged.connect(lambda x: logging.info(type(self.model.data(x))))
         self.model.dataChanged.connect(self.modelUpdateHandler)
 
         self.__ui.dimCountSpinBox.valueChanged.connect(self.changeDimensions)
 
         self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
-
-        # self.mainWindow: MainWindow = self.parent()
-        # while type(self.mainWindow
-        #           ) is not MainWindow and self.mainWindow is not None:
-        #     self.mainWindow = self.mainWindow.parent()
-
-        # self.__ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
-
-        # self.modelUpdatesEnabled = True
         self.initialized = True
 
     #TODO: Make a system to check if last change was saved
 
     def setMainWindow(self, mainwindow: 'MainWindow') -> None:
         self.__mainwindow = mainwindow
-        # mainwindow.getMatrixSelectionChangedSignal().connect(
-        #     self.updateLoadVisibility
-        # )
         mainwindow.connectSelectionChangedSignal(self.updateLoadVisibility)
-        self.__ui.loadMatrixButton.clicked.connect(
-            self.setSelectedMatrix
-            # lambda: print(mainwindow.getSelectedMatrix())
-        )
-        self.__ui.saveMatrixButton.clicked.connect(
-            self.saveMatrix
-            # lambda: QDialog
-        )
+        self.__ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
+        self.__ui.saveMatrixButton.clicked.connect(self.saveMatrix)
         self.updateLoadVisibility()
-        #TODO: selectionchanged
-        # mainwindow.__ui
-        # self.__ui.saveMatrixButton.clicked.connect(lambda x: print(main))
-        # self.__ui.l
 
     def updateLoadVisibility(self):
         self.__ui.loadMatrixButton.setEnabled(
@@ -133,12 +97,6 @@ class MatrixEditor(QWidget, CommWidg):
         )
 
     def saveMatrix(self):
-        # diag = QDialog(self)
-        # form = Ui_Form()
-        # form.setupUi(diag)
-        # # diag.show()
-        # diag.
-        # print(diag.result())
         result, status = QInputDialog.getText(
             self, "Matrix Name", "Enter matrix name:"
         )
@@ -151,16 +109,12 @@ class MatrixEditor(QWidget, CommWidg):
                 QMessageBox.warning(self, "Error", str(e))
             except EmptyNameError as e:
                 QMessageBox.warning(self, "Error", str(e))
-        # diag.show()
-        # diag.
 
     def setSelectedMatrix(self):
-        # print(self.mainWindow.getSelectedMatrix())
         sel = self.__mainwindow.getSelectedMatrix()
         if len(sel) == 1:
             proxy: NameProxy = sel[0].model()
             index = proxy.mapToSource(sel[0])
-            # print(type(sel[0].model()))
             assert (isinstance(index.model(), QSortFilterProxyModel))
             pair = index.data()
             print(pair)
@@ -168,24 +122,13 @@ class MatrixEditor(QWidget, CommWidg):
 
     def setMatrix(self, matrix: Tensor):
         self.matrix = matrix.clone()
-        # self.__ui.dimCountSpinBox.blockSignals(True)
-        # self.__ui.dimCountSpinBox.blockSignals(False)
-        # self.changeDimensions(matrix.dim())
-        # self.model.blockSignals(True)
         self.model.removeRows(0, self.model.rowCount())
-        # self.model.setRowCount(matrix.dim())
         for i in matrix.shape:
             self.model.appendRow([NNIntSI(i), NNIntSI(0)])
-        # self.updateFrameMatrix()
-        # self.updateDimensions(matrix.dim())
-        #TODO: Check why the slider is editable after the loading
-        # self.changeDimensions(matrix.dim())
-        # self.updateDimensionsCount(matrix.dim())
         self.dim0 = None
         self.dim1 = None
         self.__ui.dimCountSpinBox.setValue(matrix.dim())
         self.updateDimensions_t()
-        # self.updateDimensionsCount(matrix.dim)
 
     def logMatrix(self):
         logging.debug(self.matrix)
@@ -194,27 +137,16 @@ class MatrixEditor(QWidget, CommWidg):
     def modelUpdateHandler(
         self, index0: QModelIndex, index1: QModelIndex, li: list
     ):
-        # if not self.modelUpdatesEnabled:
-        #     return
-        # logging.info(index0, index1, li)
-        # logging.info(index0.column())
-        # assert (
-        #     index0.column() == index1.column() and index0.row() == index1.row()
-        # )
         i = 0
         try:
             for i in range(index0.row(), index1.row() + 1):
                 # if index0.column() == 0:
                 self.updateSize(i, self.model.item(i, 0).getValue())
-            # for i in range(self.model.columnCount()):
-            #     if self.model.item(index0.row(), i) is None:
-            #         return
             self.updateFrameMatrix(
                 self.dim0 == self.dim1,
                 (self.dim0 is not None and self.dim1 is not None) and
                 self.dim0 > self.dim1
             )
-        #TODO: Make this message more intuitive
         except RuntimeError as e:
             QMessageBox.warning(self, "Error", str(e))
             print(self.model.item(i, 0).getValue())
@@ -222,17 +154,14 @@ class MatrixEditor(QWidget, CommWidg):
 
     def udtmsImpl(self):
         margins = self.__ui.dimensionWidget.layout().contentsMargins()
-        # logging.info("width =", self.__ui.dimensionsTable.verticalHeader().width())
-        # logging.info(margins)
         self.__ui.dimensionWidget.setMaximumWidth(
             self.__ui.dimensionsTable.horizontalHeader().length() +
             self.__ui.dimensionsTable.verticalHeader().width() +
             self.__ui.dimensionsTable.frameWidth() * 2 + margins.left() +
             margins.right() + 6 + (
-                self.__ui.dimensionsTable.verticalScrollBar().width() if
-                self.__ui.dimensionsTable.verticalScrollBar().isVisible() else 0
+                self.__ui.dimensionsTable.verticalScrollBar().width() if self.
+                __ui.dimensionsTable.verticalScrollBar().isVisible() else 0
             )
-            # margins.left() + margins.right() + 2
         )
 
     def getCurrentFrame(self) -> Tuple[Union[int, slice]]:
@@ -246,13 +175,6 @@ class MatrixEditor(QWidget, CommWidg):
         return tuple(currentFrame)
 
     def updateFrameMatrix(self, empty: bool = False, transpose: bool = False):
-        # logging.info(self.matrix)
-        # logging.info(self.matrix.shape)
-        # if empty:
-        #     #TODO: Maybe make this do the same as the below; remove the if empty completely
-        #     self.frameEditor.updateMatrix(torch.zeros(()))
-        # else:
-        # logging.info(self.getCurrentFrame())
         logging.info(self.getCurrentFrame())
         logging.info(self.matrix)
         matrix = self.matrix[self.getCurrentFrame()]
