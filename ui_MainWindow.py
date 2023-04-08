@@ -16,11 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QListView, QMainWindow,
-    QMenu, QMenuBar, QSizePolicy, QSplitter,
-    QStatusBar, QTabWidget, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow, QMenu,
+    QMenuBar, QSizePolicy, QSplitter, QStatusBar,
+    QTabWidget, QWidget)
 
 from MatrixEditor import MatrixEditor
+from SearchListView import SearchListView
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -45,7 +46,7 @@ class Ui_MainWindow(object):
         self.tab_2.setObjectName(u"tab_2")
         self.tabWidget.addTab(self.tab_2, "")
         self.splitter.addWidget(self.tabWidget)
-        self.listView = QListView(self.splitter)
+        self.listView = SearchListView(self.splitter)
         self.listView.setObjectName(u"listView")
         self.splitter.addWidget(self.listView)
 

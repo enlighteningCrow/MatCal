@@ -1,15 +1,13 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtWidgets import QSpinBox, QVBoxLayout, QWidget, QHBoxLayout, QLabel, QTableView, QMessageBox
+from PySide6.QtWidgets import QWidget, QMessageBox, QDialog, QInputDialog
 
-from PySide6.QtCore import QTimer, QModelIndex, Qt
-
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtCore import QModelIndex, QSortFilterProxyModel
 
 from FrameEditor import FrameEditor
-from DIndexEditor import DIndexEditor
 import torch
+from torch import Tensor
 
-from typing import List, Tuple, Union
+from typing import Callable, List, Tuple, Union
 
 # from ui_DIndexLabels import Ui_Form
 from ui_MatrixEditor import Ui_Form
@@ -19,40 +17,28 @@ from SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
 
 import logging
 
+from CommWidg import CommWidg
+
+from MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, EmptyNameError
+
+from SearchListView import NameProxy
+
+# from ui_matSaveDialog import
+
+# from MainWindow import MainWindow
+
 #- TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
-
-class SizeBinding:
-
-    def __init__(self, dimEdit: 'MatrixEditor', dim: int) -> None:
-        self.dimEdit = dimEdit
-        self.dim = dim
-
-    def updateSize(self, val: int) -> None:
-        # TODO: Make this change the dimensions
-        if val < self.dimEdit.matrix.shape[self.dim]:
-            self.dimEdit.matrix = self.dimEdit.matrix[tuple(
-                (slice(None, None) if i != self.dim else slice(None, val))
-                for i in range(self.dim)
-            )]
-        elif val < self.dimEdit.matrix.shape[self.dim]:
-            shape = list(self.dimEdit.matrix.shape)
-            shape[self.dim] = self.dimEdit.matrix.shape[self.dim] - val
-            self.dimEdit.matrix = torch.cat(
-                (
-                    self.dimEdit.matrix,
-                    torch.ones(shape, device = self.dimEdit.matrix.device)
-                ), self.dim
-            )
-
-    def __call__(self, val: int) -> None:
-        return self.updateSize(val)
+if 0 != 0:
+    from MainWindow import MainWindow
 
 
-class MatrixEditor(QWidget):
+class MatrixEditor(QWidget, CommWidg):
 
-    def __init__(self, parent: 'MatrixEditor' = None):
+    # from MainWindow import MainWindow
+
+    def __init__(self, parent: 'MainWindow' = None):
         super().__init__(parent)
         self.initialized = False
         # self.dimensions = 0
@@ -109,8 +95,96 @@ class MatrixEditor(QWidget):
 
         self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
 
+        # self.mainWindow: MainWindow = self.parent()
+        # while type(self.mainWindow
+        #           ) is not MainWindow and self.mainWindow is not None:
+        #     self.mainWindow = self.mainWindow.parent()
+
+        # self.__ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
+
         # self.modelUpdatesEnabled = True
         self.initialized = True
+
+    #TODO: Make a system to check if last change was saved
+
+    def setMainWindow(self, mainwindow: 'MainWindow') -> None:
+        self.__mainwindow = mainwindow
+        # mainwindow.getMatrixSelectionChangedSignal().connect(
+        #     self.updateLoadVisibility
+        # )
+        mainwindow.connectSelectionChangedSignal(self.updateLoadVisibility)
+        self.__ui.loadMatrixButton.clicked.connect(
+            self.setSelectedMatrix
+            # lambda: print(mainwindow.getSelectedMatrix())
+        )
+        self.__ui.saveMatrixButton.clicked.connect(
+            self.saveMatrix
+            # lambda: QDialog
+        )
+        self.updateLoadVisibility()
+        #TODO: selectionchanged
+        # mainwindow.__ui
+        # self.__ui.saveMatrixButton.clicked.connect(lambda x: print(main))
+        # self.__ui.l
+
+    def updateLoadVisibility(self):
+        self.__ui.loadMatrixButton.setEnabled(
+            len(self.__mainwindow.getSelectedMatrix()) == 1
+        )
+
+    def saveMatrix(self):
+        # diag = QDialog(self)
+        # form = Ui_Form()
+        # form.setupUi(diag)
+        # # diag.show()
+        # diag.
+        # print(diag.result())
+        result, status = QInputDialog.getText(
+            self, "Matrix Name", "Enter matrix name:"
+        )
+        if status:
+            try:
+                self.__mainwindow.addMatrix(
+                    MatrixPair(result, self.matrix.clone())
+                )
+            except DuplicateValueError as e:
+                QMessageBox.warning(self, "Error", str(e))
+            except EmptyNameError as e:
+                QMessageBox.warning(self, "Error", str(e))
+        # diag.show()
+        # diag.
+
+    def setSelectedMatrix(self):
+        # print(self.mainWindow.getSelectedMatrix())
+        sel = self.__mainwindow.getSelectedMatrix()
+        if len(sel) == 1:
+            proxy: NameProxy = sel[0].model()
+            index = proxy.mapToSource(sel[0])
+            # print(type(sel[0].model()))
+            assert (isinstance(index.model(), QSortFilterProxyModel))
+            pair = index.data()
+            print(pair)
+            self.setMatrix(pair.matrix)
+
+    def setMatrix(self, matrix: Tensor):
+        self.matrix = matrix.clone()
+        # self.__ui.dimCountSpinBox.blockSignals(True)
+        self.__ui.dimCountSpinBox.setValue(matrix.dim())
+        # self.__ui.dimCountSpinBox.blockSignals(False)
+        # self.changeDimensions(matrix.dim())
+        # self.model.blockSignals(True)
+        self.model.removeRows(0, self.model.rowCount())
+        # self.model.setRowCount(matrix.dim())
+        for i in matrix.shape:
+            self.model.appendRow([NNIntSI(i), NNIntSI(0)])
+        # self.updateFrameMatrix()
+        # self.updateDimensions(matrix.dim())
+        #TODO: Check why the slider is editable after the loading
+        # self.changeDimensions(matrix.dim())
+        # self.updateDimensionsCount(matrix.dim())
+        self.dim0 = None
+        self.dim1 = None
+        self.updateDimensions_t()
 
     def logMatrix(self):
         logging.debug(self.matrix)
@@ -139,6 +213,7 @@ class MatrixEditor(QWidget):
                 (self.dim0 is not None and self.dim1 is not None) and
                 self.dim0 > self.dim1
             )
+        #TODO: Make this message more intuitive
         except RuntimeError as e:
             QMessageBox.warning(self, "Error", str(e))
             print(self.model.item(i, 0).getValue())
@@ -165,7 +240,7 @@ class MatrixEditor(QWidget):
             if self.dim0 is not None and self.dim0 == i or self.dim1 is not None and self.dim1 == i:
                 currentFrame.append(slice(None, None))
             else:
-                currentFrame.append(self.model.item(i, 1).getValue() - 1)
+                currentFrame.append(self.model.item(i, 1).getValue())
         logging.info(tuple(currentFrame))
         return tuple(currentFrame)
 
@@ -181,6 +256,35 @@ class MatrixEditor(QWidget):
         logging.info(self.matrix)
         matrix = self.matrix[self.getCurrentFrame()]
         self.frameEditor.updateMatrix(matrix.T if transpose else matrix)
+
+    def changeDimensionsMatrix(self, dim):
+        currentDimensions = self.model.rowCount()
+
+        if currentDimensions == dim:
+            return
+        if currentDimensions < dim:
+            self.matrix = self.matrix.reshape(
+                self.matrix.shape +
+                tuple((1 for i in range(self.matrix.dim(), dim)))
+            )
+        else:
+            print(
+                self.matrix, tuple(slice(None, None) for i in range(dim)),
+                tuple(0 for i in range(dim, currentDimensions))
+            )
+            self.matrix = self.matrix[
+                tuple(slice(None, None) for i in range(dim)) +
+                tuple(0 for i in range(dim, currentDimensions))]
+
+    def changeDimensionsTable(self, dim):
+        currentDimensions = self.model.rowCount()
+        if currentDimensions == dim:
+            return
+        if currentDimensions < dim:
+            for i in range(currentDimensions, dim):
+                self.model.appendRow([NNIntSI(1), NNIntSI(0)])
+        else:
+            self.model.setRowCount(dim)
 
     def changeDimensions(self, dim):
         currentDimensions = self.model.rowCount()
@@ -201,20 +305,27 @@ class MatrixEditor(QWidget):
             )
             logging.info("To: %s", self.matrix)
             for i in range(currentDimensions, dim):
-                self.model.appendRow([NNIntSI(1), NNIntSI(1)])
+                self.model.appendRow([NNIntSI(1), NNIntSI(0)])
                 # self.model.setItem(i, 0, NNIntSI(1))
                 # self.model.setItem(i, 1, NNIntSI(1))
         else:
             self.model.setRowCount(dim)
-            self.matrix = self.matrix.reshape(self.matrix.shape[: dim])
-
+            # self.matrix = self.matrix.reshape(self.matrix.shape[: dim])
+            print(
+                self.matrix, tuple(slice(None, None) for i in range(dim)),
+                tuple(0 for i in range(dim, currentDimensions))
+            )
+            self.matrix = self.matrix[
+                tuple(slice(None, None) for i in range(dim)) +
+                tuple(0 for i in range(dim, currentDimensions))]
+        return self.updateDimensions(self.model.rowCount())
         # self.frameEditor.updateDimensionsCount(dim)
         logging.info("%s, %s", currentDimensions, dim)
         self.updateDimensionsCount(dim)
 
         # self.modelUpdatesEnabled = True
 
-    def updateDimensions_t(self, _):
+    def updateDimensions_t(self, _ = None):
         return self.updateDimensions(self.model.rowCount())
 
     def updateDimensions(self, dimensions: int):
@@ -236,10 +347,12 @@ class MatrixEditor(QWidget):
             self.dim1 = self.yDimSpin.value()
 
         for i in setHide.difference(setShow):
-            self.model.item(i, 1).setVisibility(False)
+            if self.model.rowCount() > i:
+                self.model.item(i, 1).setVisibility(False)
 
         for i in setShow.difference(setHide):
-            self.model.item(i, 1).setVisibility(True)
+            if self.model.rowCount() > i:
+                self.model.item(i, 1).setVisibility(True)
 
         #TODO: Refactor this function call out of this function; this function is doing too much
         self.updateFrameMatrix(
@@ -274,7 +387,7 @@ class MatrixEditor(QWidget):
         if val < self.matrix.size(dim):
             self.matrix = self.matrix[tuple(
                 (slice(None, None) if i != dim else slice(None, val))
-                for i in range(val)
+                for i in range(self.matrix.dim())
             )]
         elif val > self.matrix.size(dim):
             shape = list(self.matrix.shape)

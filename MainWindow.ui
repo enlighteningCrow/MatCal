@@ -35,7 +35,7 @@
         </attribute>
        </widget>
       </widget>
-      <widget class="QListView" name="listView"/>
+      <widget class="SearchListView" name="listView" native="true"/>
      </widget>
     </item>
    </layout>
@@ -75,6 +75,12 @@
    <class>MatrixEditor</class>
    <extends>QWidget</extends>
    <header>MatrixEditor</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SearchListView</class>
+   <extends>QWidget</extends>
+   <header>SearchListView</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

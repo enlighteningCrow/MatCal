@@ -25,7 +25,7 @@ class NNIntSI(QStandardItem):
             # self.setFlags(~Qt.ItemIsEnabled if show else Qt.ItemIsEnabled)
             # self.setFlags(Qt.)
             if show:
-                self.setData(1)
+                self.setData(0)
                 # self.setFlags(self.flags() | Qt.ItemIsEditable)
                 self.setFlags(self.flags() | Qt.ItemIsEnabled)
             else:

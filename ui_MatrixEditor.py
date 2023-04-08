@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QGridLayout,
-    QGroupBox, QHeaderView, QLabel, QScrollArea,
-    QSizePolicy, QSpinBox, QSplitter, QTableView,
-    QVBoxLayout, QWidget)
+    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
+    QPushButton, QScrollArea, QSizePolicy, QSpinBox,
+    QSplitter, QTableView, QVBoxLayout, QWidget)
 
 from UniqueSpinBox import UniqueSpinBox
 
@@ -26,9 +26,9 @@ class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(400, 300)
-        self.verticalLayout = QVBoxLayout(Form)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        Form.resize(747, 461)
+        self.horizontalLayout = QHBoxLayout(Form)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.frame = QFrame(Form)
         self.frame.setObjectName(u"frame")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
@@ -40,21 +40,10 @@ class Ui_Form(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.gridLayout_2 = QGridLayout(self.frame)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.dimCountLabel = QLabel(self.frame)
-        self.dimCountLabel.setObjectName(u"dimCountLabel")
-
-        self.gridLayout_2.addWidget(self.dimCountLabel, 0, 0, 1, 1)
-
-        self.dimCountSpinBox = QSpinBox(self.frame)
-        self.dimCountSpinBox.setObjectName(u"dimCountSpinBox")
-        self.dimCountSpinBox.setMaximum(1000000)
-
-        self.gridLayout_2.addWidget(self.dimCountSpinBox, 0, 1, 1, 1)
-
-        self.splitterEditor = QSplitter(self.frame)
-        self.splitterEditor.setObjectName(u"splitterEditor")
-        self.splitterEditor.setOrientation(Qt.Horizontal)
-        self.dimensionWidget = QGroupBox(self.splitterEditor)
+        self.splitter = QSplitter(self.frame)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.dimensionWidget = QGroupBox(self.splitter)
         self.dimensionWidget.setObjectName(u"dimensionWidget")
         self.verticalLayout_2 = QVBoxLayout(self.dimensionWidget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -70,29 +59,33 @@ class Ui_Form(object):
 
         self.verticalLayout_2.addWidget(self.dimensionsTable)
 
-        self.splitterEditor.addWidget(self.dimensionWidget)
-        self.matrixWidget = QGroupBox(self.splitterEditor)
+        self.splitter.addWidget(self.dimensionWidget)
+        self.matrixWidget = QGroupBox(self.splitter)
         self.matrixWidget.setObjectName(u"matrixWidget")
         self.gridLayout = QGridLayout(self.matrixWidget)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.selectionXLabel = QLabel(self.matrixWidget)
-        self.selectionXLabel.setObjectName(u"selectionXLabel")
-        self.selectionXLabel.setEnabled(True)
+        self.selectionXSpinbox = UniqueSpinBox(self.matrixWidget)
+        self.selectionXSpinbox.setObjectName(u"selectionXSpinbox")
+        self.selectionXSpinbox.setMinimum(0)
+        self.selectionXSpinbox.setMaximum(0)
 
-        self.gridLayout.addWidget(self.selectionXLabel, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.selectionXSpinbox, 0, 1, 1, 1)
 
         self.selectionYLabel = QLabel(self.matrixWidget)
         self.selectionYLabel.setObjectName(u"selectionYLabel")
 
         self.gridLayout.addWidget(self.selectionYLabel, 1, 0, 1, 1)
 
-        self.selectionXSpinbox = UniqueSpinBox(self.matrixWidget)
-        self.selectionXSpinbox.setObjectName(u"selectionXSpinbox")
+        self.selectionXLabel = QLabel(self.matrixWidget)
+        self.selectionXLabel.setObjectName(u"selectionXLabel")
+        self.selectionXLabel.setEnabled(True)
 
-        self.gridLayout.addWidget(self.selectionXSpinbox, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.selectionXLabel, 0, 0, 1, 1)
 
         self.selectionYSpinbox = UniqueSpinBox(self.matrixWidget)
         self.selectionYSpinbox.setObjectName(u"selectionYSpinbox")
+        self.selectionYSpinbox.setMinimum(0)
+        self.selectionYSpinbox.setMaximum(0)
 
         self.gridLayout.addWidget(self.selectionYSpinbox, 1, 1, 1, 1)
 
@@ -103,17 +96,50 @@ class Ui_Form(object):
         self.scrollAreaFE.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 135, 93))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 174, 254))
         self.scrollAreaFE.setWidget(self.scrollAreaWidgetContents)
 
         self.gridLayout.addWidget(self.scrollAreaFE, 2, 0, 1, 2)
 
-        self.splitterEditor.addWidget(self.matrixWidget)
+        self.splitter.addWidget(self.matrixWidget)
 
-        self.gridLayout_2.addWidget(self.splitterEditor, 1, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.splitter, 2, 0, 1, 2)
+
+        self.dimCountLabel = QLabel(self.frame)
+        self.dimCountLabel.setObjectName(u"dimCountLabel")
+
+        self.gridLayout_2.addWidget(self.dimCountLabel, 0, 0, 1, 1)
+
+        self.dimCountSpinBox = QSpinBox(self.frame)
+        self.dimCountSpinBox.setObjectName(u"dimCountSpinBox")
+        self.dimCountSpinBox.setMaximum(1000000)
+
+        self.gridLayout_2.addWidget(self.dimCountSpinBox, 0, 1, 1, 1)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.horizontalLayout.addWidget(self.frame)
+
+        self.saveLoadButtons = QWidget(Form)
+        self.saveLoadButtons.setObjectName(u"saveLoadButtons")
+        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.saveLoadButtons.sizePolicy().hasHeightForWidth())
+        self.saveLoadButtons.setSizePolicy(sizePolicy2)
+        self.gridLayout_3 = QGridLayout(self.saveLoadButtons)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.loadMatrixButton = QPushButton(self.saveLoadButtons)
+        self.loadMatrixButton.setObjectName(u"loadMatrixButton")
+
+        self.gridLayout_3.addWidget(self.loadMatrixButton, 0, 0, 1, 1)
+
+        self.saveMatrixButton = QPushButton(self.saveLoadButtons)
+        self.saveMatrixButton.setObjectName(u"saveMatrixButton")
+
+        self.gridLayout_3.addWidget(self.saveMatrixButton, 1, 0, 1, 1)
+
+
+        self.horizontalLayout.addWidget(self.saveLoadButtons)
 
 
         self.retranslateUi(Form)
@@ -123,10 +149,12 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.dimCountLabel.setText(QCoreApplication.translate("Form", u"Number of Dimensions", None))
         self.dimensionWidget.setTitle(QCoreApplication.translate("Form", u"Dimensions", None))
         self.matrixWidget.setTitle(QCoreApplication.translate("Form", u"Matrix", None))
-        self.selectionXLabel.setText(QCoreApplication.translate("Form", u"Selection X:", None))
         self.selectionYLabel.setText(QCoreApplication.translate("Form", u"Selection Y:", None))
+        self.selectionXLabel.setText(QCoreApplication.translate("Form", u"Selection X:", None))
+        self.dimCountLabel.setText(QCoreApplication.translate("Form", u"Number of Dimensions", None))
+        self.loadMatrixButton.setText(QCoreApplication.translate("Form", u"Load Matrix", None))
+        self.saveMatrixButton.setText(QCoreApplication.translate("Form", u"Save Matrix", None))
     # retranslateUi
 
