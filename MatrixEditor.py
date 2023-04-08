@@ -168,9 +168,8 @@ class MatrixEditor(QWidget, CommWidg):
 
     def setMatrix(self, matrix: Tensor):
         self.matrix = matrix.clone()
-        self.__ui.dimCountSpinBox.blockSignals(True)
-        self.__ui.dimCountSpinBox.setValue(matrix.dim())
-        self.__ui.dimCountSpinBox.blockSignals(False)
+        # self.__ui.dimCountSpinBox.blockSignals(True)
+        # self.__ui.dimCountSpinBox.blockSignals(False)
         # self.changeDimensions(matrix.dim())
         # self.model.blockSignals(True)
         self.model.removeRows(0, self.model.rowCount())
@@ -184,7 +183,9 @@ class MatrixEditor(QWidget, CommWidg):
         # self.updateDimensionsCount(matrix.dim())
         self.dim0 = None
         self.dim1 = None
+        self.__ui.dimCountSpinBox.setValue(matrix.dim())
         self.updateDimensions_t()
+        # self.updateDimensionsCount(matrix.dim)
 
     def logMatrix(self):
         logging.debug(self.matrix)
