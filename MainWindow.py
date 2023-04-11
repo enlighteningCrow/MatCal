@@ -35,11 +35,23 @@ class MainWindow(QMainWindow):
         self.pixmap = QPixmap('resources/MatCalIcon.png')
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
-        for i in (self.__ui.tabWidget.widget(j)
-                  for j in range(self.__ui.tabWidget.tabBar().count())):
+        self.tabDict = dict()
+        self.tabList = [self.__ui.tabWidget.widget(j)
+                        for j in range(self.__ui.tabWidget.tabBar().count())]
+        for i in self.tabList:
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
+            self.tabDict[i.objectName()] = i
         self.matrixListModel.dataChanged.connect(self.saveSettings)
+
+    def getTabWidget(self):
+        return self.__ui.tabWidget
+
+    def getTabList(self):
+        return self.tabList
+
+    def getTabDict(self):
+        return self.tabDict
 
     def saveSettings(self):
         print("Saved settings")

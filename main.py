@@ -2,21 +2,24 @@
 
 # This Python file uses the following encoding: utf-8
 
-# failed = pip.main(["install", "PySide6", "torch", "torchvision", "torchaudio"])
+if True:
+    from moduleChecker import checkModules
+    checkModules()
 
-from uiCompiler import compileUi
+    from MainWindow import MainWindow
+    from PySide6.QtWidgets import QApplication
+    import sys
 
-compileUi()
+    from uiCompiler import compileUi
+    compileUi()
 
-import sys
-from PySide6.QtWidgets import QApplication
 
-from MainWindow import MainWindow
+# TODO: Make the program have an when run icon, and maybe packaging into executable
+# TODO: Make a MatrixList model in MatrixListModel.py
+# TODO: Make the matirxlist model capable of saving to/loading from files
+# TODO: Make each of the separate matrices capable of saving to/loading from files
 
-#TODO: Make the program have an when run icon, and maybe packaging into executable
-#TODO: Make a MatrixList model in MatrixListModel.py
-#TODO: Make the matirxlist model capable of saving to/loading from files
-#TODO: Make each of the separate matrices capable of saving to/loading from files
+# TODO: Make the widget to allow the users to make their own operations, maybe 1 for making more permanent scripts and 1 as a mini-interpreter
 
 if __name__ == "__main__":
     # logging.getLogger().setLevel(logging.DEBUG)
@@ -32,3 +35,5 @@ if __name__ == "__main__":
     # deditor = MatrixEditor()
     # deditor.show()
     sys.exit(app.exec())
+
+# TODO: Separate components into modules

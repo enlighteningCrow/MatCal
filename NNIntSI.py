@@ -10,7 +10,7 @@ class NNIntSI(QStandardItem):
 
     valueChanged = Signal(int)
 
-    def __init__(self, value = 0):
+    def __init__(self, value=0):
         super().__init__()
         self.value = value
         self.setData(str(value))
@@ -33,7 +33,7 @@ class NNIntSI(QStandardItem):
                 # self.setFlags(self.flags() & ~Qt.ItemIsEditable)
                 self.setFlags(self.flags() & ~Qt.ItemIsEnabled)
 
-    def setData(self, value, role = Qt.EditRole):
+    def setData(self, value, role=Qt.EditRole):
         if role == Qt.EditRole:
             self.prev_value = self.value
             self.value = int(value)
@@ -71,8 +71,24 @@ class NNIntSI(QStandardItem):
 
 class NNIntSIM(QStandardItemModel):
 
-    def __init__(self, parent = None):
+    # def headerData(self, section, orientation, role):
+    #     # Write the function, with both the vertical and horizontal being an increasing sequence starting from 0
+    #     # if orientation == Qt.Horizontal:
+    #     #     return section
+    #     if orientation == Qt.Vertical:
+    #         return str(section)
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int):
+        if self.zeroBased and orientation == Qt.Vertical and role == Qt.DisplayRole:
+            return str(section)
+        return super().headerData(section, orientation, role)
+
+    def __init__(self, parent=None):
         super().__init__(parent)
+        self.zeroBased = True
+
+    # TODO: (Maybe) hook this up to the main menu toolbar actions
+    def setIndexing(self, zeroBased: bool):
+        self.zeroBased = zeroBased
 
     def setItem(self, row, column, item):
         if isinstance(item, NNIntSI) or item is None:
