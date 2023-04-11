@@ -23,7 +23,7 @@ from MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, Em
 
 from SearchListView import NameProxy
 
-#- TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
+# - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
 if 0 != 0:
@@ -32,8 +32,10 @@ if 0 != 0:
 
 class MatrixEditor(QWidget, CommWidg):
 
-    def __init__(self, parent: 'MainWindow' = None):
+    def __init__(self, parent: Union['MainWindow', None] = None):
         super().__init__(parent)
+        # super(CommWidg, self)
+        # QWidget.__init__(self, parent)
         self.initialized = False
         self.matrix = torch.zeros(())
         self.__ui = Ui_Form()
@@ -82,7 +84,7 @@ class MatrixEditor(QWidget, CommWidg):
         self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
         self.initialized = True
 
-    #TODO: Make a system to check if last change was saved
+    # TODO: Make a system to check if last change was saved
 
     def setMainWindow(self, mainwindow: 'MainWindow') -> None:
         self.__mainwindow = mainwindow
@@ -113,11 +115,14 @@ class MatrixEditor(QWidget, CommWidg):
     def setSelectedMatrix(self):
         sel = self.__mainwindow.getSelectedMatrix()
         if len(sel) == 1:
-            proxy: NameProxy = sel[0].model()
-            index = proxy.mapToSource(sel[0])
-            assert (isinstance(index.model(), QSortFilterProxyModel))
+            proxyS: QSortFilterProxyModel = sel[0].model()
+            indexS: QModelIndex = proxyS.mapToSource(sel[0])
+            proxy: NameProxy = indexS.model()
+            index = proxy.mapToSource(indexS)
+            logging.info(index.model(), type(index.model()))
+            assert (isinstance(index.model(), MatrixListModel))
             pair = index.data()
-            print(pair)
+            logging.info(pair)
             self.setMatrix(pair.matrix)
 
     def setMatrix(self, matrix: Tensor):
@@ -223,7 +228,7 @@ class MatrixEditor(QWidget, CommWidg):
         self.updateDimensionsCount(dim)
         return self.updateDimensions(self.model.rowCount())
 
-    def updateDimensions_t(self, _ = None):
+    def updateDimensions_t(self, _=None):
         return self.updateDimensions(self.model.rowCount())
 
     def updateDimensions(self, dimensions: int):
@@ -252,7 +257,7 @@ class MatrixEditor(QWidget, CommWidg):
             if self.model.rowCount() > i:
                 self.model.item(i, 1).setVisibility(True)
 
-        #TODO: Refactor this function call out of this function; this function is doing too much
+        # TODO: Refactor this function call out of this function; this function is doing too much
         self.updateFrameMatrix(
             self.dim0 == self.dim1,
             (self.dim0 is not None and self.dim1 is not None) and
@@ -291,6 +296,6 @@ class MatrixEditor(QWidget, CommWidg):
             shape = list(self.matrix.shape)
             shape[dim] = val - self.matrix.size(dim)
             self.matrix = torch.cat(
-                (self.matrix, torch.zeros(shape, device = self.matrix.device)),
+                (self.matrix, torch.zeros(shape, device=self.matrix.device)),
                 dim
             )

@@ -12,7 +12,8 @@ from bisect import bisect_left
 class DuplicateValueError(Exception):
 
     def __init__(self, name: str) -> None:
-        super().__init__(f"Matrix with name {name} already exists in the list.")
+        super().__init__(
+            f"Matrix with name {name} already exists in the list.")
 
 
 class EmptyNameError(Exception):
@@ -37,34 +38,37 @@ class MatrixPair:
 
 class MatrixListModel(QAbstractListModel):
 
-    def __init__(self, matrices: List[MatrixPair], parent = None):
+    def __init__(self, matrices: List[MatrixPair], parent=None):
         super().__init__(parent)
         self.__matrices = matrices
 
-    def rowCount(self, parent = QModelIndex()):
+    def getMatrixList(self):
+        return self.__matrices
+
+    def rowCount(self, parent=QModelIndex()):
         return len(self.__matrices)
 
     # def dataPair(self, index: int):
     #     return self.__matrices[index]
 
-    def data(self, index, role = Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or not (0 <= index.row() < self.rowCount()):
             return None
         if role == Qt.DisplayRole or role == Qt.EditRole:
             return self.__matrices[index.row()]
         return None
 
-    def setData(self, index: QModelIndex, value, role = Qt.EditRole) -> bool:
-        if not index.isValid() or role != Qt.EditRole or index.row() >= len(
-                self.__matrices):
-            return False
-        if isinstance(value, MatrixPair):
-            self.__matrices[index.row()] = value
-        elif isinstance(value, str):
-            self.__matrices[index.row()] = MatrixPair(value, zeros(()))
-        else:
-            return False
-        return True
+    # def setData(self, index: QModelIndex, value, role=Qt.EditRole) -> bool:
+    #     if not index.isValid() or role != Qt.EditRole or index.row() >= len(
+    #             self.__matrices):
+    #         return False
+    #     if isinstance(value, MatrixPair):
+    #         self.__matrices[index.row()] = value
+    #     elif isinstance(value, str):
+    #         self.__matrices[index.row()] = MatrixPair(value, zeros(()))
+    #     else:
+    #         return False
+    #     return True
 
     # def flags(self, index):
     #     flags = super().flags(index)
@@ -72,15 +76,15 @@ class MatrixListModel(QAbstractListModel):
     #         flags |= Qt.ItemIsEditable
     #     return flags
 
-    def insertRows(self, row, count, parent = QModelIndex()):
+    def insertRows(self, row, count, parent=QModelIndex()):
         self.beginInsertRows(parent, row, row + count - 1)
-        self.__matrices[row : row] = (None for i in range(count))
+        self.__matrices[row: row] = (None for i in range(count))
         self.endInsertRows()
         return True
 
-    def removeRows(self, row, count, parent = QModelIndex()):
+    def removeRows(self, row, count, parent=QModelIndex()):
         self.beginRemoveRows(parent, row, row + count - 1)
-        self.__matrices[row : row + count] = ()
+        self.__matrices[row: row + count] = ()
         self.endRemoveRows()
         return True
 
@@ -92,12 +96,13 @@ class MatrixListModel(QAbstractListModel):
 
         index = bisect_left(self.__matrices, matrix)
         if index < len(self.__matrices
-                      ) and matrix.name == self.__matrices[index].name:
+                       ) and matrix.name == self.__matrices[index].name:
             raise DuplicateValueError(matrix.name)
         self.beginInsertRows(QModelIndex(), index, index)
         self.__matrices.insert(index, matrix)
         self.endInsertRows()
         logging.info(f"After adding matrix: {self.__matrices}")
+        self.dataChanged.emit(self.index(index), self.index(index))
         # self.__matrices.insert(index, matrix)
         # self.setData(self.index(index), matrix)
         # self.dataChanged.emit(

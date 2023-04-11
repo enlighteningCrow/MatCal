@@ -23,7 +23,9 @@ class MainWindow(QMainWindow):
         self.__ui = Ui_MainWindow()
         self.__ui.setupUi(self)
         # self.setupUi(self)
-        matrixList = []
+        self.settings = QSettings()
+        matrixList = self.settings.value('matrixList', [])
+        # matrixList = []
         self.matrixListModel = MatrixListModel(matrixList, self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
         self.__ui.listView.setModel(self.matrixListModel)
@@ -37,9 +39,13 @@ class MainWindow(QMainWindow):
                   for j in range(self.__ui.tabWidget.tabBar().count())):
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
+        self.matrixListModel.dataChanged.connect(self.saveSettings)
 
+    def saveSettings(self):
+        print("Saved settings")
+        self.settings.setValue(
+            'matrixList', self.matrixListModel.getMatrixList())
 # In PySide6, demonstrate how to save the state of a subclass of QAbstractListModel
-        self.settings = QSettings()
 
     def connectSelectionChangedSignal(self, slot):
         # self.__ui.listView.selectionChanged.connect(slot)
@@ -60,7 +66,7 @@ class MainWindow(QMainWindow):
         self.matrixListModel.addMatrix(matrix)
 
 
-#-TODO: (PRIORITY): Try removing the current MatrixEditor.py altogether,
+# -TODO: (PRIORITY): Try removing the current MatrixEditor.py altogether,
 # and replace it with the current MatrixEditor.py. Also consider making
 # the matrix editor only pop up when the list is clicked, such that the user
 # makes an action to modify an existing matrix in the list or create a new one.
