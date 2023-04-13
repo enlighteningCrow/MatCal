@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>matrix.png</file>
-        <file>MatCalIcon.webp</file>
-    </qresource>
-</RCC>

@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         # for i in [QStandardItem("ajsio"), QStandardItem("bsdf09h"),
         #           QStandardItem("cjoasidg0")]:
         #     self.matrixList.appendRow(i)
-        self.pixmap = QPixmap('resources/MatCalIcon.png')
+        self.pixmap = QPixmap(':/resources/MatCalIcon.png')
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
         self.tabDict = dict()

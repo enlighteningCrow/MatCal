@@ -1,3 +1,3 @@
 {
-    "files": ["UnaryCalculator.ui","SearchListView.ui","BinaryCalculator.ui","matrixSaveToListDialog.ui","DIndexLabels.ui","FrameEditor.py","MatrixEditor.ui","DIndexEditor.py","MainWindow.ui","MatrixEditor.py","MainWindow.py","main.py","DIndexEditor.ui","UnaryCalculator.py"]
+    "files": ["MainWindow.py","DIndexEditor.py","SearchListView.ui","DIndexEditor.ui","UnaryCalculator.ui","matrixSaveToListDialog.ui","main.py","FrameEditor.py","MatrixEditor.py","MatrixEditor.ui","DIndexLabels.ui","BinaryCalculator.ui","UnaryCalculator.py","MainWindow.ui","resources.qrc"]
 }
