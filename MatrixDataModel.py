@@ -15,37 +15,53 @@ class MultiDimensionalMatrixException(Exception):
         )
 
 
-#TODO: Make the below option self._onXAxis connected to some sort of configuration file/something
+# TODO: Make the below option self._onXAxis connected to some sort of configuration file/something
 
 
 class MatrixDataModel(QAbstractTableModel):
 
     def __init__(
-        self, matrix: torch.Tensor, onXAxis: bool = True, parent = None
+        self, matrix: torch.Tensor, onXAxis: bool = True, parent=None
     ):
         super().__init__(parent)
         self.checkMatrixConstraints(matrix)
-        #TODO: Check if this matrix set must be moved over to self.setMatrix
+        # TODO: Check if this matrix set must be moved over to self.setMatrix
         self.__matrix: torch.Tensor = matrix
         self._onXAxis: bool = onXAxis
+        self.zeroBased = True
+
+    # TODO: (Maybe) hook this up to the main menu toolbar actions
+    def setAxis(self, onXAxis: bool):
+        self._onXAxis = onXAxis
+        self.dataChanged.emit(self.index(0, 0), self.index(
+            self.rowCount() - 1, self.columnCount() - 1))
+
+    # TODO: (Maybe) hook this up to the main menu toolbar actions
+    def setIndexing(self, zeroBased: bool):
+        self.zeroBased = zeroBased
+
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int):
+        if role == Qt.DisplayRole:
+            return str(section)
+        return super().headerData(section, orientation, role)
 
     def checkMatrixConstraints(self, matrix: torch.Tensor):
         if matrix.dim() > 2:
             raise MultiDimensionalMatrixException(matrix.dim())
 
-    def rowCount(self, parent = QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         if self.__matrix.dim() == 0:
             return 1
         return self.__matrix.size(0) if self.__matrix.dim(
         ) == 2 or self._onXAxis else 1
 
-    def columnCount(self, parent = QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         if self.__matrix.dim() == 0:
             return 1
         return self.__matrix.size(1) if self.__matrix.dim(
         ) == 2 else (1 if self._onXAxis else self.__matrix.size(0))
 
-    def data(self, index, role = Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return None
 
@@ -66,7 +82,7 @@ class MatrixDataModel(QAbstractTableModel):
 
         return None
 
-    def setData(self, index, value, role = Qt.EditRole):
+    def setData(self, index, value, role=Qt.EditRole):
         if not index.isValid() or role != Qt.EditRole:
             return False
 

@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QFrame, QGridLayout,
-    QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-    QPushButton, QScrollArea, QSizePolicy, QSpinBox,
-    QSplitter, QTableView, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGridLayout, QGroupBox,
+    QHBoxLayout, QHeaderView, QLabel, QPushButton,
+    QScrollArea, QSizePolicy, QSpinBox, QSplitter,
+    QTableView, QVBoxLayout, QWidget)
 
 from UniqueSpinBox import UniqueSpinBox
 
@@ -29,18 +29,16 @@ class Ui_Form(object):
         Form.resize(747, 461)
         self.horizontalLayout = QHBoxLayout(Form)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.frame = QFrame(Form)
-        self.frame.setObjectName(u"frame")
+        self.widget = QWidget(Form)
+        self.widget.setObjectName(u"widget")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.frame.sizePolicy().hasHeightForWidth())
-        self.frame.setSizePolicy(sizePolicy)
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.gridLayout_2 = QGridLayout(self.frame)
+        sizePolicy.setHeightForWidth(self.widget.sizePolicy().hasHeightForWidth())
+        self.widget.setSizePolicy(sizePolicy)
+        self.gridLayout_2 = QGridLayout(self.widget)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.splitter = QSplitter(self.frame)
+        self.splitter = QSplitter(self.widget)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Horizontal)
         self.dimensionWidget = QGroupBox(self.splitter)
@@ -96,7 +94,7 @@ class Ui_Form(object):
         self.scrollAreaFE.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 174, 254))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 174, 256))
         self.scrollAreaFE.setWidget(self.scrollAreaWidgetContents)
 
         self.gridLayout.addWidget(self.scrollAreaFE, 2, 0, 1, 2)
@@ -105,19 +103,19 @@ class Ui_Form(object):
 
         self.gridLayout_2.addWidget(self.splitter, 2, 0, 1, 2)
 
-        self.dimCountLabel = QLabel(self.frame)
+        self.dimCountLabel = QLabel(self.widget)
         self.dimCountLabel.setObjectName(u"dimCountLabel")
 
         self.gridLayout_2.addWidget(self.dimCountLabel, 0, 0, 1, 1)
 
-        self.dimCountSpinBox = QSpinBox(self.frame)
+        self.dimCountSpinBox = QSpinBox(self.widget)
         self.dimCountSpinBox.setObjectName(u"dimCountSpinBox")
         self.dimCountSpinBox.setMaximum(1000000)
 
         self.gridLayout_2.addWidget(self.dimCountSpinBox, 0, 1, 1, 1)
 
 
-        self.horizontalLayout.addWidget(self.frame)
+        self.horizontalLayout.addWidget(self.widget)
 
         self.saveLoadButtons = QWidget(Form)
         self.saveLoadButtons.setObjectName(u"saveLoadButtons")
