@@ -1,18 +1,30 @@
-from os import walk
+# from os import walk
+import logging
+import os
+
+from pathlib import Path
+from utils.chdir import chdir
 
 
 def regenerateRcc():
-    fl = open("resources.qrc", 'w')
+    fl = open("resources/resources.qrc", 'w')
     prefix = """<RCC>
     <qresource prefix="/">
 """
-    suffix = """
-    </qresource>
+    suffix = """    </qresource>
 </RCC>"""
     # <file > resources/themes/theme.qss < /file >
     # <file > resources/MatCalIcon.png < /file >
     contents = prefix
-    for root, dirs, files in walk("resources"):
-        if len(files):
-            for i in files:
-                contents += "<file>" + root + '/' + i + "</file>"
+    # os.curren
+    with chdir("resources"):
+        for root, dirs, files in os.walk("."):
+            # print(root, dirs, files)
+            if len(files):
+                for i in files:
+                    if not i.endswith(".qrc"):
+                        contents += 8 * ' ' + "<file>" + \
+                            (root + '/')[2:] + i + "</file>\n"
+        contents += suffix
+        logging.info("Regenerating resources.qrc contents", contents)
+        fl.write(contents)

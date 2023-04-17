@@ -3,12 +3,8 @@
 # This Python file uses the following encoding: utf-8
 
 if True:
-    from moduleChecker import checkModules
+    from utils.moduleChecker import checkModules
     checkModules()
-
-    from MainWindow import MainWindow
-    from PySide6.QtWidgets import QApplication
-    import sys
 
     from compilers.uiCompiler import compileUi
     compileUi()
@@ -16,9 +12,14 @@ if True:
     regenerateRcc()
     from compilers.rccCompiler import compileRcc
     compileRcc()
+    from generators.projectGenerator import regenerateProject
+    regenerateProject()
 
-    import rcc_themes
-
+    from src.ui.MainWindow import MainWindow
+    from PySide6.QtWidgets import QApplication
+    from PySide6.QtCore import QFile
+    import sys
+    from generated.resources import rcc_resources
 
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py
@@ -35,8 +36,9 @@ if __name__ == "__main__":
     # ui_file = QFile(uicPath)
     # ui_file.open(QFile.ReadOnly)
     # widget = loader.load(ui_file)
-    with open("themes/theme.qss", 'r') as file:
-        theme = file.read()
+    file = QFile("://themes/theme.qss")
+    if file.open(QFile.ReadOnly | QFile.Text):
+        theme = file.readAll().data().decode()
         app.setStyleSheet(theme)
     editor = MainWindow()
     editor.show()

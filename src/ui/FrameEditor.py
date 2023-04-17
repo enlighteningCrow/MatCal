@@ -1,25 +1,16 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtWidgets import (
-    QDoubleSpinBox,
-    QGridLayout,
-    QHBoxLayout,
-    QLabel,
-    QScrollArea,
-    QSpinBox,
     QTableView,
     QVBoxLayout,
     QWidget,
 )
 
 # In case you are reading this, there is NO ML or DL or any sort of AI in here; this is used solely for matrix calculations
-from torch import Tensor, tensor
+from torch import Tensor
 
-from typing import List
-from math import inf
+from src.ui.models.MatrixDataModel import MatrixDataModel
 
-from MatrixDataModel import MatrixDataModel
-
-from DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
+from src.ui.delegates.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
 
 import logging
 

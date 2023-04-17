@@ -2,7 +2,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import QApplication, QStyledItemDelegate, QItemDelegate, QDoubleSpinBox, QTableView, QWidget, QVBoxLayout
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from NNIntSI import NNIntSI, NNIntSIM
 
 from math import inf
 

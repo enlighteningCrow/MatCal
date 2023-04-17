@@ -83,13 +83,13 @@
   <customwidget>
    <class>MatrixEditor</class>
    <extends>QWidget</extends>
-   <header>MatrixEditor</header>
+   <header>src.ui.MatrixEditor</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>SearchListView</class>
    <extends>QWidget</extends>
-   <header>SearchListView</header>
+   <header>src.ui.views.SearchListView</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

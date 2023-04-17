@@ -1,19 +1,21 @@
-from PySide6.QtWidgets import QMainWindow, QAbstractItemView
-from ui_MainWindow import Ui_MainWindow
+from PySide6.QtWidgets import QMainWindow
+from generated.designer.ui_MainWindow import Ui_MainWindow
 
-from PySide6.QtGui import QStandardItem, QStandardItemModel, QIcon, QPixmap
+from PySide6.QtGui import QIcon, QImage, QPixmap
 
-from CommWidg import CommWidg
+from src.ui.CommWidg import CommWidg
 
-from MatrixListModel import DuplicateValueError, MatrixListModel, MatrixPair
+from src.ui.models.MatrixListModel import MatrixListModel, MatrixPair
 
-from typing import Tuple, List
-
-from torch import Tensor
+from typing import List
 
 import logging
 
 from PySide6.QtCore import QModelIndex, QSettings
+
+from generated.resources import rcc_resources
+
+# rcc_resources.initResources()
 
 
 class MainWindow(QMainWindow):
@@ -24,7 +26,16 @@ class MainWindow(QMainWindow):
         self.__ui.setupUi(self)
         # self.setupUi(self)
         self.settings = QSettings()
-        matrixList = self.settings.value('matrixList', [])
+        matrixList: List[MatrixPair] = []
+        try:
+            matrixList = self.settings.value('matrixList', [])
+            if not isinstance(matrixList, list):
+                raise RuntimeError("Settings for matrixList has invalid type")
+        except Exception as e:
+            logging.error(str(e))
+            logging.error("Resetting value of matrixList to", [])
+            self.settings.setValue('matrixList', [])
+            matrixList = []
         # matrixList = []
         self.matrixListModel = MatrixListModel(matrixList, self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
@@ -32,7 +43,8 @@ class MainWindow(QMainWindow):
         # for i in [QStandardItem("ajsio"), QStandardItem("bsdf09h"),
         #           QStandardItem("cjoasidg0")]:
         #     self.matrixList.appendRow(i)
-        self.pixmap = QPixmap(':/resources/MatCalIcon.png')
+        self.pixmap = QPixmap('://resources/MatCalIcon.png')
+        print(self.pixmap)
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
         self.tabDict = dict()

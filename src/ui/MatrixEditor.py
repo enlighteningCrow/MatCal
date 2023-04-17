@@ -1,27 +1,27 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtWidgets import QWidget, QMessageBox, QDialog, QInputDialog
+from PySide6.QtWidgets import QWidget, QMessageBox, QInputDialog
 
 from PySide6.QtCore import QModelIndex, QSortFilterProxyModel
 
-from FrameEditor import FrameEditor
+from src.ui.FrameEditor import FrameEditor
 import torch
 from torch import Tensor
 
-from typing import Callable, List, Tuple, Union
+from typing import Tuple, Union
 
 # from ui_DIndexLabels import Ui_Form
-from ui_MatrixEditor import Ui_Form
+from generated.designer.ui_MatrixEditor import Ui_Form
 
-from NNIntSI import NNIntSI, NNIntSIM
-from SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
+from src.ui.models.NNIntSI import NNIntSI, NNIntSIM
+from src.ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
 
 import logging
 
-from CommWidg import CommWidg
+from src.ui.CommWidg import CommWidg
 
-from MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, EmptyNameError
+from src.ui.models.MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, EmptyNameError
 
-from SearchListView import NameProxy
+from src.ui.views.SearchListView import NameProxy
 
 # - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
@@ -33,7 +33,7 @@ if 0 != 0:
 class MatrixEditor(QWidget, CommWidg):
 
     def __init__(self, parent: Union['MainWindow', None] = None):
-        super().__init__(parent)
+        super().__init__()
         # super(CommWidg, self)
         # QWidget.__init__(self, parent)
         self.initialized = False

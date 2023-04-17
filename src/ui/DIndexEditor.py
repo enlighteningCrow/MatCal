@@ -1,12 +1,9 @@
 # This Python file uses the following encoding: utf-8
 from PySide6.QtWidgets import QWidget, QSpinBox
-from ui_DIndexEditor import Ui_Form
 from torch import Tensor
 
 from PySide6.QtCore import Signal
 from typing import Tuple
-
-import logging
 
 
 # TODO: Make it hide the curIndex if the frameEditor is set to this dimension

@@ -169,7 +169,7 @@
   <customwidget>
    <class>UniqueSpinBox</class>
    <extends>QSpinBox</extends>
-   <header>UniqueSpinBox</header>
+   <header>src.ui.UniqueSpinBox</header>
   </customwidget>
  </customwidgets>
  <resources/>

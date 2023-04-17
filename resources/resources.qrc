@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>themes/theme.qss</file>
+        <file>icons/MatCalIcon.png</file>
+    </qresource>
+</RCC>

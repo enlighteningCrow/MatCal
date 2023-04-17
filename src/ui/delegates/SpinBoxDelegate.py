@@ -1,8 +1,7 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIntValidator
-from PySide6.QtWidgets import QApplication, QStyledItemDelegate, QItemDelegate, QSpinBox, QTableView, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QApplication, QStyledItemDelegate, QSpinBox, QTableView, QWidget, QVBoxLayout
 from PySide6.QtGui import QStandardItemModel, QStandardItem
-from NNIntSI import NNIntSI, NNIntSIM
+from src.ui.models.NNIntSI import NNIntSI
 
 import logging
 
