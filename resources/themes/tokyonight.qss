@@ -1,0 +1,100 @@
+
+        /* Set default styles for various widgets */
+        QWidget {
+            color: #c0caf5;
+            background-color: #1a1b26;
+        }
+
+        QLabel {
+            background-color: transparent;
+        }
+
+        QLineEdit, QTextEdit, QPlainTextEdit {
+            background-color: #21233d;
+            border: 1px solid #21233d;
+        }
+
+        QPushButton {
+            background-color: #21233d;
+            border: 1px solid #21233d;
+            padding: 5px 10px;
+        }
+
+        QPushButton:hover, QPushButton:focus {
+            background-color: #1a1b26;
+            border-color: #7aa2f7;
+        }
+
+        QMenuBar {
+            background-color: #21233d;
+        }
+
+        QMenuBar::item {
+            padding: 5px 10px;
+            background-color: #21233d;
+            color: #c0caf5;
+        }
+
+        QMenuBar::item:selected, QMenuBar::item:pressed {
+            background-color: #1a1b26;
+            color: #7aa2f7;
+        }
+
+        QMenu {
+            background-color: #21233d;
+            border: 1px solid #21233d;
+        }
+
+        QMenu::item {
+            padding: 5px 10px;
+            background-color: #21233d;
+            color: #c0caf5;
+        }
+
+        QMenu::item:selected, QMenu::item:pressed {
+            background-color: #1a1b26;
+            color: #7aa2f7;
+        }
+
+        QScrollBar {
+            background-color: #21233d;
+            border: 1px solid #21233d;
+        }
+
+        QScrollBar::handle {
+            background-color: #1a1b26;
+        }
+
+        QScrollBar::handle:hover, QScrollBar::handle:focus {
+            background-color: #7aa2f7;
+        }
+
+        QScrollBar::add-page, QScrollBar::sub-page {
+            background-color: transparent;
+        }
+
+        QScrollBar::add-line, QScrollBar::sub-line {
+            background-color: #21233d;
+            border: 1px solid #21233d;
+        }
+
+        QScrollBar::add-line:hover, QScrollBar::sub-line:hover {
+            background-color: #1a1b26;
+            border-color: #7aa2f7;
+        }
+
+        QScrollBar::add-line:pressed, QScrollBar::sub-line:pressed {
+            background-color: #7aa2f7;
+            border-color: #7aa2f7;
+        }
+
+        QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+            width: 16px;
+            height: 16px;
+        }
+
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+            width: 16px;
+            height: 16px;
+        }
+        

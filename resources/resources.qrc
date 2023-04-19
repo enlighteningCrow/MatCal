@@ -1,6 +1,16 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="">
+        <file>themes/gruvboxDark.qss</file>
+        <file>themes/nord.qss</file>
+        <file>themes/monokai.qss</file>
+        <file>themes/dracula.qss</file>
+        <file>themes/vscode-dark-plus.qss</file>
+        <file>themes/gruvbox.qss</file>
         <file>themes/theme.qss</file>
+        <file>themes/theme_manual.qss</file>
+        <file>themes/tokyonight.qss</file>
+        <file>themes/ayu-dark.qss</file>
+        <file>themes/one-dark.qss</file>
         <file>icons/MatCalIcon.png</file>
     </qresource>
 </RCC>

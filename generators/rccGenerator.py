@@ -9,7 +9,7 @@ from utils.chdir import chdir
 def regenerateRcc():
     fl = open("resources/resources.qrc", 'w')
     prefix = """<RCC>
-    <qresource prefix="/">
+    <qresource prefix="">
 """
     suffix = """    </qresource>
 </RCC>"""

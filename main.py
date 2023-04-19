@@ -8,6 +8,7 @@ if True:
 
     from compilers.uiCompiler import compileUi
     compileUi()
+    from generators import themeGenerator
     from generators.rccGenerator import regenerateRcc
     regenerateRcc()
     from compilers.rccCompiler import compileRcc
@@ -17,9 +18,12 @@ if True:
 
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
-    from PySide6.QtCore import QFile
+    from PySide6.QtCore import QFile, QSettings
+    from PySide6.QtGui import QPixmap
     import sys
     from generated.resources import rcc_resources
+    from src.ui.settings import settingEntries
+    from src.ui.misc.setTheme import setTheme
 
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py
@@ -36,10 +40,11 @@ if __name__ == "__main__":
     # ui_file = QFile(uicPath)
     # ui_file.open(QFile.ReadOnly)
     # widget = loader.load(ui_file)
-    file = QFile("://themes/theme.qss")
-    if file.open(QFile.ReadOnly | QFile.Text):
-        theme = file.readAll().data().decode()
-        app.setStyleSheet(theme)
+    settings = QSettings()
+    for i, j in settingEntries:
+        if not settings.contains(i):
+            settings.setValue(i, j)
+    setTheme(app, settings)
     editor = MainWindow()
     editor.show()
     # widget.show()

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtWidgets import QMainWindow, QDialog
 from generated.designer.ui_MainWindow import Ui_MainWindow
 
 from PySide6.QtGui import QIcon, QImage, QPixmap
@@ -11,9 +11,11 @@ from typing import List
 
 import logging
 
-from PySide6.QtCore import QModelIndex, QSettings
+from PySide6.QtCore import QModelIndex, QSettings, QFile
 
 from generated.resources import rcc_resources
+
+from src.ui.dialogs.PreferencesDialog import PreferencesDialog
 
 # rcc_resources.initResources()
 
@@ -34,17 +36,13 @@ class MainWindow(QMainWindow):
         except Exception as e:
             logging.error(str(e))
             logging.error("Resetting value of matrixList to", [])
-            self.settings.setValue('matrixList', [])
+            self.settings.clear()
             matrixList = []
         # matrixList = []
         self.matrixListModel = MatrixListModel(matrixList, self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
         self.__ui.listView.setModel(self.matrixListModel)
-        # for i in [QStandardItem("ajsio"), QStandardItem("bsdf09h"),
-        #           QStandardItem("cjoasidg0")]:
-        #     self.matrixList.appendRow(i)
-        self.pixmap = QPixmap('://resources/MatCalIcon.png')
-        print(self.pixmap)
+        self.pixmap = QPixmap(":/icons/MatCalIcon.png")
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
         self.tabDict = dict()
@@ -70,6 +68,14 @@ class MainWindow(QMainWindow):
         self.settings.setValue(
             'matrixList', self.matrixListModel.getMatrixList())
 # In PySide6, demonstrate how to save the state of a subclass of QAbstractListModel
+
+    def showPreferencesDialog(self):
+        print("showPreferencesDialog")
+        diag = PreferencesDialog(self)
+        diag.exec()
+        # diag.
+        # diag.show()
+        # diag.exec()
 
     def connectSelectionChangedSignal(self, slot):
         # self.__ui.listView.selectionChanged.connect(slot)
