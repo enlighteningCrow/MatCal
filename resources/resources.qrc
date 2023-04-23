@@ -6,8 +6,6 @@
         <file>themes/dracula.qss</file>
         <file>themes/vscode-dark-plus.qss</file>
         <file>themes/gruvbox.qss</file>
-        <file>themes/theme.qss</file>
-        <file>themes/theme_manual.qss</file>
         <file>themes/tokyonight.qss</file>
         <file>themes/ayu-dark.qss</file>
         <file>themes/one-dark.qss</file>

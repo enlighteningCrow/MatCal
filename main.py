@@ -24,6 +24,7 @@ if True:
     from generated.resources import rcc_resources
     from src.ui.settings import settingEntries
     from src.ui.misc.setTheme import setTheme
+    from src.ui.GlobalSettings import settings, gsettings
 
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py
@@ -40,12 +41,16 @@ if __name__ == "__main__":
     # ui_file = QFile(uicPath)
     # ui_file.open(QFile.ReadOnly)
     # widget = loader.load(ui_file)
-    settings = QSettings()
-    for i, j in settingEntries:
-        if not settings.contains(i):
-            settings.setValue(i, j)
-    setTheme(app, settings)
+    # settings = QSettings()
+    # gsettings().clear()
+    for i, j in settingEntries.items():
+        if not gsettings().contains(i):
+            settings(i).set(j)
+    theme = settings("theme")
+    theme.valueChanged.connect(lambda x: setTheme(app, x))
+    theme.update()
     editor = MainWindow()
+    gsettings().update()
     editor.show()
     # widget.show()
     # deditor = MatrixEditor()

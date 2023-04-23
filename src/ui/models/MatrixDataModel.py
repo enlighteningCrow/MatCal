@@ -5,6 +5,8 @@ from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 
 import logging
 
+from src.ui.GlobalSettings import settings
+
 
 class MultiDimensionalMatrixException(Exception):
 
@@ -21,20 +23,30 @@ class MultiDimensionalMatrixException(Exception):
 class MatrixDataModel(QAbstractTableModel):
 
     def __init__(
-        self, matrix: torch.Tensor, onXAxis: bool = True, parent=None
+        self, matrix: torch.Tensor, parent=None
     ):
         super().__init__(parent)
         self.checkMatrixConstraints(matrix)
         # TODO: Check if this matrix set must be moved over to self.setMatrix
         self.__matrix: torch.Tensor = matrix
-        self._onXAxis: bool = onXAxis
+        self._onXAxis: bool = False
         self.zeroBased = True
+        settings("axis").valueChanged.connect(self.setAxis)
+        settings("indexing").valueChanged.connect(self.setIndexing)
 
     # TODO: (Maybe) hook this up to the main menu toolbar actions
-    def setAxis(self, onXAxis: bool):
-        self._onXAxis = onXAxis
+    def setAxis(self, onYAxis: bool):
+        # self.begin
+        # if self.rowCount() > self.columnCount():
+        #     self.beginInsertColumns(
+        #         QModelIndex(), self.columnCount(), self.rowCount() - 1)
+        #     self.beginRemoveRows(
+        #         QModelIndex(), self.columnCount(), self.rowCount() - 1)
+        self.beginResetModel()
+        self._onXAxis = not onYAxis
         self.dataChanged.emit(self.index(0, 0), self.index(
             self.rowCount() - 1, self.columnCount() - 1))
+        self.endResetModel()
 
     # TODO: (Maybe) hook this up to the main menu toolbar actions
     def setIndexing(self, zeroBased: bool):

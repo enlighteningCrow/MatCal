@@ -27,17 +27,18 @@ class MainWindow(QMainWindow):
         self.__ui = Ui_MainWindow()
         self.__ui.setupUi(self)
         # self.setupUi(self)
-        self.settings = QSettings()
+        # self.settings = QSettings()
         matrixList: List[MatrixPair] = []
-        try:
-            matrixList = self.settings.value('matrixList', [])
-            if not isinstance(matrixList, list):
-                raise RuntimeError("Settings for matrixList has invalid type")
-        except Exception as e:
-            logging.error(str(e))
-            logging.error("Resetting value of matrixList to", [])
-            self.settings.clear()
-            matrixList = []
+        # TODO: ZODB for matrixList
+        # try:
+        #     matrixList = self.settings.value('matrixList', [])
+        #     if not isinstance(matrixList, list):
+        #         raise RuntimeError("Settings for matrixList has invalid type")
+        # except Exception as e:
+        #     logging.error(str(e))
+        #     logging.error("Resetting value of matrixList to", [])
+        #     self.settings.clear()
+        #     matrixList = []
         # matrixList = []
         self.matrixListModel = MatrixListModel(matrixList, self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
@@ -52,7 +53,7 @@ class MainWindow(QMainWindow):
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
             self.tabDict[i.objectName()] = i
-        self.matrixListModel.dataChanged.connect(self.saveSettings)
+        self.matrixListModel.dataChanged.connect(self.saveList)
 
     def getTabWidget(self):
         return self.__ui.tabWidget
@@ -63,10 +64,10 @@ class MainWindow(QMainWindow):
     def getTabDict(self):
         return self.tabDict
 
-    def saveSettings(self):
+    def saveList(self):
         print("Saved settings")
-        self.settings.setValue(
-            'matrixList', self.matrixListModel.getMatrixList())
+        # self.settings.setValue(
+        #     'matrixList', self.matrixListModel.getMatrixList())
 # In PySide6, demonstrate how to save the state of a subclass of QAbstractListModel
 
     def showPreferencesDialog(self):

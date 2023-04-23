@@ -26,9 +26,13 @@ class MatrixPair:
 
     def __init__(self, name: str, matrix: Tensor):
         self.name = name
-        self.matrix = matrix
+        self.__matrix = matrix
 
-    def __lt__(self, other: object) -> bool:
+    @property
+    def matrix(self):
+        return self.__matrix
+
+    def __lt__(self, other: 'MatrixPair') -> bool:
         return self.name < other.name
 
     def __str__(self):
@@ -48,33 +52,12 @@ class MatrixListModel(QAbstractListModel):
     def rowCount(self, parent=QModelIndex()):
         return len(self.__matrices)
 
-    # def dataPair(self, index: int):
-    #     return self.__matrices[index]
-
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid() or not (0 <= index.row() < self.rowCount()):
             return None
         if role == Qt.DisplayRole or role == Qt.EditRole:
             return self.__matrices[index.row()]
         return None
-
-    # def setData(self, index: QModelIndex, value, role=Qt.EditRole) -> bool:
-    #     if not index.isValid() or role != Qt.EditRole or index.row() >= len(
-    #             self.__matrices):
-    #         return False
-    #     if isinstance(value, MatrixPair):
-    #         self.__matrices[index.row()] = value
-    #     elif isinstance(value, str):
-    #         self.__matrices[index.row()] = MatrixPair(value, zeros(()))
-    #     else:
-    #         return False
-    #     return True
-
-    # def flags(self, index):
-    #     flags = super().flags(index)
-    #     if index.isValid():
-    #         flags |= Qt.ItemIsEditable
-    #     return flags
 
     def insertRows(self, row, count, parent=QModelIndex()):
         self.beginInsertRows(parent, row, row + count - 1)
@@ -109,3 +92,24 @@ class MatrixListModel(QAbstractListModel):
         #     self.index(index), self.index(self.rowCount() - 1)
         # )
         # self.layoutChanged.emit()
+
+    # def dataPair(self, index: int):
+    #     return self.__matrices[index]
+
+    # def setData(self, index: QModelIndex, value, role=Qt.EditRole) -> bool:
+    #     if not index.isValid() or role != Qt.EditRole or index.row() >= len(
+    #             self.__matrices):
+    #         return False
+    #     if isinstance(value, MatrixPair):
+    #         self.__matrices[index.row()] = value
+    #     elif isinstance(value, str):
+    #         self.__matrices[index.row()] = MatrixPair(value, zeros(()))
+    #     else:
+    #         return False
+    #     return True
+
+    # def flags(self, index):
+    #     flags = super().flags(index)
+    #     if index.isValid():
+    #         flags |= Qt.ItemIsEditable
+    #     return flags

@@ -149,6 +149,8 @@ class Theme:
 # )
 
 
+# TODO: Move back the theme_manual with a different name
+
 themes = [
     Theme("gruvbox", "#ebdbb2", "#282828", "#3c3836", "#cc241d",
           "#98971a", "#d79921", "#458588", "#b16286", "#689d6a", "#d65d0e"),

@@ -117,8 +117,8 @@
    <slot>updateIndexCheckboxLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>256</x>
-     <y>76</y>
+     <x>380</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>398</x>
@@ -133,28 +133,12 @@
    <slot>updateAxisCheckboxLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>207</x>
-     <y>45</y>
+     <x>357</x>
+     <y>41</y>
     </hint>
     <hint type="destinationlabel">
      <x>392</x>
      <y>59</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>applyPreferences()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>69</x>
-     <y>273</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>66</x>
-     <y>295</y>
     </hint>
    </hints>
   </connection>

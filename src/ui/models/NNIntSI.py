@@ -5,6 +5,8 @@ from typing import Union
 
 import logging
 
+from src.ui.GlobalSettings import settings
+
 
 class NNIntSI(QStandardItem):
 
@@ -85,6 +87,7 @@ class NNIntSIM(QStandardItemModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.zeroBased = True
+        settings("indexing").valueChanged.connect(self.setIndexing)
 
     # TODO: (Maybe) hook this up to the main menu toolbar actions
     def setIndexing(self, zeroBased: bool):

@@ -20,7 +20,7 @@ import logging
 # TODO: Maybe rename to MatrixView
 class FrameEditor(QWidget):
 
-    def __init__(self, mat: Tensor, parent = None):
+    def __init__(self, mat: Tensor, parent=None):
         self.initialized = False
         super().__init__(parent)
         # self.matrix = mat
@@ -31,11 +31,9 @@ class FrameEditor(QWidget):
         # self.glOuter.addWidget(self.scrArea, 1, 2, 1, 2)
         self.vblo = QVBoxLayout(self)
         self.tableView = QTableView(self)
-        self.matrixModel = MatrixDataModel(mat, parent = self)
+        self.matrixModel = MatrixDataModel(mat, self)
         self.tableView.setModel(self.matrixModel)
         self.vblo.addWidget(self.tableView)
-        delegate = DoubleSpinBoxDelegate(self.tableView)
-        self.tableView.setItemDelegate(delegate)
         # self.updateBindings()
         self.initialized = True
 

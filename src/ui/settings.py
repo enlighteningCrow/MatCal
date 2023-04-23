@@ -1,1 +1,2 @@
-settingEntries = (("theme", ""), ("axis", False), ("index", False))
+# TODO: Consider turning this into a dictionary instead of a tuple
+settingEntries = {"theme": "<default>", "axis": False, "indexing": False}
