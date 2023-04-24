@@ -15,6 +15,8 @@ if True:
     from generators.projectGenerator import regenerateProject
     regenerateProject()
 
+    from generators import themeGenerator
+
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
     import sys
