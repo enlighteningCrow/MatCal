@@ -86,3 +86,4 @@ backup/
 generated/
 
 __pycache__/
+.idea/
