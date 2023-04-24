@@ -15,7 +15,7 @@ import sys
 
 def checkModules():
     pkgs = set(i.project_name for i in pkg.working_set)
-    packagesList = {"PySide6", "torch", "torchvision"}
+    packagesList = {"PySide6", "torch", "torchvision", "BTrees", "ZODB"}
     diff = packagesList.difference(pkgs)
     if len(diff):
         logging.info("Missing packages:", diff)
