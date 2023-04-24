@@ -39,7 +39,7 @@ class GlobalSettings:
     #     return GlobalSettings.__instance
 
     def __init__(self):
-        self.settings = SettingsWrapper()
+        self.settings = SettingsWrapper("MatCal", "preferences")
         # self.settingsItems = defaultdict(set)
         self.settingsItems: Dict[str, 'GlobalSettingsItem'] = dict()
 
