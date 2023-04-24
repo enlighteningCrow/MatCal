@@ -129,6 +129,16 @@ class Theme:
             width: 16px;
             height: 16px;
         }}
+
+        QTabWidget::tab {{
+            background-color: {theme.BG2};
+            color: {theme.BG};
+            font-size: 14px;
+        }}
+
+        QTabWidget::tab:selected {{
+            color: {theme.BLUE};
+        }}
         """
         with open("resources/themes/" + theme.name + ".qss", "w") as f:
             f.write(result)
