@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.__ui.setupUi(self)
         # self.setupUi(self)
         # self.settings = QSettings()
-        matrixList: List[MatrixPair] = []
+        # matrixList: List[MatrixPair] = []
         # TODO: ZODB for matrixList
         # try:
         #     matrixList = self.settings.value('matrixList', [])
@@ -40,15 +40,17 @@ class MainWindow(QMainWindow):
         #     self.settings.clear()
         #     matrixList = []
         # matrixList = []
-        self.matrixListModel = MatrixListModel(matrixList, self.__ui.listView)
+        self.matrixListModel = MatrixListModel(self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
         self.__ui.listView.setModel(self.matrixListModel)
         self.pixmap = QPixmap(":/icons/MatCalIcon.png")
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
         self.tabDict = dict()
-        self.tabList = [self.__ui.tabWidget.widget(j)
-                        for j in range(self.__ui.tabWidget.tabBar().count())]
+        self.tabList = [
+            self.__ui.tabWidget.widget(j)
+            for j in range(self.__ui.tabWidget.tabBar().count())
+        ]
         for i in self.tabList:
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)

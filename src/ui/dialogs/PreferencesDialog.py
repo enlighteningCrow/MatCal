@@ -1,10 +1,7 @@
-from PySide6.QtWidgets import QDialog, QAbstractButton, QApplication, QComboBox, QDialogButtonBox
-from PySide6.QtCore import QSettings
+from PySide6.QtWidgets import QDialog, QDialogButtonBox
 from generated.designer.ui_PreferencesDialog import Ui_Dialog
-from src.ui.settings import settingEntries
-from src.ui.misc.setTheme import setTheme
 
-from src.ui.GlobalSettings import settings
+from src.db.GlobalSettings import settings
 from utils.themes import getThemes
 
 

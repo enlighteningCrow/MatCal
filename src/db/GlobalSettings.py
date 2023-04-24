@@ -1,11 +1,7 @@
-from PySide6.QtCore import QCoreApplication, QObject, QSettings, Signal
-from PySide6.QtWidgets import QApplication
-from collections import defaultdict
-from typing import overload, Union, Dict
+from PySide6.QtCore import QObject, QSettings, Signal
+from typing import Dict
 
-from functools import singledispatch
-
-from src.ui.settings import settingEntries
+from src.db.settings import settingEntries
 
 
 class SettingsWrapper(QSettings):

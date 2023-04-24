@@ -8,7 +8,6 @@ if True:
 
     from compilers.uiCompiler import compileUi
     compileUi()
-    from generators import themeGenerator
     from generators.rccGenerator import regenerateRcc
     regenerateRcc()
     from compilers.rccCompiler import compileRcc
@@ -18,13 +17,10 @@ if True:
 
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
-    from PySide6.QtCore import QFile, QSettings
-    from PySide6.QtGui import QPixmap
     import sys
-    from generated.resources import rcc_resources
-    from src.ui.settings import settingEntries
+    from src.db.settings import settingEntries
     from src.ui.misc.setTheme import setTheme
-    from src.ui.GlobalSettings import settings, gsettings
+    from src.db.GlobalSettings import settings, gsettings
 
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py

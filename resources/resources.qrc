@@ -5,6 +5,7 @@
         <file>themes/monokai.qss</file>
         <file>themes/dracula.qss</file>
         <file>themes/vscode-dark-plus.qss</file>
+        <file>themes/defBlue.qss</file>
         <file>themes/gruvbox.qss</file>
         <file>themes/tokyonight.qss</file>
         <file>themes/ayu-dark.qss</file>

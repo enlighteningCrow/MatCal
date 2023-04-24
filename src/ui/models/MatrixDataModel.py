@@ -1,11 +1,9 @@
-from PySide6.QtCore import QAbstractItemModel
-
 import torch
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 
 import logging
 
-from src.ui.GlobalSettings import settings
+from src.db.GlobalSettings import settings
 
 
 class MultiDimensionalMatrixException(Exception):

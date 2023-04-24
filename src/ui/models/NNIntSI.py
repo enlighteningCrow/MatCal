@@ -3,9 +3,7 @@ from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 from typing import Union
 
-import logging
-
-from src.ui.GlobalSettings import settings
+from src.db.GlobalSettings import settings
 
 
 class NNIntSI(QStandardItem):
