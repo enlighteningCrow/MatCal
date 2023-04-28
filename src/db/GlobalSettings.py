@@ -17,7 +17,9 @@ class SettingsWrapper(QSettings):
     def update(self):
         # QSettings()
         for i in self.allKeys():
-            self.valueChanged.emit(i, self.value(i))
+            self.valueChanged.emit(
+                i, self.value(i, type = type(settingEntries[i]))
+            )
 
 
 # class GlobalSettings(QObject):
@@ -28,6 +30,7 @@ class SettingsWrapper(QSettings):
 #     @staticmethod
 #     def getSettingsItem(item):
 #         return GlobalSettings.GlobalSettingsItem(item)
+
 
 class GlobalSettings:
     instance: 'GlobalSettings' = None
@@ -82,7 +85,9 @@ class GlobalSettingsItem(QObject):
         self.__item = item
 
     def get(self):
-        return gsettings().value(self.__item, type=type(settingEntries[self.__item]))
+        return gsettings().value(
+            self.__item, type = type(settingEntries[self.__item])
+        )
 
     def set(self, value):
         gsettings().setValue(self.__item, value)
@@ -92,6 +97,7 @@ class GlobalSettingsItem(QObject):
 
 
 class GlobalSettingsItemInterfacer:
+
     def __init__(self):
         pass
 
@@ -118,8 +124,7 @@ class GlobalSettingsItemInterfacer:
     @staticmethod
     def _updateConnections(item, value):
         if item in GlobalSettings.instance.settingsItems:
-            GlobalSettings.instance.settingsItems[item].valueChanged.emit(
-                value)
+            GlobalSettings.instance.settingsItems[item].valueChanged.emit(value)
 
 
 if GlobalSettingsItemInterfacer.instance is None:
@@ -127,12 +132,14 @@ if GlobalSettingsItemInterfacer.instance is None:
     for i in settingEntries:
         GlobalSettingsItemInterfacer.instance.create(i)
     GlobalSettings.instance.settings.valueChanged.connect(
-        GlobalSettingsItemInterfacer._updateConnections)
+        GlobalSettingsItemInterfacer._updateConnections
+    )
 
 
 def settings(item: str):
     assert (item in settingEntries)
     return GlobalSettingsItemInterfacer.instance.item(item)
+
 
 # @settings.register
 # def _(item: str):

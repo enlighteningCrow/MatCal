@@ -33,9 +33,9 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="MatrixEditor" name="tab">
+       <widget class="MatrixEditor" name="MatrixEditor">
         <attribute name="title">
-         <string>Creation</string>
+         <string>Matrix Editor</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="tab_2">

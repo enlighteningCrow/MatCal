@@ -26,6 +26,10 @@ if True:
 
     from src.db.Storage import onExit
 
+    from PySide6.QtCore import QTimer
+
+    import logging
+
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py
 # TODO: Make the matrixlist model capable of saving to/loading from files
@@ -33,8 +37,10 @@ if True:
 
 # TODO: Make the widget to allow the users to make their own operations, maybe 1 for making more permanent scripts and 1 as a mini-interpreter
 
+# TODO: (PRIORITY) Consider moving everything source-related to src (except ignored and resources)
+
 if __name__ == "__main__":
-    # logging.getLogger().setLevel(logging.DEBUG)
+    logging.getLogger().setLevel(logging.WARN)
     app = QApplication(sys.argv)
     # loader = QUiLoader()
     # uicPath = Path(__file__).resolve().parent / "MainWindow.ui"
@@ -49,12 +55,12 @@ if __name__ == "__main__":
     theme = settings("theme")
     theme.valueChanged.connect(lambda x: setTheme(app, x))
     theme.update()
-    editor = MainWindow()
-    gsettings().update()
-    editor.show()
+    mainWindow = MainWindow()
+    mainWindow.show()
     # widget.show()
     # deditor = MatrixEditor()
     # deditor.show()
+    # QTimer.singleShot(1000, lambda: gsettings().update())
     exitCode = app.exec()
     onExit()
     sys.exit(exitCode)

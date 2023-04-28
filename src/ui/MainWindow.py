@@ -67,13 +67,13 @@ class MainWindow(QMainWindow):
         return self.tabDict
 
     def saveList(self):
-        print("Saved settings")
+        logging.info("Saved settings")
         # self.settings.setValue(
         #     'matrixList', self.matrixListModel.getMatrixList())
 # In PySide6, demonstrate how to save the state of a subclass of QAbstractListModel
 
     def showPreferencesDialog(self):
-        print("showPreferencesDialog")
+        # print("showPreferencesDialog")
         diag = PreferencesDialog(self)
         diag.exec()
         # diag.
@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
         # self.
 
     def addMatrix(self, matrix: MatrixPair):
-        logging.info("added matrix:", matrix)
+        logging.info(f"added matrix: {matrix}")
         # self.matrixList.addMatrix(matrix)
         # self.matrixList.layoutChanged.emit()
         # self.__ui.listView.updateEditorData()

@@ -7,7 +7,7 @@ from src.ui.FrameEditor import FrameEditor
 import torch
 from torch import Tensor
 
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional, List
 
 # from ui_DIndexLabels import Ui_Form
 from generated.designer.ui_MatrixEditor import Ui_Form
@@ -23,6 +23,8 @@ from src.ui.models.MatrixListModel import MatrixListModel, MatrixPair, Duplicate
 
 from src.ui.views.SearchListView import NameProxy
 
+from src.ui.dialogs.MatrixListDialogs import saveMatrix
+
 # - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
@@ -32,7 +34,7 @@ if 0 != 0:
 
 class MatrixEditor(QWidget, CommWidg):
 
-    def __init__(self, parent: Union['MainWindow', None] = None):
+    def __init__(self, parent: Optional['MainWindow'] = None):
         super().__init__()
         # super(CommWidg, self)
         # QWidget.__init__(self, parent)
@@ -99,18 +101,19 @@ class MatrixEditor(QWidget, CommWidg):
         )
 
     def saveMatrix(self):
-        result, status = QInputDialog.getText(
-            self, "Matrix Name", "Enter matrix name:"
-        )
-        if status:
-            try:
-                self.__mainwindow.addMatrix(
-                    MatrixPair(result, self.matrix.clone())
-                )
-            except DuplicateValueError as e:
-                QMessageBox.warning(self, "Error", str(e))
-            except EmptyNameError as e:
-                QMessageBox.warning(self, "Error", str(e))
+        saveMatrix(self.matrix, self.__mainwindow, self)
+        # result, status = QInputDialog.getText(
+        #     self, "Matrix Name", "Enter matrix name:"
+        # )
+        # if status:
+        #     try:
+        #         self.__mainwindow.addMatrix(
+        #             MatrixPair(result, self.matrix.clone())
+        #         )
+        #     except DuplicateValueError as e:
+        #         QMessageBox.warning(self, "Error", str(e))
+        #     except EmptyNameError as e:
+        #         QMessageBox.warning(self, "Error", str(e))
 
     def setSelectedMatrix(self):
         sel = self.__mainwindow.getSelectedMatrix()
@@ -119,7 +122,12 @@ class MatrixEditor(QWidget, CommWidg):
             indexS: QModelIndex = proxyS.mapToSource(sel[0])
             proxy: NameProxy = indexS.model()
             index = proxy.mapToSource(indexS)
-            logging.info(index.model(), type(index.model()))
+            logging.info(
+                # "Model: {}, Type: {}".format(
+                #     index.model(), type(index.model())
+                # )
+                f"Model: {index.model()}, Type: {type(index.model())}"
+            )
             assert (isinstance(index.model(), MatrixListModel))
             pair = index.data()
             logging.info(pair)
@@ -154,7 +162,7 @@ class MatrixEditor(QWidget, CommWidg):
             )
         except RuntimeError as e:
             QMessageBox.warning(self, "Error", str(e))
-            print(self.model.item(i, 0).getValue())
+            logging.error(self.model.item(i, 0).getValue())
             self.model.item(i, 0).revertValue()
 
     def udtmsImpl(self):
@@ -196,9 +204,8 @@ class MatrixEditor(QWidget, CommWidg):
                 tuple((1 for i in range(self.matrix.dim(), dim)))
             )
         else:
-            print(
-                self.matrix, tuple(slice(None, None) for i in range(dim)),
-                tuple(0 for i in range(dim, currentDimensions))
+            logging.info(
+                f"{self.matrix=}, {tuple(slice(None, None) for i in range(dim)) + tuple(0 for i in range(dim, currentDimensions))=}"
             )
             self.matrix = self.matrix[
                 tuple(slice(None, None) for i in range(dim)) +
@@ -216,19 +223,18 @@ class MatrixEditor(QWidget, CommWidg):
 
     def changeDimensions(self, dim):
         currentDimensions = self.model.rowCount()
-        logging.info("From: %s", self.matrix)
+        # logging.info(f"From: {self.matrix}")
         self.changeDimensionsMatrix(dim)
         self.changeDimensionsTable(dim)
-        logging.info("To: %s", self.matrix)
-        print(
-            self.matrix, tuple(slice(None, None) for i in range(dim)),
-            tuple(0 for i in range(dim, currentDimensions))
-        )
-        logging.info("%s, %s", currentDimensions, dim)
+        # logging.info(f"To: {self.matrix}")
+        # logging.info(
+        #     f"{self.matrix=}, {tuple(slice(None, None) for i in range(dim))=}, tuple(0 for i in range(dim, currentDimensions))"
+        # )
+        logging.info(f"{currentDimensions=}, {dim=}")
         self.updateDimensionsCount(dim)
         return self.updateDimensions(self.model.rowCount())
 
-    def updateDimensions_t(self, _=None):
+    def updateDimensions_t(self, _ = None):
         return self.updateDimensions(self.model.rowCount())
 
     def updateDimensions(self, dimensions: int):
@@ -296,6 +302,6 @@ class MatrixEditor(QWidget, CommWidg):
             shape = list(self.matrix.shape)
             shape[dim] = val - self.matrix.size(dim)
             self.matrix = torch.cat(
-                (self.matrix, torch.zeros(shape, device=self.matrix.device)),
+                (self.matrix, torch.zeros(shape, device = self.matrix.device)),
                 dim
             )

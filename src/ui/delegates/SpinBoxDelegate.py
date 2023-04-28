@@ -46,7 +46,7 @@ class SpinBoxDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.value()
-        logging.info("Model data set on %s to %s", index, value)
+        logging.info(f"Model data set on {index} to {value}")
         model.setData(index, value, Qt.EditRole)
 
     def setMax(self, maxVal: int):

@@ -1,8 +1,6 @@
-from PySide6.QtCore import QAbstractListModel
+from PySide6.QtCore import QAbstractListModel, Qt, QModelIndex
 from torch import Tensor, zeros
 from typing import List, Tuple, Union
-
-from PySide6.QtCore import Qt, QModelIndex
 
 import logging
 
@@ -67,15 +65,24 @@ class MatrixListModel(QAbstractListModel):
 
     # def insertRows(self, row, count, parent=QModelIndex()):
     #     self.beginInsertRows(parent, row, row + count - 1)
-    #     self.__matrices[row: row] = (None for i in range(count))
+    #     # self.__matrices[row: row] = (None for i in range(count))
+    #     self.__matrices.in(self.__matrices.keys()[row])
     #     self.endInsertRows()
     #     return True
-    #
+
     # def removeRows(self, row, count, parent=QModelIndex()):
     #     self.beginRemoveRows(parent, row, row + count - 1)
-    #     self.__matrices[row: row + count] = ()
+    #     # self.__matrices[row: row + count] = ()
+    #     self.__matrices.pop(self.__matrices.keys()[row])
     #     self.endRemoveRows()
     #     return True
+
+    def removeRow(self, row, parent=QModelIndex()):
+        self.beginRemoveRows(parent, row, row)
+        # self.__matrices[row: row + count] = ()
+        self.__matrices.pop(self.__matrices.keys()[row])
+        self.endRemoveRows()
+        return True
 
     def addMatrix(self, matrix: MatrixPair):
         logging.info(f"Before adding matrix: {self.__matrices}")

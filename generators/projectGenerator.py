@@ -14,7 +14,8 @@ def isProjectFile(filename: Path) -> bool:
 def regenerateProject():
     fl = open("MatCal.pyproject", 'w')
     filesList: List[str] = []
-    for dir in ["compilers", "designer", "generators", "resources", "src", "utils"]:
+    for dir in ["compilers", "designer", "generators", "resources", "src",
+                "utils"]:
         for root, dirs, files in walk(dir):
             if len(files):
                 for i in files:
@@ -23,5 +24,6 @@ def regenerateProject():
     contents = json.dumps({"files": filesList})
     # print(filesList)
     # print(contents)
-    logging.info("Regenerating project contents", contents)
+    # print(logging.getLogger())
+    logging.info(f"Regenerating project contents: {contents}")
     fl.write(contents)

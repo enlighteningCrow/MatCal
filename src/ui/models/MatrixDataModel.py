@@ -20,20 +20,18 @@ class MultiDimensionalMatrixException(Exception):
 
 class MatrixDataModel(QAbstractTableModel):
 
-    def __init__(
-        self, matrix: torch.Tensor, parent=None
-    ):
+    def __init__(self, matrix: torch.Tensor, parent = None):
         super().__init__(parent)
         self.checkMatrixConstraints(matrix)
         # TODO: Check if this matrix set must be moved over to self.setMatrix
         self.__matrix: torch.Tensor = matrix
-        self._onXAxis: bool = False
+        self._onYAxis: bool = True
         self.zeroBased = True
         settings("axis").valueChanged.connect(self.setAxis)
         settings("indexing").valueChanged.connect(self.setIndexing)
 
     # TODO: (Maybe) hook this up to the main menu toolbar actions
-    def setAxis(self, onYAxis: bool):
+    def setAxis(self, onXAxis: bool):
         # self.begin
         # if self.rowCount() > self.columnCount():
         #     self.beginInsertColumns(
@@ -41,9 +39,12 @@ class MatrixDataModel(QAbstractTableModel):
         #     self.beginRemoveRows(
         #         QModelIndex(), self.columnCount(), self.rowCount() - 1)
         self.beginResetModel()
-        self._onXAxis = not onYAxis
-        self.dataChanged.emit(self.index(0, 0), self.index(
-            self.rowCount() - 1, self.columnCount() - 1))
+        self._onYAxis = not onXAxis
+        self.dataChanged.emit(
+            self.index(0, 0),
+            self.index(self.rowCount() - 1,
+                       self.columnCount() - 1)
+        )
         self.endResetModel()
 
     # TODO: (Maybe) hook this up to the main menu toolbar actions
@@ -59,19 +60,19 @@ class MatrixDataModel(QAbstractTableModel):
         if matrix.dim() > 2:
             raise MultiDimensionalMatrixException(matrix.dim())
 
-    def rowCount(self, parent=QModelIndex()):
+    def rowCount(self, parent = QModelIndex()):
         if self.__matrix.dim() == 0:
             return 1
         return self.__matrix.size(0) if self.__matrix.dim(
-        ) == 2 or self._onXAxis else 1
+        ) == 2 or self._onYAxis else 1
 
-    def columnCount(self, parent=QModelIndex()):
+    def columnCount(self, parent = QModelIndex()):
         if self.__matrix.dim() == 0:
             return 1
         return self.__matrix.size(1) if self.__matrix.dim(
-        ) == 2 else (1 if self._onXAxis else self.__matrix.size(0))
+        ) == 2 else (1 if self._onYAxis else self.__matrix.size(0))
 
-    def data(self, index, role=Qt.DisplayRole):
+    def data(self, index, role = Qt.DisplayRole):
         if not index.isValid():
             return None
 
@@ -81,7 +82,7 @@ class MatrixDataModel(QAbstractTableModel):
             if self.__matrix.dim() == 0:
                 return str(self.__matrix.item())
             if self.__matrix.dim() == 1:
-                if self._onXAxis:
+                if self._onYAxis:
                     if column == 0:
                         return str(self.__matrix[row].item())
                 else:
@@ -92,11 +93,11 @@ class MatrixDataModel(QAbstractTableModel):
 
         return None
 
-    def setData(self, index, value, role=Qt.EditRole):
+    def setData(self, index, value, role = Qt.EditRole):
         if not index.isValid() or role != Qt.EditRole:
             return False
 
-        logging.info(self.__matrix)
+        logging.info(f"Set data to matrix: {self.__matrix}")
 
         row, column = index.row(), index.column()
 
@@ -108,7 +109,7 @@ class MatrixDataModel(QAbstractTableModel):
             self.dataChanged.emit(index, index)
             return True
         if self.__matrix.dim() == 1:
-            if self._onXAxis:
+            if self._onYAxis:
                 if column == 0:
                     self.__matrix[row] = value
                     self.dataChanged.emit(index, index)

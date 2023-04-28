@@ -30,7 +30,7 @@ class DoubleSpinBoxDelegate(QStyledItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.value()
-        logging.info("Model data set on", index, "to", value)
+        logging.info(f"Model data set on {index} to {value}")
         model.setData(index, value, Qt.EditRole)
 
     def setMax(self, maxVal: float):
