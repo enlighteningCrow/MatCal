@@ -97,4 +97,14 @@
             width: 16px;
             height: 16px;
         }
+
+        QTabWidget::tab {
+            background-color: #2c313a;
+            color: #282c34;
+            font-size: 14px;
+        }
+
+        QTabWidget::tab:selected {
+            color: #61afef;
+        }
         

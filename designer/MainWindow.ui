@@ -90,7 +90,7 @@
     <string>Preferences...</string>
    </property>
    <property name="shortcut">
-    <string>E</string>
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

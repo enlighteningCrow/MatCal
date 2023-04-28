@@ -24,6 +24,8 @@ if True:
     from src.ui.misc.setTheme import setTheme
     from src.db.GlobalSettings import settings, gsettings
 
+    from src.db.Storage import onExit
+
 # TODO: Make the program have an when run icon, and maybe packaging into executable
 # TODO: Make a MatrixList model in MatrixListModel.py
 # TODO: Make the matrixlist model capable of saving to/loading from files
@@ -53,6 +55,8 @@ if __name__ == "__main__":
     # widget.show()
     # deditor = MatrixEditor()
     # deditor.show()
-    sys.exit(app.exec())
+    exitCode = app.exec()
+    onExit()
+    sys.exit(exitCode)
 
 # TODO: Separate components into modules

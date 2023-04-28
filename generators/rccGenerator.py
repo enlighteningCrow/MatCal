@@ -26,5 +26,6 @@ def regenerateRcc():
                         contents += 8 * ' ' + "<file>" + \
                             (root + '/')[2:] + i + "</file>\n"
         contents += suffix
-        logging.info("Regenerating resources.qrc contents", contents)
+        logging.info("Regenerating resources.qrc contents:")
+        logging.info(contents)
         fl.write(contents)

@@ -4,6 +4,7 @@ import logging
 import pip
 import pkg_resources as pkg
 
+import os
 import sys
 
 # print([i for i in pkg.working_set])
@@ -24,7 +25,16 @@ def checkModules():
             ". Install automatically? (y/n): "
         )
         if accept == "y":
-            pip.main(["install", *diff])
+            special_inst = {"torch", "torchvision", "torchaudio"}
+            pip.main(
+                ["install", *[i for i in diff if i not in special_inst]])
+            if len(special_inst.union(diff)):
+                "Cannot install torch, torchvision, and torchaudio automatically. Please install them manually according to this web: https://pytorch.org"
+                # if os.name in ("posix", "nt"):
+                #         pip.main(
+                #             ["install", *[i for i in diff if i in ("torch", "torchvision", "torchaudio")], " --index-url", "https://download.pytorch.org/whl/cu118"])
+                # pip.main(
+                #     ["install", *[i for i in diff if i not in ("torch", "torchvision", "torchaudio")]])
         elif accept == "n":
             print("Please install the missing packages before running MatCal.")
             sys.exit(1)
