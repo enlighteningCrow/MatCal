@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="">
+        <file>resources_rc.py</file>
         <file>themes/gruvboxDark.qss</file>
         <file>themes/nord.qss</file>
         <file>themes/monokai.qss</file>

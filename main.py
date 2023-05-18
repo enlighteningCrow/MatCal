@@ -26,8 +26,6 @@ if True:
 
     from src.db.Storage import onExit
 
-    from PySide6.QtCore import QTimer
-
     import logging
 
 # TODO: Make the program have an when run icon, and maybe packaging into executable
@@ -38,6 +36,7 @@ if True:
 # TODO: Make the widget to allow the users to make their own operations, maybe 1 for making more permanent scripts and 1 as a mini-interpreter
 
 # TODO: (PRIORITY) Consider moving everything source-related to src (except ignored and resources)
+# TODO: (PRIORITY) Consider rebranding this to a Tensor Calculator instead of Matrix Calculator
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.WARN)
@@ -60,7 +59,6 @@ if __name__ == "__main__":
     # widget.show()
     # deditor = MatrixEditor()
     # deditor.show()
-    # QTimer.singleShot(1000, lambda: gsettings().update())
     exitCode = app.exec()
     onExit()
     sys.exit(exitCode)

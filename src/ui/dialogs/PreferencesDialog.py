@@ -3,25 +3,29 @@ from generated.designer.ui_PreferencesDialog import Ui_Dialog
 
 from src.db.GlobalSettings import settings
 from utils.themes import getThemes
+import logging
 
 
 class PreferencesDialog(QDialog):
-    def __init__(self, parent=None):
+
+    def __init__(self, parent = None):
         super().__init__(parent)
         self.__ui = Ui_Dialog()
         self.__ui.setupUi(self)
         self.populateThemes()
         settings("theme").valueChanged.connect(
-            self.updateThemeComboBoxSelection)
+            self.updateThemeComboBoxSelection
+        )
         settings("theme").update()
         settings("axis").valueChanged.connect(self.updateAxisCheckbox)
         settings("axis").update()
-        settings("indexing").valueChanged.connect(
-            self.updateIndexCheckbox)
+        settings("indexing").valueChanged.connect(self.updateIndexCheckbox)
         settings("indexing").update()
         # self.__ui.buttonBox.clicked.connect(self.buttonClicked)
-        self.__ui.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.applyPreferences)
-        self.__ui.buttonBox.button(QDialogButtonBox.Ok).clicked.connect(self.applyPreferences)
+        self.__ui.buttonBox.button(QDialogButtonBox.Apply
+                                  ).clicked.connect(self.applyPreferences)
+        self.__ui.buttonBox.button(QDialogButtonBox.Ok
+                                  ).clicked.connect(self.applyPreferences)
 
     def populateThemes(self):
         # QComboBox().clear()
@@ -42,7 +46,8 @@ class PreferencesDialog(QDialog):
 
     def updateIndexCheckboxLabel(self, checked: bool):
         self.__ui.checkBoxIndex.setText(
-            "Use " + ('1' if checked else '0') + "-based indexing")
+            "Use " + ('1' if checked else '0') + "-based indexing"
+        )
 
     def updateIndexCheckbox(self, checked: bool):
         self.__ui.checkBoxIndex.setChecked(checked)
@@ -54,7 +59,7 @@ class PreferencesDialog(QDialog):
 
     def applyPreferences(self):
         # settings = QSettings()
-        print("Preferences applied")
+        logging.info("Preferences applied")
         if settings("theme").get() != self.__ui.comboBoxTheme.currentText():
             settings("theme").set(self.__ui.comboBoxTheme.currentText())
             # setTheme(QApplication.instance(), settingbs)
