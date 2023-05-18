@@ -9,9 +9,9 @@ if True:
     from compilers.uiCompiler import compileUi
     compileUi()
     from generators.rccGenerator import regenerateRcc
-    regenerateRcc()
+    # regenerateRcc()
     from compilers.rccCompiler import compileRcc
-    compileRcc()
+    # compileRcc()
     from generators.projectGenerator import regenerateProject
     regenerateProject()
 
@@ -19,6 +19,7 @@ if True:
 
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
+    from PySide6.QtCore import Signal, Slot
     import sys
     from src.db.settings import settingEntries
     from src.ui.misc.setTheme import setTheme
@@ -64,3 +65,5 @@ if __name__ == "__main__":
     sys.exit(exitCode)
 
 # TODO: Separate components into modules
+
+# TODO: Check why the themes (qss) still regenerate despite commenting out
