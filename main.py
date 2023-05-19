@@ -9,9 +9,9 @@ if True:
     from compilers.uiCompiler import compileUi
     compileUi()
     from generators.rccGenerator import regenerateRcc
-    regenerateRcc()
+    # regenerateRcc()
     from compilers.rccCompiler import compileRcc
-    compileRcc()
+    # compileRcc()
     from generators.projectGenerator import regenerateProject
     regenerateProject()
 
@@ -19,14 +19,13 @@ if True:
 
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
+    from PySide6.QtCore import Signal, Slot
     import sys
     from src.db.settings import settingEntries
     from src.ui.misc.setTheme import setTheme
     from src.db.GlobalSettings import settings, gsettings
 
     from src.db.Storage import onExit
-
-    from PySide6.QtCore import QTimer
 
     import logging
 
@@ -38,6 +37,7 @@ if True:
 # TODO: Make the widget to allow the users to make their own operations, maybe 1 for making more permanent scripts and 1 as a mini-interpreter
 
 # TODO: (PRIORITY) Consider moving everything source-related to src (except ignored and resources)
+# TODO: (PRIORITY) Consider rebranding this to a Tensor Calculator instead of Matrix Calculator
 
 if __name__ == "__main__":
     logging.getLogger().setLevel(logging.WARN)
@@ -60,9 +60,10 @@ if __name__ == "__main__":
     # widget.show()
     # deditor = MatrixEditor()
     # deditor.show()
-    # QTimer.singleShot(1000, lambda: gsettings().update())
     exitCode = app.exec()
     onExit()
     sys.exit(exitCode)
 
 # TODO: Separate components into modules
+
+# TODO: Check why the themes (qss) still regenerate despite commenting out

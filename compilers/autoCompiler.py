@@ -16,6 +16,15 @@ def getExecutableVariants(name: str):
     return [name, name + ".exe", name + ".bat", name + ".sh", name + ".app"]
 
 
+def createPath(path: Path):
+    if not path.exists():
+        # make that path if it does not exist
+        for i in range(0, len(path.parts)):
+            curPath = Path(*path.parts[0:i + 1])
+            if not curPath.exists():
+                curPath.mkdir()
+
+
 def compileAuto(
     compilerName: str,
     compilerNamesFallback: List[str],
@@ -74,6 +83,7 @@ def compileAuto(
         for i in (file for file in os.listdir(inputDir)
                   if file.endswith('.' + filetype)):
             path = Path(i)
+            createPath(path.parent/outputDirPrefix / outputDirSuffix)
             output = str(
                 path.parent / outputDirPrefix / outputDirSuffix /
                 (resultPrefix + "_" + path.stem + ".py")
