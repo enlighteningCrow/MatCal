@@ -1,6 +1,4 @@
-from compilers.autoCompiler import compileAuto
-
-from os import walk
+from src.compilers.autoCompiler import compileAuto
 
 
 def compileRcc():

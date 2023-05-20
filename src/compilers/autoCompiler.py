@@ -2,27 +2,19 @@ import os
 from pathlib import Path
 import sys
 
-from glob import glob
 import PySide6
-from PySide6.QtCore import QDirIterator
 
 from shutil import which
 
 import logging
 from typing import List
 
+from src.utils import createPath
+
 
 def getExecutableVariants(name: str):
     return [name, name + ".exe", name + ".bat", name + ".sh", name + ".app"]
 
-
-def createPath(path: Path):
-    if not path.exists():
-        # make that path if it does not exist
-        for i in range(0, len(path.parts)):
-            curPath = Path(*path.parts[0:i + 1])
-            if not curPath.exists():
-                curPath.mkdir()
 
 
 def compileAuto(
@@ -83,7 +75,7 @@ def compileAuto(
         for i in (file for file in os.listdir(inputDir)
                   if file.endswith('.' + filetype)):
             path = Path(i)
-            createPath(path.parent/outputDirPrefix / outputDirSuffix)
+            createPath(path.parent / outputDirPrefix / outputDirSuffix)
             output = str(
                 path.parent / outputDirPrefix / outputDirSuffix /
                 (resultPrefix + "_" + path.stem + ".py")

@@ -1,4 +1,4 @@
-from compilers.autoCompiler import compileAuto
+from src.compilers.autoCompiler import compileAuto
 
 
 def compileUi():

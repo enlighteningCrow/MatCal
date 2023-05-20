@@ -3,23 +3,18 @@
 # This Python file uses the following encoding: utf-8
 
 if True:
-    from utils.moduleChecker import checkModules
+    from src.utils.moduleChecker import checkModules
     checkModules()
 
-    from compilers.uiCompiler import compileUi
+    from src.compilers.uiCompiler import compileUi
     compileUi()
-    from generators.rccGenerator import regenerateRcc
     # regenerateRcc()
-    from compilers.rccCompiler import compileRcc
     # compileRcc()
-    from generators.projectGenerator import regenerateProject
+    from src.generators.projectGenerator import regenerateProject
     regenerateProject()
-
-    from generators import themeGenerator
 
     from src.ui.MainWindow import MainWindow
     from PySide6.QtWidgets import QApplication
-    from PySide6.QtCore import Signal, Slot
     import sys
     from src.db.settings import settingEntries
     from src.ui.misc.setTheme import setTheme
@@ -67,3 +62,10 @@ if __name__ == "__main__":
 # TODO: Separate components into modules
 
 # TODO: Check why the themes (qss) still regenerate despite commenting out
+
+# TODO: (PROCEDURE) Make the main window show a stackwidget first to let the user enter the logging in screen.
+# Store the account details (username, password (hashed), account type) into the ZODB.
+# Then make the user authenticate and select from the account type which
+
+# --Fix the auto compiler to look at the correct location
+#TODO: Move the main.py into the src directory

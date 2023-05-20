@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SolvingEquationsTab</class>
+ <widget class="QWidget" name="SolvingEquationsTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>274</width>
+    <height>539</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="equationsLabel">
+     <property name="text">
+      <string>Number of equations:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="spinBox"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QTableView" name="tableView"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="resultsLabel">
+     <property name="text">
+      <string>Results:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QTableView" name="tableView_2"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

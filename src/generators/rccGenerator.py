@@ -2,8 +2,7 @@
 import logging
 import os
 
-from pathlib import Path
-from utils.chdir import chdir
+from src.utils import chdir
 
 
 def regenerateRcc():
@@ -18,7 +17,7 @@ def regenerateRcc():
     contents = prefix
     # os.curren
     with chdir("resources"):
-        for root, dirs, files in os.walk("."):
+        for root, dirs, files in os.walk(""):
             # print(root, dirs, files)
             if len(files):
                 for i in files:

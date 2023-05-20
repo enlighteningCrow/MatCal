@@ -1,7 +1,7 @@
 from typing import List
 
 
-def joinNatural(*args: List[str]):
+def joinNatural(*args: str):
     # if not len(args):
     #     return ""
     # elif len(args) == 1:
