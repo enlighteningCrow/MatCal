@@ -1,9 +1,12 @@
-import ZODB
 import ZODB.FileStorage
 
-from ZODB import Connection
+# from utils import createPath
+from src.utils import createPath
+from pathlib import Path
 
-storage = ZODB.FileStorage.FileStorage('storage.fs')
+createPath(Path('data'))
+
+storage = ZODB.FileStorage.FileStorage(str(Path('data') / 'storage.fs'))
 db = ZODB.DB(storage)
 connection = db.open()
 # print(storage, db)

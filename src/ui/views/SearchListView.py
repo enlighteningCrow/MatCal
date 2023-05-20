@@ -1,11 +1,11 @@
 from PySide6.QtWidgets import QWidget, QMenu
-from generated.designer.ui_SearchListView import Ui_Form
+from src.generated import Ui_Form
 
 from PySide6.QtCore import QAbstractListModel, QSortFilterProxyModel, Qt, QIdentityProxyModel
 from PySide6.QtGui import QAction
 
 from src.ui.models.MatrixListModel import MatrixPair
-from typing import Union, Optional
+from typing import Optional
 
 from types import SimpleNamespace
 

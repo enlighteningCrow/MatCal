@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import QMainWindow, QDialog
-from generated.designer.ui_MainWindow import Ui_MainWindow
+from PySide6.QtWidgets import QMainWindow
+from src.generated.designer.ui_MainWindow import Ui_MainWindow
 
-from PySide6.QtGui import QIcon, QImage, QPixmap
+from PySide6.QtGui import QIcon, QPixmap
 
 from src.ui.CommWidg import CommWidg
 
@@ -11,9 +11,7 @@ from typing import List
 
 import logging
 
-from PySide6.QtCore import QModelIndex, QSettings, QFile
-
-from generated.resources import rcc_resources
+from PySide6.QtCore import QModelIndex
 
 from src.ui.dialogs.PreferencesDialog import PreferencesDialog
 

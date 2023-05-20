@@ -78,6 +78,7 @@ CMakeLists.txt.user*
 *.user
 
 *_bck.py
+*_bck.*
 *_bck[0-9].py
 *_old.py
 *_old[0-9].py
@@ -85,7 +86,7 @@ ui_*.py
 
 experiment/
 backup/
-generated/
+src/generated/
 
 __pycache__/
 .idea/

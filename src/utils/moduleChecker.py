@@ -4,10 +4,9 @@ import logging
 import pip
 import pkg_resources as pkg
 
-import os
 import sys
 
-from utils.strings import joinNatural
+
 # print([i for i in pkg.working_set])
 # print(pkg.working_set.__iter__())
 

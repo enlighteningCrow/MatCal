@@ -16,7 +16,6 @@ def getExecutableVariants(name: str):
     return [name, name + ".exe", name + ".bat", name + ".sh", name + ".app"]
 
 
-
 def compileAuto(
     compilerName: str,
     compilerNamesFallback: List[str],
@@ -26,6 +25,7 @@ def compileAuto(
     outputDirPrefix: str = "generated",
     outputDirSuffix: str = ''
 ):
+    outputDirPrefix = "src/" + outputDirPrefix
     compilerPrefixes = [
         Path(PySide6.__file__).parent / "Qt" / "libexec",
         Path(PySide6.__file__).parent,
@@ -71,6 +71,7 @@ def compileAuto(
                     )
                     foundCompilerPath = Path(a)
                     break
+    inputDir = Path('src', inputDir)
     if foundCompilerPath is not None:
         for i in (file for file in os.listdir(inputDir)
                   if file.endswith('.' + filetype)):

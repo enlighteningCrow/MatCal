@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QDialog, QDialogButtonBox
-from generated.designer.ui_PreferencesDialog import Ui_Dialog
+from src.generated import Ui_Dialog
 
 from src.db.GlobalSettings import settings
-from utils.themes import getThemes
+from src.utils.themes import getThemes
 import logging
 
 

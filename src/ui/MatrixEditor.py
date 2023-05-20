@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-from PySide6.QtWidgets import QWidget, QMessageBox, QInputDialog
+from PySide6.QtWidgets import QWidget, QMessageBox
 
 from PySide6.QtCore import QModelIndex, QSortFilterProxyModel
 
@@ -7,10 +7,10 @@ from src.ui.FrameEditor import FrameEditor
 import torch
 from torch import Tensor
 
-from typing import Tuple, Union, Optional, List
+from typing import Tuple, Union, Optional
 
 # from ui_DIndexLabels import Ui_Form
-from generated.designer.ui_MatrixEditor import Ui_Form
+from src.generated import Ui_Form
 
 from src.ui.models.NNIntSI import NNIntSI, NNIntSIM
 from src.ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
@@ -19,7 +19,7 @@ import logging
 
 from src.ui.CommWidg import CommWidg
 
-from src.ui.models.MatrixListModel import MatrixListModel, MatrixPair, DuplicateValueError, EmptyNameError
+from src.ui.models.MatrixListModel import MatrixListModel
 
 from src.ui.views.SearchListView import NameProxy
 
