@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMessageBox, QInputDialog, QWidget
 
-from src.ui.models.MatrixListModel import MatrixPair, MatrixListModel, DuplicateValueError, EmptyNameError
+from ui.models.MatrixListModel import MatrixPair, MatrixListModel, DuplicateValueError, EmptyNameError
 
 from typing import Optional
 

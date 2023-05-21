@@ -3,7 +3,7 @@ from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt
 
 import logging
 
-from src.db.GlobalSettings import settings
+from db.GlobalSettings import settings
 
 
 class MultiDimensionalMatrixException(Exception):

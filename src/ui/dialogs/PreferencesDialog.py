@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QDialog, QDialogButtonBox
-from src.generated import Ui_Dialog
+from generated.designer.ui_PreferencesDialog import Ui_Dialog
 
-from src.db.GlobalSettings import settings
-from src.utils.themes import getThemes
+from db.GlobalSettings import settings
+from utils.themes import getThemes
 import logging
 
 
@@ -33,6 +33,8 @@ class PreferencesDialog(QDialog):
         self.__ui.comboBoxTheme.clear()
         for i in getThemes():
             self.__ui.comboBoxTheme.addItem(i)
+        # self.__ui.comboBoxTheme.update()
+        # self.__ui.comboBoxTheme.repaint()
 
     def updateThemeComboBoxSelection(self):
         self.__ui.comboBoxTheme.setCurrentText(settings("theme").get())

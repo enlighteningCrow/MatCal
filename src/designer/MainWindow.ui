@@ -31,7 +31,7 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="MatrixEditor" name="MatrixEditor">
         <attribute name="title">
@@ -41,6 +41,11 @@
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>Calculation</string>
+        </attribute>
+       </widget>
+       <widget class="EquationSolver" name="tab">
+        <attribute name="title">
+         <string>Page</string>
         </attribute>
        </widget>
       </widget>
@@ -56,7 +61,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -98,13 +103,19 @@
   <customwidget>
    <class>MatrixEditor</class>
    <extends>QWidget</extends>
-   <header>src.ui.MatrixEditor</header>
+   <header>ui.widgets.MatrixEditor.MatrixEditor</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>SearchListView</class>
    <extends>QWidget</extends>
-   <header>src.ui.views.SearchListView</header>
+   <header>ui.views.SearchListView</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EquationSolver</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.EquationSolver.EquationSolver</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

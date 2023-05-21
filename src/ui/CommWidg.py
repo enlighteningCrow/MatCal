@@ -1,5 +1,7 @@
 from typing import Callable, List, Tuple
 
+# from abc import ABC, abstractmethod
+
 
 class CommWidg():
 
@@ -11,5 +13,7 @@ class CommWidg():
     #     raise NotImplementedError()
 
     #TODO: Make the widgets have this as a slot, and make it as the MainWindow instance to manipulate with the list methods
+    # @abstractmethod
     def setMainWindow(self, mainwindow) -> None:
+        # pass
         raise NotImplementedError()

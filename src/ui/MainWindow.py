@@ -1,11 +1,11 @@
 from PySide6.QtWidgets import QMainWindow
-from src.generated.designer.ui_MainWindow import Ui_MainWindow
+from generated.designer.ui_MainWindow import Ui_MainWindow
 
 from PySide6.QtGui import QIcon, QPixmap
 
-from src.ui.CommWidg import CommWidg
+from ui.CommWidg import CommWidg
 
-from src.ui.models.MatrixListModel import MatrixListModel, MatrixPair
+from ui.models.MatrixListModel import MatrixListModel, MatrixPair
 
 from typing import List
 
@@ -13,7 +13,7 @@ import logging
 
 from PySide6.QtCore import QModelIndex
 
-from src.ui.dialogs.PreferencesDialog import PreferencesDialog
+from ui.dialogs.PreferencesDialog import PreferencesDialog
 
 # rcc_resources.initResources()
 

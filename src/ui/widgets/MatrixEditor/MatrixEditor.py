@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QMessageBox
 
 from PySide6.QtCore import QModelIndex, QSortFilterProxyModel
 
-from ui.FrameEditor import FrameEditor
+from .FrameEditor import FrameEditor
 import torch
 from torch import Tensor
 

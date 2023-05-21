@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, QSettings, Signal
 from typing import Dict
 
-from src.db.settings import settingEntries
+from db.settings import settingEntries
 
 
 class SettingsWrapper(QSettings):

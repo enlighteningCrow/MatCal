@@ -9,7 +9,7 @@ from shutil import which
 import logging
 from typing import List
 
-from src.utils import createPath
+from utils import createPath
 
 
 def getExecutableVariants(name: str):
@@ -21,11 +21,11 @@ def compileAuto(
     compilerNamesFallback: List[str],
     filetype: str,
     resultPrefix: str,
-    inputDir: str,
-    outputDirPrefix: str = "generated",
+    inputDir: Path,
+    outputDirPrefix: str = '',
     outputDirSuffix: str = ''
 ):
-    outputDirPrefix = "src/" + outputDirPrefix
+    # outputDirPrefix = "generated/" + outputDirPrefix
     compilerPrefixes = [
         Path(PySide6.__file__).parent / "Qt" / "libexec",
         Path(PySide6.__file__).parent,
@@ -33,7 +33,7 @@ def compileAuto(
     ]
     foundCompilerPath = None
     if not len(outputDirSuffix):
-        outputDirSuffix = inputDir
+        outputDirSuffix = inputDir.stem
     for prefix in compilerPrefixes:
         for pathCurrent in (
                 prefix / i for i in getExecutableVariants(compilerName)):
@@ -71,7 +71,6 @@ def compileAuto(
                     )
                     foundCompilerPath = Path(a)
                     break
-    inputDir = Path('src', inputDir)
     if foundCompilerPath is not None:
         for i in (file for file in os.listdir(inputDir)
                   if file.endswith('.' + filetype)):

@@ -1,15 +1,15 @@
 from PySide6.QtWidgets import QWidget, QMenu
-from src.generated import Ui_Form
+from generated.designer.ui_SearchListView import Ui_Form
 
 from PySide6.QtCore import QAbstractListModel, QSortFilterProxyModel, Qt, QIdentityProxyModel
 from PySide6.QtGui import QAction
 
-from src.ui.models.MatrixListModel import MatrixPair
+from ui.models.MatrixListModel import MatrixPair
 from typing import Optional
 
 from types import SimpleNamespace
 
-from src.ui.dialogs.MatrixListDialogs import saveMatrix
+from ui.dialogs.MatrixListDialogs import saveMatrix
 
 import logging
 
@@ -32,7 +32,7 @@ class NameProxy(QIdentityProxyModel):
 
 
 if 1 < 0:
-    from src.ui.MainWindow import MainWindow
+    from ui.MainWindow import MainWindow
 
 
 class SearchListView(QWidget):
@@ -98,7 +98,7 @@ class SearchListView(QWidget):
         #     self.__proxyName.sourceModel(), sep='\n'
         # )
         # assert (isinstance(self.parent(), MainWindow))
-        from src.ui.MainWindow import MainWindow
+        from ui.MainWindow import MainWindow
         if self.mainWindow is None:
             self.mainWindow = self
             while self.mainWindow is not None and not isinstance(

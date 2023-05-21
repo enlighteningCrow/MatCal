@@ -3,14 +3,14 @@ from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 from typing import Union
 
-from src.db.GlobalSettings import settings
+from db.GlobalSettings import settings
 
 
 class NNIntSI(QStandardItem):
 
     valueChanged = Signal(int)
 
-    def __init__(self, value=0):
+    def __init__(self, value = 0):
         super().__init__()
         self.value = value
         self.setData(str(value))
@@ -33,7 +33,7 @@ class NNIntSI(QStandardItem):
                 # self.setFlags(self.flags() & ~Qt.ItemIsEditable)
                 self.setFlags(self.flags() & ~Qt.ItemIsEnabled)
 
-    def setData(self, value, role=Qt.EditRole):
+    def setData(self, value, role = Qt.EditRole):
         if role == Qt.EditRole:
             self.prev_value = self.value
             self.value = int(value)
@@ -82,7 +82,7 @@ class NNIntSIM(QStandardItemModel):
             return str(section)
         return super().headerData(section, orientation, role)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent = None):
         super().__init__(parent)
         self.zeroBased = True
         settings("indexing").valueChanged.connect(self.setIndexing)

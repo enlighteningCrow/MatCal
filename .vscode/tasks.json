@@ -6,8 +6,11 @@
         {
             "label": "Run MatCal",
             "type": "shell",
-            "command": "python ./main.py",
+            "command": "python ./MatCal.py",
             "problemMatcher": []
         }
     ]
 }
+// {
+//     "version": "2.0.0",
+// }

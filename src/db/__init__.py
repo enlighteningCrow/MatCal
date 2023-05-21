@@ -1,1 +1,1 @@
-from . import GlobalSettings, settings, Storage
+from . import *

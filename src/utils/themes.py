@@ -1,6 +1,8 @@
 from pathlib import Path
 from PySide6.QtCore import QDir
 
+import generated.resources.rcc_resources
+
 THEME_DIR = ":/themes/"
 
 
