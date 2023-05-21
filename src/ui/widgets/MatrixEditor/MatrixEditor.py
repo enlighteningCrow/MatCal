@@ -3,27 +3,27 @@ from PySide6.QtWidgets import QWidget, QMessageBox
 
 from PySide6.QtCore import QModelIndex, QSortFilterProxyModel
 
-from src.ui.FrameEditor import FrameEditor
+from ui.FrameEditor import FrameEditor
 import torch
 from torch import Tensor
 
 from typing import Tuple, Union, Optional
 
 # from ui_DIndexLabels import Ui_Form
-from src.generated import Ui_Form
+from generated.designer.ui_MatrixEditor import Ui_Form
 
-from src.ui.models.NNIntSI import NNIntSI, NNIntSIM
-from src.ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
+from ui.models.NNIntSI import NNIntSI, NNIntSIM
+from ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
 
 import logging
 
-from src.ui.CommWidg import CommWidg
+from ui.CommWidg import CommWidg
 
-from src.ui.models.MatrixListModel import MatrixListModel
+from ui.models.MatrixListModel import MatrixListModel
 
-from src.ui.views.SearchListView import NameProxy
+from ui.views.SearchListView import NameProxy
 
-from src.ui.dialogs.MatrixListDialogs import saveMatrix
+from ui.dialogs.MatrixListDialogs import saveMatrix
 
 # - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute

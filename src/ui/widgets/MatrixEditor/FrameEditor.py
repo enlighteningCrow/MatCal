@@ -8,9 +8,9 @@ from PySide6.QtWidgets import (
 # In case you are reading this, there is NO ML or DL or any sort of AI in here; this is used solely for matrix calculations
 from torch import Tensor
 
-from src.ui.models.MatrixDataModel import MatrixDataModel
+from ui.models.MatrixDataModel import MatrixDataModel
 
-from src.ui.delegates.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
+from ui.delegates.DoubleSpinBoxDelegate import DoubleSpinBoxDelegate
 
 import logging
 
@@ -20,7 +20,7 @@ import logging
 # TODO: Maybe rename to MatrixView
 class FrameEditor(QWidget):
 
-    def __init__(self, mat: Tensor, parent=None):
+    def __init__(self, mat: Tensor, parent = None):
         self.initialized = False
         super().__init__(parent)
         # self.matrix = mat
