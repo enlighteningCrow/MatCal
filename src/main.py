@@ -34,8 +34,8 @@ def main():
 
         import logging
 
-        # TODO: Make the program have an when run icon, and maybe packaging into executable
-        # TODO: Make a MatrixList model in MatrixListModel.py
+        # -TODO: Make the program have an when run icon, and maybe packaging into executable
+        # -TODO: Make a MatrixList model in MatrixListModel.py
         # TODO: Make the matrixlist model capable of saving to/loading from files
         # TODO: Make each of the separate matrices capable of saving to/loading from files
 

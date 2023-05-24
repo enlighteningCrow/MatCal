@@ -12,13 +12,19 @@ from torch.linalg import solve
 from typing import *
 
 
-class ResultsModel(QAbstractListModel):
+class State:
+
+    def __init__(self, tabName: str, displayString: str, value: dict):
+        self.tabName = tabName
+        self.displayString = displayString
+        self.value = value
+
+
+class StatesListModel(QAbstractListModel):
 
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.__parent = parent
-        self.__varNamesList: List[str] = []
-        self.__results = zeros(0)
+        self.__states = List[State]
 
     def rowCount(self, parent = QModelIndex()):
         return self.__results.size(0)

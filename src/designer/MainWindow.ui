@@ -23,7 +23,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -33,7 +33,7 @@
        <property name="currentIndex">
         <number>2</number>
        </property>
-       <widget class="MatrixEditor" name="MatrixEditor">
+       <widget class="MatrixEditorPersistent" name="MatrixEditor">
         <attribute name="title">
          <string>Matrix Editor</string>
         </attribute>
@@ -43,13 +43,14 @@
          <string>Calculation</string>
         </attribute>
        </widget>
-       <widget class="EquationSolver" name="tab">
+       <widget class="EquationSolverPersistent" name="tab">
         <attribute name="title">
          <string>Page</string>
         </attribute>
        </widget>
       </widget>
       <widget class="SearchListView" name="listView" native="true"/>
+      <widget class="QListView" name="listView_2"/>
      </widget>
     </item>
    </layout>
@@ -101,7 +102,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MatrixEditor</class>
+   <class>MatrixEditorPersistent</class>
    <extends>QWidget</extends>
    <header>ui.widgets.MatrixEditor.MatrixEditor</header>
    <container>1</container>
@@ -113,7 +114,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>EquationSolver</class>
+   <class>EquationSolverPersistent</class>
    <extends>QWidget</extends>
    <header>ui.widgets.EquationSolver.EquationSolver</header>
    <container>1</container>

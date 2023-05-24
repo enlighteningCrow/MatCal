@@ -49,11 +49,27 @@ class MainWindow(QMainWindow):
             self.__ui.tabWidget.widget(j)
             for j in range(self.__ui.tabWidget.tabBar().count())
         ]
+        # TODO: (Urgent) Look at the bottom TODO; make it connect to this list or make it contain the list in itself.
+        self.__statesListModel = StatesListModel
         for i in self.tabList:
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
             self.tabDict[i.objectName()] = i
+            i.isChanged.connect(
+                #TODO: This, and implement a method for loading the state and setting the active tab when double clicked
+                lambda x: self.__statesListModel.insertState(x.saveState())
+            )
         self.matrixListModel.dataChanged.connect(self.saveList)
+
+        self.__ui.tabWidget.currentChanged.connect(
+            lambda x: self.__ui.listView.show() if self.__ui.tabWidget.
+            widget(x).needsTensorsTab() else self.__ui.listView.hide()
+        )
+        self.__ui.tabWidget.currentChanged.emit(
+            self.__ui.tabWidget.currentIndex()
+        )
+
+        #TODO: Make a class inheriting from the
 
     def getTabWidget(self):
         return self.__ui.tabWidget
@@ -101,3 +117,6 @@ class MainWindow(QMainWindow):
 # and replace it with the current MatrixEditor.py. Also consider making
 # the matrix editor only pop up when the list is clicked, such that the user
 # makes an action to modify an existing matrix in the list or create a new one.
+
+#TODO: (PRIORITY): Make the listView on the right of all screens to be a subclass of listview, and set its model such that it goes to whatever widget the item was created in
+#TODO: (PRIORITY): Make the CommViews all store the data everytime anything is changed. Maybe make a signal in all of the CommWidgs, and make the CommWidgs the subclass of QWidget instead of all the others.

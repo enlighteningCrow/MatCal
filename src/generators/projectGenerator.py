@@ -13,9 +13,9 @@ def isProjectFile(filename: Path) -> bool:
 
 def regenerateProject():
     fl = open("MatCal.pyproject", 'w')
-    filesList: List[str] = ["main.py"]
-    for dir in ["compilers", "designer", "generators", "resources", "src",
-                "utils"]:
+    filesList: List[str] = ["MatCal.py"]
+    # for dir in ["compilers", "designer", "generators", "resources", "src", "utils"]:
+    for dir in ["resources", "src"]:
         for root, dirs, files in walk(dir):
             if len(files):
                 for i in files:

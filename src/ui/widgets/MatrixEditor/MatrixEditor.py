@@ -17,7 +17,7 @@ from ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
 
 import logging
 
-from ui.CommWidg import CommWidg
+from ui.CommWidg import CommWidg, CommWidgPersistent
 
 from ui.models.MatrixListModel import MatrixListModel
 
@@ -25,14 +25,17 @@ from ui.views.SearchListView import NameProxy
 
 from ui.dialogs.MatrixListDialogs import saveMatrix
 
+from ui.utils import setMaxWidth
+
 # - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
 if 0 != 0:
-    from MainWindow import MainWindow
+    from src.ui.MainWindow import MainWindow
+    # from MainWindow import MainWindow
 
 
-class MatrixEditor(QWidget, CommWidg):
+class MatrixEditor(CommWidg):
 
     def __init__(self, parent: Optional['MainWindow'] = None):
         super().__init__()
@@ -166,16 +169,17 @@ class MatrixEditor(QWidget, CommWidg):
             self.model.item(i, 0).revertValue()
 
     def udtmsImpl(self):
-        margins = self.__ui.dimensionWidget.layout().contentsMargins()
-        self.__ui.dimensionWidget.setMaximumWidth(
-            self.__ui.dimensionsTable.horizontalHeader().length() +
-            self.__ui.dimensionsTable.verticalHeader().width() +
-            self.__ui.dimensionsTable.frameWidth() * 2 + margins.left() +
-            margins.right() + 6 + (
-                self.__ui.dimensionsTable.verticalScrollBar().width() if self.
-                __ui.dimensionsTable.verticalScrollBar().isVisible() else 0
-            )
-        )
+        # margins = self.__ui.dimensionWidget.layout().contentsMargins()
+        # self.__ui.dimensionWidget.setMaximumWidth(
+        #     self.__ui.dimensionsTable.horizontalHeader().length() +
+        #     self.__ui.dimensionsTable.verticalHeader().width() +
+        #     self.__ui.dimensionsTable.frameWidth() * 2 + margins.left() +
+        #     margins.right() + 6 + (
+        #         self.__ui.dimensionsTable.verticalScrollBar().width() if self.
+        #         __ui.dimensionsTable.verticalScrollBar().isVisible() else 0
+        #     )
+        # )
+        setMaxWidth(self.__ui.dimensionWidget, self.__ui.dimensionsTable)
 
     def getCurrentFrame(self) -> Tuple[Union[int, slice]]:
         currentFrame = []
@@ -305,3 +309,32 @@ class MatrixEditor(QWidget, CommWidg):
                 (self.matrix, torch.zeros(shape, device = self.matrix.device)),
                 dim
             )
+
+    def getMainWindow(self):
+        return self.__mainwindow
+
+    def needsTensorsTab(self) -> bool:
+        return True
+
+
+class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
+
+    def __init__(self, parent: Union['MainWindow', None] = None):
+        super().__init__(parent)
+
+    # Return an object containing all the information that has to be saved to be able to restore the state of the widget and all of the models and views of the widget
+    def saveState(self):
+        return {
+            "matrix": self.matrix,
+            "dimensions": self.model.saveState(),
+            "frameEditor": self.frameEditor.saveState()
+        }
+
+    # Restore the state of the widget and all of the models and views of the widget
+    def loadState(self, state: dict):
+        self.setMatrix(state["matrix"])
+        self.model.loadState(state["dimensions"])
+        self.frameEditor.loadState(state["frameEditor"])
+
+
+# TODO: Continue implementing this to support having states stored to a list (Use copilot)

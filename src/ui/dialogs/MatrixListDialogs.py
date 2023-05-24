@@ -8,6 +8,8 @@ import os
 
 import logging
 
+import torch
+
 
 def saveMatrix(matrix, mainWindow, parent: Optional[QWidget] = None):
     result, status = QInputDialog.getText(
@@ -15,7 +17,7 @@ def saveMatrix(matrix, mainWindow, parent: Optional[QWidget] = None):
     )
     if status:
         try:
-            mainWindow.addMatrix(MatrixPair(result, matrix.clone()))
+            mainWindow.addMatrix(MatrixPair(result, torch.clone(matrix)))
         except DuplicateValueError as e:
             QMessageBox.warning(parent, "Error", str(e))
         except EmptyNameError as e:

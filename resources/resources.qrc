@@ -1,18 +1,19 @@
 <RCC>
         <qresource prefix="">
-            <file>resources_rc.py</file>
-        <file>rcc_resources.py</file>
-        <file>themes/gruvboxDark.qss</file>
-        <file>themes/nord.qss</file>
-        <file>themes/monokai.qss</file>
-        <file>themes/dracula.qss</file>
-        <file>themes/vscode-dark-plus.qss</file>
-        <file>themes/defBlue.qss</file>
-        <file>themes/gruvbox.qss</file>
-        <file>themes/tokyonight.qss</file>
-        <file>themes/ayu-dark.qss</file>
-        <file>themes/one-dark.qss</file>
-        <file>resources/rcc_resources.py</file>
+            <file>rcc_resources.py</file>
+        <file>rc_resources.py</file>
+        <file>resources_rc.py</file>
         <file>icons/MatCalIcon.png</file>
+        <file>resources/rcc_resources.py</file>
+        <file>themes/ayu-dark.qss</file>
+        <file>themes/defBlue.qss</file>
+        <file>themes/dracula.qss</file>
+        <file>themes/gruvbox.qss</file>
+        <file>themes/gruvboxDark.qss</file>
+        <file>themes/monokai.qss</file>
+        <file>themes/nord.qss</file>
+        <file>themes/one-dark.qss</file>
+        <file>themes/tokyonight.qss</file>
+        <file>themes/vscode-dark-plus.qss</file>
     </qresource>
     </RCC>

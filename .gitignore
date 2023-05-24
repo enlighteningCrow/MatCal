@@ -94,3 +94,5 @@ __pycache__/
 *.fs.*
 storage.fs
 TensorDict.fs
+
+*.pickle
