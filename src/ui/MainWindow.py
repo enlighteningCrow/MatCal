@@ -15,6 +15,8 @@ from PySide6.QtCore import QModelIndex
 
 from ui.dialogs.PreferencesDialog import PreferencesDialog
 
+from ui.models.StatesListModel import StatesListModel
+
 # rcc_resources.initResources()
 
 
@@ -50,15 +52,17 @@ class MainWindow(QMainWindow):
             for j in range(self.__ui.tabWidget.tabBar().count())
         ]
         # TODO: (Urgent) Look at the bottom TODO; make it connect to this list or make it contain the list in itself.
-        self.__statesListModel = StatesListModel
+        self.__statesListModel = StatesListModel(self)
         for i in self.tabList:
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
+                i.isChanged.connect(
+                    #TODO: This, and implement a method for loading the state and setting the active tab when double clicked
+                    lambda x: self.__statesListModel.insertState(x.saveState())
+                )
+            else:
+                logging.warning(f"Tab {i} is not a CommWidg")
             self.tabDict[i.objectName()] = i
-            i.isChanged.connect(
-                #TODO: This, and implement a method for loading the state and setting the active tab when double clicked
-                lambda x: self.__statesListModel.insertState(x.saveState())
-            )
         self.matrixListModel.dataChanged.connect(self.saveList)
 
         self.__ui.tabWidget.currentChanged.connect(
