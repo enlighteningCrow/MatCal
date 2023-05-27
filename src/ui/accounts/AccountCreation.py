@@ -119,6 +119,7 @@ class LoginPage(QWidget):
 from generated.designer.ui_Accounts import Ui_Form
 
 class Account:
+    accountTypes = {"Admin" : ["Manage"], "School Student": ["Calculator"], "Computer Scientist": ["Calculator", "Graphing", "Programming"], "Mathematician": ["Calculator", "Graphing", "Programming", "Statistics"], "Data Scientist": ["Calculator", "Matrix Editor", "Matrix Calculation"]}
     def __init__(self, username, password, account_type):
         self.username = username
         self.password = password
@@ -127,11 +128,11 @@ class Account:
     def __str__(self):
         return f"Username: {self.username}\nPassword: {self.password}\nAccount Type: {self.account_type}"
 
+# class Admin:
 
 
 class Accounts(QWidget):
     # List the account types of users of a calculator system and the tabs that shuold be shown to them
-    accountTypes = {"Admin" : ["Manage"], "School Student": ["Calculator"], "Computer Scientist": ["Calculator", "Graphing", "Programming"], "Mathematician": ["Calculator", "Graphing", "Programming", "Statistics"], "Data Scientist": ["Calculator", "Matrix Editor", "Matrix Calculation"]}
     def __init__(self, parent = None):
         super().__init__(parent)
         self.__ui = Ui_Form()
