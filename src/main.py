@@ -60,8 +60,15 @@ def main():
         theme = settings("theme")
         theme.valueChanged.connect(lambda x: setTheme(app, x))
         theme.update()
-        mainWindow = MainWindow()
-        mainWindow.show()
+
+        #Commented out main window
+        # mainWindow = MainWindow()
+        # mainWindow.show()
+
+        from ui.accounts.AccountCreation import Accounts
+        accountsPage = Accounts()
+        accountsPage.show()
+
         # widget.show()
         # deditor = MatrixEditor()
         # deditor.show()

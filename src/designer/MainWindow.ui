@@ -31,7 +31,7 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="MatrixEditorPersistent" name="MatrixEditor">
         <attribute name="title">
@@ -40,12 +40,12 @@
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>Calculation</string>
+         <string>Matrix Calculation</string>
         </attribute>
        </widget>
        <widget class="EquationSolverPersistent" name="tab">
         <attribute name="title">
-         <string>Page</string>
+         <string>LinearSystem</string>
         </attribute>
        </widget>
       </widget>
@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
