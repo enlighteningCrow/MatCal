@@ -10,6 +10,8 @@ from torch import zeros, cat
 
 from typing import *
 
+from ui.CommWidg import CommWidgPersistent
+
 
 class MultiDimensionalMatrixException(Exception):
 
@@ -37,6 +39,7 @@ from PySide6.QtCore import Qt, QModelIndex, QAbstractTableModel
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtWidgets import QStyledItemDelegate, QLineEdit, QWidget
 
+from math import inf
 
 class EquationDelegate(QStyledItemDelegate):
 
@@ -46,6 +49,8 @@ class EquationDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, option, index):
         editor = QDoubleSpinBox(parent)
+        editor.setMinimum(-inf)
+        editor.setMaximum(inf)
         return editor
 
     def setEditorData(self, editor: QDoubleSpinBox, index):
@@ -64,15 +69,17 @@ class EquationDelegate(QStyledItemDelegate):
                 self.__parent, "Error", "Please enter a valid number"
             )
 
+from types import SimpleNamespace
 
-class EquationSolverModel(QAbstractTableModel):
+class EquationSolverModel(QAbstractTableModel, CommWidgPersistent):
 
     def __init__(self, unknownsCount: int = 0, parent = None):
-        super().__init__(parent)
+        super().__init__()
         self.__varNamesList: List[str] = []
         self.__equations = zeros((unknownsCount, unknownsCount + 1))
         self.__unknownsCount = unknownsCount
         self.setUnknownsCount(unknownsCount)
+        self.__saveDisabled = False
 
     def setUnknownsCount(self, unknownsCount: int):
         # self.equations.res
@@ -184,3 +191,52 @@ class EquationSolverModel(QAbstractTableModel):
 
     def getEquations(self):
         return self.__equations
+
+    def getDisplayStringForState(self, state: SimpleNamespace):
+    # def linear_equations_to_string(variables, equations):
+        n = len(state.varNamesList)
+        result = []
+
+        for i in range(n):
+            equation_str = []
+            for j in range(n):
+                coefficient = state.equations[i][j].item()
+                variable = state.varNamesList[j]
+                equation_str.append(f"{coefficient}*{variable}")
+            
+            constant = state.equations[i][-1].item()
+            # equation_str.append(f"= {constant}")
+            
+            result.append(" + ".join(equation_str) + f" = {constant}")
+        
+        return " ; ".join(result)
+
+    def saveState(self):
+        if self.__saveDisabled:
+            return None
+        s = SimpleNamespace()
+        s.unknownsCount = self.__unknownsCount
+        s.varNamesList = self.__varNamesList[:]
+        s.equations = self.__equations.clone()
+        return "Equation Solver: " + self.getDisplayStringForState(s), s
+
+    def loadState(self, state: SimpleNamespace):
+        self.beginResetModel()
+        self.__unknownsCount = state.unknownsCount
+        self.__varNamesList = state.varNamesList[:]
+        self.__equations = state.equations.clone()
+        # self.dataChanged.emit(
+        #     self.index(0, 0), self.index(self.rowCount() - 1,
+        #                                     self.columnCount() - 1)
+        # )
+        # self.headerDataChanged.emit(Qt.Horizontal, 0, self.columnCount() - 1)
+        # self.headerDataChanged.emit(Qt.Vertical, 0, self.rowCount() - 1)
+        self.endResetModel()
+
+    def disableSaving(self):
+        self.__saveDisabled = True
+
+    def enableSaving(self):
+        self.__saveDisabled = False
+
+

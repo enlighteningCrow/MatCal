@@ -175,3 +175,6 @@ class MatrixDataModel(QAbstractTableModel):
         topLeft = self.index(0, 0)
         bottomRight = self.index(newRows - 1, newCols - 1)
         self.dataChanged.emit(topLeft, bottomRight)
+
+    def getMatrix(self) -> torch.Tensor:
+        return self.__matrix

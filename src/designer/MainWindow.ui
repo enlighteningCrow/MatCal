@@ -23,7 +23,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -31,26 +31,44 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>3</number>
        </property>
        <widget class="MatrixEditorPersistent" name="MatrixEditor">
         <attribute name="title">
          <string>Matrix Editor</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="MatrixCalculationPersistent" name="MatrixCalculation">
         <attribute name="title">
          <string>Matrix Calculation</string>
         </attribute>
        </widget>
-       <widget class="EquationSolverPersistent" name="tab">
+       <widget class="EquationSolverPersistent" name="LinearSolver">
         <attribute name="title">
          <string>LinearSystem</string>
         </attribute>
        </widget>
+       <widget class="BinaryCalculatorPersistent" name="BinaryCalculator">
+        <attribute name="title">
+         <string>Binary Calculator</string>
+        </attribute>
+       </widget>
       </widget>
       <widget class="SearchListView" name="listView" native="true"/>
-      <widget class="QListView" name="listView_2"/>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QListView" name="StatesList"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton">
+          <property name="text">
+           <string>Clear History</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -119,6 +137,18 @@
    <header>ui.widgets.EquationSolver.EquationSolver</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>MatrixCalculationPersistent</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.MatrixCalculation.MatrixCalculation</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BinaryCalculatorPersistent</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.BinaryCalculator.BinaryCalculator</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -138,8 +168,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>clearHistory()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>896</x>
+     <y>674</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>890</x>
+     <y>692</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showPreferencesDialog()</slot>
+  <slot>clearHistory()</slot>
  </slots>
 </ui>

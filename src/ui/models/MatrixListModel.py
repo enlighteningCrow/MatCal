@@ -108,6 +108,10 @@ class MatrixListModel(QAbstractListModel):
         # )
         # self.layoutChanged.emit()
 
+    def getMatrices(self) -> OOBTree:
+        return self.__matrices
+
+
     # def dataPair(self, index: int):
     #     return self.__matrices[index]
 
