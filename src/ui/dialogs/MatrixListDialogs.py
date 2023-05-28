@@ -17,6 +17,8 @@ def saveMatrix(matrix, mainWindow, parent: Optional[QWidget] = None):
     )
     if status:
         try:
+            if not isinstance(matrix , torch.Tensor):
+                matrix = matrix.matrix
             mainWindow.addMatrix(MatrixPair(result, torch.clone(matrix)))
         except DuplicateValueError as e:
             QMessageBox.warning(parent, "Error", str(e))

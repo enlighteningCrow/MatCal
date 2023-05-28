@@ -13,7 +13,8 @@ import persistent
 
 from typing import List
 
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 class Account(persistent.Persistent):
     accountTypes = {"Admin": ["AdminPage"], "School Student": ["Calculator", "LinearSolver"], "Computer Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "BinaryCalculator"], "Mathematician": ["Calculator", "LinearSolver"], "Data Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "LinearSolver", "BinaryCalculator"]}
