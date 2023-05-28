@@ -2,6 +2,21 @@
 
 # This Python file uses the following encoding: utf-8
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
+
+from ui.MainWindow import MainWindow
+
+if 0 != 0:
+    from ui.accounts.AccountCreation import Account
+
+def onLoginComplete(account : 'Account'):
+    main_window = MainWindow(account)
+    main_window.show()
+    for i in range(len(account.states) - 1, -1, -1):
+        if not account.states[i].tabName in main_window.tabDict:
+            account.states.pop(i)
 
 def main():
 
@@ -65,7 +80,7 @@ def main():
         # mainWindow = MainWindow()
         # mainWindow.show()
 
-        from ui.accounts.AccountCreation import Accounts
+        from src.ui.accounts.AccountCreation import Accounts
         accountsPage = Accounts()
         accountsPage.show()
 

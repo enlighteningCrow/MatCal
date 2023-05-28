@@ -3,11 +3,11 @@ from generated.designer.ui_MainWindow import Ui_MainWindow
 
 from PySide6.QtGui import QIcon, QPixmap
 
-from ui.CommWidg import CommWidg
+from ui.CommWidg import CommWidg, CommWidgPersistent
 
 from ui.models.MatrixListModel import MatrixListModel, MatrixPair
 
-from typing import List
+from typing import List, TypedDict
 
 import logging
 
@@ -15,14 +15,17 @@ from PySide6.QtCore import QModelIndex
 
 from ui.dialogs.PreferencesDialog import PreferencesDialog
 
-from ui.models.StatesListModel import StatesListModel
+from ui.models.StatesListModel import State, StatesListModel
 
 # rcc_resources.initResources()
+
+if 0 != 0:
+    from accounts.AccountCreation import Account 
 
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, account : 'Account'):
         super().__init__()
         self.__ui = Ui_MainWindow()
         self.__ui.setupUi(self)
@@ -40,30 +43,31 @@ class MainWindow(QMainWindow):
         #     self.settings.clear()
         #     matrixList = []
         # matrixList = []
-        self.matrixListModel = MatrixListModel(self.__ui.listView)
+        self.__matrixListModel = MatrixListModel(self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
-        self.__ui.listView.setModel(self.matrixListModel)
+        self.__ui.listView.setModel(self.__matrixListModel)
         self.pixmap = QPixmap(":/icons/MatCalIcon.png")
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
-        self.tabDict = dict()
+        self.tabDict : TypedDict[str, CommWidg] = dict()
         self.tabList = [
             self.__ui.tabWidget.widget(j)
             for j in range(self.__ui.tabWidget.tabBar().count())
         ]
         # TODO: (Urgent) Look at the bottom TODO; make it connect to this list or make it contain the list in itself.
-        self.__statesListModel = StatesListModel(self)
+        self.__statesListModel = StatesListModel(account.states, self)
         for i in self.tabList:
             if isinstance(i, CommWidg):
                 i.setMainWindow(self)
                 i.isChanged.connect(
                     #TODO: This, and implement a method for loading the state and setting the active tab when double clicked
-                    lambda x: self.__statesListModel.insertState(x.saveState())
+                    #TODO: Make this add the tab widget (or index) and the state as a simple namespace
+                    lambda x: self.__statesListModel.insertState(x.objectName(), *x.saveState())
                 )
             else:
                 logging.warning(f"Tab {i} is not a CommWidg")
             self.tabDict[i.objectName()] = i
-        self.matrixListModel.dataChanged.connect(self.saveList)
+        self.__matrixListModel.dataChanged.connect(self.saveList)
 
         self.__ui.tabWidget.currentChanged.connect(
             lambda x: self.__ui.listView.show() if self.__ui.tabWidget.
@@ -74,6 +78,16 @@ class MainWindow(QMainWindow):
         )
 
         #TODO: Make a class inheriting from the
+
+        self.__ui.StatesList.setModel(self.__statesListModel)
+        #TODO: Check if this is correct
+        def loadCommWidgState(x : QModelIndex):
+            s : StatesListModel = x.model()
+            stateData = s.getState(x)
+            commWidg = self.tabDict[stateData.tabName]
+            commWidg.loadState(stateData.value)
+            self.__ui.tabWidget.setCurrentWidget(commWidg)
+        self.__ui.StatesList.doubleClicked.connect(loadCommWidgState)
 
     def getTabWidget(self):
         return self.__ui.tabWidget
@@ -114,7 +128,16 @@ class MainWindow(QMainWindow):
         # self.__ui.listView.updateEditorData()
         # self.matrixList.
         # self.matrixList.insertRow(0, matrix)
-        self.matrixListModel.addMatrix(matrix)
+        self.__matrixListModel.addMatrix(matrix)
+
+    def setStateList(self, account : 'Account' ):
+        self.__statesList = (account.states)
+
+    def getMatrixListModel(self):
+        return self.__matrixListModel
+
+    def clearHistory(self):
+        self.__statesListModel.clear()
 
 
 # -TODO: (PRIORITY): Try removing the current MatrixEditor.py altogether,

@@ -9,6 +9,8 @@ from db.GlobalSettings import settings
 
 from PySide6.QtWidgets import QStyledItemDelegate, QLineEdit, QTableView, QSpinBox, QMessageBox, QWidget
 
+from ui.CommWidg import CommWidgPersistent
+
 
 class VariableDelegate(QStyledItemDelegate):
 
@@ -37,15 +39,21 @@ class VariableDelegate(QStyledItemDelegate):
                 "The variable name is invalid: " + str(e)
             )
 
+from types import SimpleNamespace
 
-class VariableNamesListModel(QAbstractListModel):
+
+class VariableNamesListModel(QAbstractListModel, CommWidgPersistent):
+    #
 
     # # TODO: Make this signal, and connect it to the setVarNamesList in equation solver in the designer
     # varListChanged = Signal(list)
 
     def __init__(self, unknownsCount: int = 0, parent = None):
-        super().__init__(parent)
+        # QAbstractListModel.__init__(self, parent=parent)
+        # CommWidgPersistent.__init__(self)
+        super().__init__()
         self.names = []
+        self.__saveDisabled = False
 
     def setUnknownsCount(self, unknownsCount: int):
         self.size = unknownsCount
@@ -116,8 +124,34 @@ class VariableNamesListModel(QAbstractListModel):
 
         return super().flags(index) | Qt.ItemIsEditable
 
-    def addObservee(self, observee):
-        self.varListChanged.connect(observee.setVarNamesList)
+    # def addObservee(self, observee):
+    #     self.varListChanged.connect(observee.setVarNamesList)
+
+    def getDisplayStringForState(self, state: SimpleNamespace):
+        return str(state.names)
+
+
+    def saveState(self):
+        if self.__saveDisabled:
+            return None
+        s = SimpleNamespace()
+        s.names = self.names[:]
+        return self.getDisplayStringForState(s), s
+
+    def loadState(self, state : SimpleNamespace):
+        self.beginResetModel()
+        self.names = state.names[:]
+        self.endResetModel()
+        # self.dataChanged.emit(
+        #     self.index(0), self.index(len(self.names) - 1),
+        #     [Qt.EditRole]
+        # )
+
+    def disableSaving(self):
+        self.__saveDisabled = True
+
+    def enableSaving(self):
+        self.__saveDisabled = False
 
 
 #TODO: Finish this

@@ -1,4 +1,5 @@
 # This Python file uses the following encoding: utf-8
+from typing import Tuple
 from PySide6.QtWidgets import (
     QTableView,
     QVBoxLayout,
@@ -17,12 +18,16 @@ import logging
 # class MatrixModel(QAbstract)
 
 
+from ui.CommWidg import CommWidgPersistent
+
+from types import SimpleNamespace
+
 # TODO: Maybe rename to MatrixView
-class FrameEditor(QWidget):
+class FrameEditor(QWidget, CommWidgPersistent):
 
     def __init__(self, mat: Tensor, parent = None):
         self.initialized = False
-        super().__init__(parent)
+        super().__init__()
         # self.matrix = mat
         # self.spinboxes: List[QDoubleSpinBox] = []
         # self.glOuter = QGridLayout(self)
@@ -47,3 +52,17 @@ class FrameEditor(QWidget):
         self.matrixModel.setMatrix(matrix)
         # self.tableView.resizeColumnsToContents()
         # self.tableView.resizeRowsToContents()
+
+    # def saveState(self):
+    #     state.matrix = self.matrixModel.getMatrix()
+
+    def getDisplayStringForState(self, state: SimpleNamespace):
+        return str(state.matrix)
+
+    def saveState(self) -> Tuple[str, SimpleNamespace]:
+        s = SimpleNamespace()
+        s.matrix = self.matrixModel.getMatrix()
+        return self.getDisplayStringForState(s), s
+
+    def loadState(self, state: SimpleNamespace):
+        self.matrixModel.setMatrix(state.matrix)

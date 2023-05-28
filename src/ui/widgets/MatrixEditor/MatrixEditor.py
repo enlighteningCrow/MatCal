@@ -27,6 +27,8 @@ from ui.dialogs.MatrixListDialogs import saveMatrix
 
 from ui.utils import setMaxWidth
 
+from types import SimpleNamespace
+
 # - TODO: Use a stackedwidget or something to swap between with 0 dimensions (1 lineedit), 1 dimension (1 row/column of lineedit), 2 dimensions (matrix of lineedits), 3+ dimensions (matrix of lineedits in selectable dimensions for columns and rows, with other dimensions selected with the spinboxes)
 # TODO: Make all the hardcoded values of the columns size and selection, and replace them with an attribute
 
@@ -38,15 +40,15 @@ if 0 != 0:
 class MatrixEditor(CommWidg):
 
     def __init__(self, parent: Optional['MainWindow'] = None):
-        super().__init__()
+        super().__init__(parent)
         # super(CommWidg, self)
         # QWidget.__init__(self, parent)
         self.initialized = False
-        self.matrix = torch.zeros(())
+        self._matrix = torch.zeros(())
         self.__ui = Ui_Form()
         self.__ui.setupUi(self)
-        self.frameEditor = FrameEditor(self.matrix, self)
-        self.__ui.scrollAreaFE.setWidget(self.frameEditor)
+        self._frameEditor = FrameEditor(self._matrix, self)
+        self.__ui.scrollAreaFE.setWidget(self._frameEditor)
         self.dim0 = None
         self.dim1 = None
 
@@ -69,11 +71,11 @@ class MatrixEditor(CommWidg):
         by this class or somewhere else
         TODO: Set the below changeDimensions to not use inc, dec; use the below to clone the items needed, and connect them
         """
-        self.model = NNIntSIM(self)
+        self._model = NNIntSIM(self)
         # self.model = QStandardItemModel(self)
-        self.__ui.dimensionsTable.setModel(self.model)
-        self.model.setColumnCount(2)
-        self.model.setHorizontalHeaderLabels(["Size", "Selection"])
+        self.__ui.dimensionsTable.setModel(self._model)
+        self._model.setColumnCount(2)
+        self._model.setHorizontalHeaderLabels(["Size", "Selection"])
 
         self.changeDimensions(self.__ui.dimCountSpinBox.value())
         spbidIndex = IndexSpinBoxDelegate(self.__ui.dimensionsTable)
@@ -81,12 +83,12 @@ class MatrixEditor(CommWidg):
         self.__ui.dimensionsTable.setItemDelegateForColumn(0, spbidSize)
         self.__ui.dimensionsTable.setItemDelegateForColumn(1, spbidIndex)
 
-        self.updateDimensionsCount(self.model.rowCount())
-        self.model.dataChanged.connect(self.modelUpdateHandler)
+        self.updateDimensionsCount(self._model.rowCount())
+        self._model.dataChanged.connect(self.modelUpdateHandler)
 
         self.__ui.dimCountSpinBox.valueChanged.connect(self.changeDimensions)
 
-        self.frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
+        self._frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
         self.initialized = True
 
     # TODO: Make a system to check if last change was saved
@@ -104,7 +106,7 @@ class MatrixEditor(CommWidg):
         )
 
     def saveMatrix(self):
-        saveMatrix(self.matrix, self.__mainwindow, self)
+        saveMatrix(self._matrix, self.__mainwindow, self)
         # result, status = QInputDialog.getText(
         #     self, "Matrix Name", "Enter matrix name:"
         # )
@@ -137,17 +139,17 @@ class MatrixEditor(CommWidg):
             self.setMatrix(pair.matrix)
 
     def setMatrix(self, matrix: Tensor):
-        self.matrix = matrix.clone()
-        self.model.removeRows(0, self.model.rowCount())
+        self._matrix = matrix.clone()
+        self._model.removeRows(0, self._model.rowCount())
         for i in matrix.shape:
-            self.model.appendRow([NNIntSI(i), NNIntSI(0)])
+            self._model.appendRow([NNIntSI(i), NNIntSI(0)])
         self.dim0 = None
         self.dim1 = None
         self.__ui.dimCountSpinBox.setValue(matrix.dim())
         self.updateDimensions_t()
 
     def logMatrix(self):
-        logging.debug(self.matrix)
+        logging.debug(self._matrix)
         # pass
 
     def modelUpdateHandler(
@@ -157,7 +159,7 @@ class MatrixEditor(CommWidg):
         try:
             for i in range(index0.row(), index1.row() + 1):
                 # if index0.column() == 0:
-                self.updateSize(i, self.model.item(i, 0).getValue())
+                self.updateSize(i, self._model.item(i, 0).getValue())
             self.updateFrameMatrix(
                 self.dim0 == self.dim1,
                 (self.dim0 is not None and self.dim1 is not None) and
@@ -165,8 +167,8 @@ class MatrixEditor(CommWidg):
             )
         except RuntimeError as e:
             QMessageBox.warning(self, "Error", str(e))
-            logging.error(self.model.item(i, 0).getValue())
-            self.model.item(i, 0).revertValue()
+            logging.error(self._model.item(i, 0).getValue())
+            self._model.item(i, 0).revertValue()
 
     def udtmsImpl(self):
         # margins = self.__ui.dimensionWidget.layout().contentsMargins()
@@ -183,50 +185,50 @@ class MatrixEditor(CommWidg):
 
     def getCurrentFrame(self) -> Tuple[Union[int, slice]]:
         currentFrame = []
-        for i in range(self.model.rowCount()):
+        for i in range(self._model.rowCount()):
             if self.dim0 is not None and self.dim0 == i or self.dim1 is not None and self.dim1 == i:
                 currentFrame.append(slice(None, None))
             else:
-                currentFrame.append(self.model.item(i, 1).getValue())
+                currentFrame.append(self._model.item(i, 1).getValue())
         logging.info(tuple(currentFrame))
         return tuple(currentFrame)
 
     def updateFrameMatrix(self, empty: bool = False, transpose: bool = False):
         logging.info(self.getCurrentFrame())
-        logging.info(self.matrix)
-        matrix = self.matrix[self.getCurrentFrame()]
-        self.frameEditor.updateMatrix(matrix.T if transpose else matrix)
+        logging.info(self._matrix)
+        matrix = self._matrix[self.getCurrentFrame()]
+        self._frameEditor.updateMatrix(matrix.T if transpose else matrix)
 
     def changeDimensionsMatrix(self, dim):
-        currentDimensions = self.model.rowCount()
+        currentDimensions = self._model.rowCount()
 
         if currentDimensions == dim:
             return
         if currentDimensions < dim:
-            self.matrix = self.matrix.reshape(
-                self.matrix.shape +
-                tuple((1 for i in range(self.matrix.dim(), dim)))
+            self._matrix = self._matrix.reshape(
+                self._matrix.shape +
+                tuple((1 for i in range(self._matrix.dim(), dim)))
             )
         else:
             logging.info(
-                f"{self.matrix=}, {tuple(slice(None, None) for i in range(dim)) + tuple(0 for i in range(dim, currentDimensions))=}"
+                f"{self._matrix=}, {tuple(slice(None, None) for i in range(dim)) + tuple(0 for i in range(dim, currentDimensions))=}"
             )
-            self.matrix = self.matrix[
+            self._matrix = self._matrix[
                 tuple(slice(None, None) for i in range(dim)) +
                 tuple(0 for i in range(dim, currentDimensions))]
 
     def changeDimensionsTable(self, dim):
-        currentDimensions = self.model.rowCount()
+        currentDimensions = self._model.rowCount()
         if currentDimensions == dim:
             return
         if currentDimensions < dim:
             for i in range(currentDimensions, dim):
-                self.model.appendRow([NNIntSI(1), NNIntSI(0)])
+                self._model.appendRow([NNIntSI(1), NNIntSI(0)])
         else:
-            self.model.setRowCount(dim)
+            self._model.setRowCount(dim)
 
     def changeDimensions(self, dim):
-        currentDimensions = self.model.rowCount()
+        currentDimensions = self._model.rowCount()
         # logging.info(f"From: {self.matrix}")
         self.changeDimensionsMatrix(dim)
         self.changeDimensionsTable(dim)
@@ -236,10 +238,10 @@ class MatrixEditor(CommWidg):
         # )
         logging.info(f"{currentDimensions=}, {dim=}")
         self.updateDimensionsCount(dim)
-        return self.updateDimensions(self.model.rowCount())
+        return self.updateDimensions(self._model.rowCount())
 
     def updateDimensions_t(self, _ = None):
-        return self.updateDimensions(self.model.rowCount())
+        return self.updateDimensions(self._model.rowCount())
 
     def updateDimensions(self, dimensions: int):
         setHide = set()
@@ -260,12 +262,12 @@ class MatrixEditor(CommWidg):
             self.dim1 = self.yDimSpin.value()
 
         for i in setHide.difference(setShow):
-            if self.model.rowCount() > i:
-                self.model.item(i, 1).setVisibility(False)
+            if self._model.rowCount() > i:
+                self._model.item(i, 1).setVisibility(False)
 
         for i in setShow.difference(setHide):
-            if self.model.rowCount() > i:
-                self.model.item(i, 1).setVisibility(True)
+            if self._model.rowCount() > i:
+                self._model.item(i, 1).setVisibility(True)
 
         # TODO: Refactor this function call out of this function; this function is doing too much
         self.updateFrameMatrix(
@@ -297,16 +299,16 @@ class MatrixEditor(CommWidg):
 
     def updateSize(self, dim: int, val: int) -> None:
         # TODO: Make this change the dimensions
-        if val < self.matrix.size(dim):
-            self.matrix = self.matrix[tuple(
+        if val < self._matrix.size(dim):
+            self._matrix = self._matrix[tuple(
                 (slice(None, None) if i != dim else slice(None, val))
-                for i in range(self.matrix.dim())
+                for i in range(self._matrix.dim())
             )]
-        elif val > self.matrix.size(dim):
-            shape = list(self.matrix.shape)
-            shape[dim] = val - self.matrix.size(dim)
-            self.matrix = torch.cat(
-                (self.matrix, torch.zeros(shape, device = self.matrix.device)),
+        elif val > self._matrix.size(dim):
+            shape = list(self._matrix.shape)
+            shape[dim] = val - self._matrix.size(dim)
+            self._matrix = torch.cat(
+                (self._matrix, torch.zeros(shape, device = self._matrix.device)),
                 dim
             )
 
@@ -324,17 +326,28 @@ class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
 
     # Return an object containing all the information that has to be saved to be able to restore the state of the widget and all of the models and views of the widget
     def saveState(self):
-        return {
-            "matrix": self.matrix,
-            "dimensions": self.model.saveState(),
-            "frameEditor": self.frameEditor.saveState()
-        }
+        # return {
+        #     "matrix": self._matrix,
+        #     "dimensions": self._model.saveState(),
+        #     "frameEditor": self._frameEditor.saveState()
+        # }
+        s = SimpleNamespace()
+        smat, s.matrix = self._matrix
+        smodel, s.dimensions = self._model.saveState()
+        sframeEditor, s.frameEditor = self._frameEditor.saveState()
+        return sframeEditor, s
+
 
     # Restore the state of the widget and all of the models and views of the widget
-    def loadState(self, state: dict):
-        self.setMatrix(state["matrix"])
-        self.model.loadState(state["dimensions"])
-        self.frameEditor.loadState(state["frameEditor"])
+    def loadState(self, state: SimpleNamespace):
+        # self.setMatrix(state["matrix"])
+        # self._model.loadState(state["dimensions"])
+        # self._frameEditor.loadState(state["frameEditor"])
+        self.setMatrix(state.matrix)
+        self._model.loadState(state.dimensions)
+        self._frameEditor.loadState(state.frameEditor)
+        # self._frameEditor.updateMatrix(self._matrix[self.getCurrentFrame()].T)
+
 
 
 # TODO: Continue implementing this to support having states stored to a list (Use copilot)
