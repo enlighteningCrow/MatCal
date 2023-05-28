@@ -39,6 +39,7 @@ from PySide6.QtCore import Qt, QModelIndex, QAbstractTableModel
 from PySide6.QtGui import QStandardItemModel, QStandardItem
 from PySide6.QtWidgets import QStyledItemDelegate, QLineEdit, QWidget
 
+from math import inf
 
 class EquationDelegate(QStyledItemDelegate):
 
@@ -48,6 +49,8 @@ class EquationDelegate(QStyledItemDelegate):
 
     def createEditor(self, parent, option, index):
         editor = QDoubleSpinBox(parent)
+        editor.setMinimum(-inf)
+        editor.setMaximum(inf)
         return editor
 
     def setEditorData(self, editor: QDoubleSpinBox, index):

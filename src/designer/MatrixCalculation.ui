@@ -14,34 +14,34 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lbOp1">
      <property name="text">
       <string>First Matrix</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2">
     <widget class="QLabel" name="lbOpt">
      <property name="text">
       <string>Operation</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
+   <item row="0" column="3">
     <widget class="QLabel" name="lbOp2">
      <property name="text">
       <string>Second Matrix</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="0" colspan="2">
     <widget class="QComboBox" name="cbOp1"/>
    </item>
-   <item row="1" column="1">
+   <item row="1" column="2">
     <widget class="QComboBox" name="cbOpt"/>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="3">
     <widget class="QComboBox" name="cbOp2"/>
    </item>
    <item row="2" column="0">
@@ -51,18 +51,74 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="3">
-    <widget class="QTableView" name="tvRes"/>
-   </item>
-   <item row="2" column="1" colspan="2">
+   <item row="2" column="2">
     <widget class="QPushButton" name="pbCal">
      <property name="text">
       <string>Calculate</string>
      </property>
     </widget>
    </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="TensorTableWidget" name="tvRes"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Cannot show tensor. Please save it and view it in the editor.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Save Result</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TensorTableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>ui.views.TensorTableWidget</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>saveMatrix()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>340</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>397</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>saveMatrix()</slot>
+ </slots>
 </ui>

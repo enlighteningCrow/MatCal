@@ -31,14 +31,14 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="MatrixEditorPersistent" name="MatrixEditor">
         <attribute name="title">
          <string>Matrix Editor</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="MatrixCalculation">
+       <widget class="MatrixCalculationPersistent" name="MatrixCalculation">
         <attribute name="title">
          <string>Matrix Calculation</string>
         </attribute>
@@ -48,9 +48,14 @@
          <string>LinearSystem</string>
         </attribute>
        </widget>
+       <widget class="BinaryCalculatorPersistent" name="BinaryCalculator">
+        <attribute name="title">
+         <string>Binary Calculator</string>
+        </attribute>
+       </widget>
       </widget>
       <widget class="SearchListView" name="listView" native="true"/>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QListView" name="StatesList"/>
@@ -130,6 +135,18 @@
    <class>EquationSolverPersistent</class>
    <extends>QWidget</extends>
    <header>ui.widgets.EquationSolver.EquationSolver</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MatrixCalculationPersistent</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.MatrixCalculation.MatrixCalculation</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BinaryCalculatorPersistent</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.BinaryCalculator.BinaryCalculator</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

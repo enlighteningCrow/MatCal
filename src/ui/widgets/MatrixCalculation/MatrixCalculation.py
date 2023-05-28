@@ -10,6 +10,7 @@ from typing import Tuple, Union, Optional
 
 # from ui_DIndexLabels import Ui_Form
 from generated.designer.ui_MatrixEditor import Ui_Form
+# from src.ui.MainWindow import MainWindow
 
 from ui.models.NNIntSI import NNIntSI, NNIntSIM
 from ui.delegates.SpinBoxDelegate import SpinBoxDelegate, IndexSpinBoxDelegate
@@ -39,6 +40,8 @@ from generated.designer.ui_MatrixCalculation import Ui_Form
 
 from app.Operation import Operation
 
+from ui.dialogs.MatrixListDialogs import saveMatrix
+
 class MatrixCalculation(CommWidg):
 
     def __init__(self, parent: Optional['MainWindow'] = None):
@@ -46,9 +49,10 @@ class MatrixCalculation(CommWidg):
         self.__ui = Ui_Form()
         self.__ui.setupUi(self)
         self.__ui.pbCal.clicked.connect(self.calculate)
+        self.result = torch.empty((0))
 
     def getOperands(self):
-        self.mainwindow.getMatrixListModel().getMatrices()
+        return self.mainwindow.getMatrixListModel().getMatrices()
 
     def getOperations(self):
         # Return a dictionary of all the operations that can be performed on two tensors with the result being a tensor in the pytorch library
@@ -204,8 +208,8 @@ class MatrixCalculation(CommWidg):
         # Make the operations and operands available in the combobox from the operands and operations, which are both dictionaries.
         # Make the combo boxes have the name of the operation/operand as the text, and the value of the operation/operand as the real data,
         # where the 
-        self.__ui.cbOp1.addItems(self.operands.keys())
-        self.__ui.cbOp2.addItems(self.operands.keys())
+        self.__ui.cbOp1.addItems(list(self.operands.keys()))
+        self.__ui.cbOp2.addItems(list(self.operands.keys()))
         self.__ui.cbOpt.addItems(self.operations.keys())
 
     def setMainWindow(self, mainwindow: 'MainWindow') -> None:
@@ -219,17 +223,67 @@ class MatrixCalculation(CommWidg):
         return True
 
     def calculate(self):
+        self.result = None
+        # shouldExit = False
+        # while not shouldExit:
+        #     shouldExit = False
+        try:
+            #Modify this line to get the correct operands (tensors) and operations (functions) from the ui combo boxes together with the self.operands and self.operations dictionaries
+            op = Operation(self.operands[self.__ui.cbOp1.currentText()], self.operands[self.__ui.cbOp2.currentText()], self.operations[self.__ui.cbOpt.currentText()])
+            self.result = op.performOperation()
+            # shouldExit = True
+        except Exception as e:
+            logging.exception(e)
+            QMessageBox.critical(self, "Error", str(e) + "; Please try again.")
+            # shouldExit = False
+
+        if isinstance(self.result, torch.Tensor) and self.result.dim() < 3:
+            self.__ui.tvRes.setTensor(self.result)
+            self.__ui.stackedWidget.setCurrentIndex(0)
+            # self.result = self.result.item()
+        else:
+            self.__ui.stackedWidget.setCurrentIndex(1)
+
         self.isChanged.emit(self)
-        shouldExit = False
-        while not shouldExit:
-            shouldExit = False
-            try:
-                #Modify this line to get the correct operands (tensors) and operations (functions) from the ui combo boxes together with the self.operands and self.operations dictionaries
-                op = Operation(self.operands[self.__ui.cbOp1.currentData()], self.operands[self.__ui.cbOp2.currentData()], self.operations[self.__ui.cbOpt.currentData()])
-                op.performOperation()
-                shouldExit = True
-            except Exception as e:
-                logging.exception(e)
-                QMessageBox.critical(self, "Error", str(e) + "; Please try again.")
-                shouldExit = False
-        
+        return self.result
+
+
+
+    def saveMatrix(self):
+        if self.result is None:
+            return
+        if self.mainwindow is None:
+            return
+        saveMatrix(self.result, self.mainwindow, self)
+        # self.mainwindow.saveMatrixList(self.result)
+
+
+class MatrixCalculationPersistent(MatrixCalculation, CommWidgPersistent):
+    def __init__(self, parent= None):
+        super().__init__()
+        self.__savingDisabled = False
+
+
+    def disableSaving(self):
+        self.__savingDisabled = True
+
+    def enableSaving(self):
+        self.__savingDisabled = False
+
+    def saveState(self) -> Tuple[str, SimpleNamespace]:
+        if self.__savingDisabled:
+            return None
+        state = SimpleNamespace()
+        # state.op1 = self.__ui.cbOp1.currentText()
+        # state.op2 = self.__ui.cbOp2.currentText()
+        # state.opt = self.__ui.cbOpt.currentText()
+        state.result = self.result
+        state.stackedWidgetIndex = self.__ui.stackedWidget.currentIndex()
+
+        return state
+
+    def loadState(self, state: SimpleNamespace):
+        self.result = state.result
+        self.__ui.stackedWidget.setCurrentIndex(state.stackedWidgetIndex)
+        if isinstance(self.result, torch.Tensor) and self.result.dim() < 3:
+            self.__ui.tvRes.setTensor(self.result)

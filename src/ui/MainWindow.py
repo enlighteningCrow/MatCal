@@ -89,6 +89,10 @@ class MainWindow(QMainWindow):
             self.__ui.tabWidget.setCurrentWidget(commWidg)
         self.__ui.StatesList.doubleClicked.connect(loadCommWidgState)
 
+        self.__matrixListModel.dataChanged.connect(self.__ui.MatrixCalculation.updateOptions)
+        self.__matrixListModel.rowsInserted.connect(self.__ui.MatrixCalculation.updateOptions)
+        self.__matrixListModel.rowsRemoved.connect(self.__ui.MatrixCalculation.updateOptions)
+
     def getTabWidget(self):
         return self.__ui.tabWidget
 
