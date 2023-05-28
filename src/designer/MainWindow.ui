@@ -31,7 +31,7 @@
       </property>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>5</number>
        </property>
        <widget class="MatrixEditorPersistent" name="MatrixEditor">
         <attribute name="title">
@@ -45,12 +45,22 @@
        </widget>
        <widget class="EquationSolverPersistent" name="LinearSolver">
         <attribute name="title">
-         <string>LinearSystem</string>
+         <string>Linear Solver</string>
         </attribute>
        </widget>
        <widget class="BinaryCalculatorPersistent" name="BinaryCalculator">
         <attribute name="title">
          <string>Binary Calculator</string>
+        </attribute>
+       </widget>
+       <widget class="NormalCalculator" name="NormalCalculator">
+        <attribute name="title">
+         <string>Normal Calculator</string>
+        </attribute>
+       </widget>
+       <widget class="AdminPage" name="AdminPage">
+        <attribute name="title">
+         <string>Administrator Page</string>
         </attribute>
        </widget>
       </widget>
@@ -147,6 +157,18 @@
    <class>BinaryCalculatorPersistent</class>
    <extends>QWidget</extends>
    <header>ui.widgets.BinaryCalculator.BinaryCalculator</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AdminPage</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.AdminPage.AdminPage</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>NormalCalculator</class>
+   <extends>QWidget</extends>
+   <header>ui.widgets.NormalCalculator.NormalCalculator</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

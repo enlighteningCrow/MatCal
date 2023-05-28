@@ -93,6 +93,13 @@ class MainWindow(QMainWindow):
         self.__matrixListModel.rowsInserted.connect(self.__ui.MatrixCalculation.updateOptions)
         self.__matrixListModel.rowsRemoved.connect(self.__ui.MatrixCalculation.updateOptions)
 
+        for c, i in enumerate(self.tabList):
+            self.__ui.tabWidget.setTabVisible(c, i.objectName() in account.getTabs())
+            #asdfg
+            print(self.tabList[c], i.objectName())
+        # for i in account.getTabs():
+
+
     def getTabWidget(self):
         return self.__ui.tabWidget
 

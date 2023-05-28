@@ -1,4 +1,6 @@
-class Operation:
+from abc import ABC, abstractmethod
+
+class Operation(ABC):
     def __init__(self, operand0, operand1, operator):
         self.operand0 = operand0
         self.operand1 = operand1
@@ -18,5 +20,12 @@ class Operation:
         self.operator = value
 
     def getResult(self):
-        self.result
+        return self.result
 
+class OperationMenu(ABC):
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def getOperations(self):
+        pass

@@ -1,10 +1,10 @@
-from app.Operation import Operation
+from app.Operation import Operation, OperationMenu
 
 class BinaryOperation(Operation):
     def __init__(self, operand0, operand1, operator):
         super().__init__(operand0, operand1, operator)
 
-class BinaryOperationMenu:
+class BinaryOperationMenu(OperationMenu):
     def __init__(self):
         pass
 

@@ -16,7 +16,7 @@ from typing import List
 DEBUG = True
 
 class Account(persistent.Persistent):
-    accountTypes = {"Admin": ["Manage"], "School Student": ["Calculator"], "Computer Scientist": ["Calculator", "Graphing", "Programming"], "Mathematician": ["Calculator", "Graphing", "Programming", "Statistics"], "Data Scientist": ["Calculator", "Matrix Editor", "Matrix Calculation"]}
+    accountTypes = {"Admin": ["AdminPage"], "School Student": ["Calculator", "LinearSolver"], "Computer Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "BinaryCalculator"], "Mathematician": ["Calculator", "LinearSolver"], "Data Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "LinearSolver", "BinaryCalculator"]}
     def __init__(self, username, password, account_type):
         self.username = username
         self.password = password
@@ -25,6 +25,9 @@ class Account(persistent.Persistent):
 
     def __str__(self):
         return f"Username: {self.username}\nPassword: {self.password}\nAccount Type: {self.account_type}"
+
+    def getTabs(self):
+        return Account.accountTypes[self.account_type]
 
 
 from ui.models.StatesListModel import State
