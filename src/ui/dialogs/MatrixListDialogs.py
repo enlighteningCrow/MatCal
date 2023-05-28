@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QMessageBox, QInputDialog, QWidget
+from PySide6.QtWidgets import QMessageBox, QInputDialog, QWidget, QFileDialog
 
 from ui.models.MatrixListModel import MatrixPair, MatrixListModel, DuplicateValueError, EmptyNameError
 
@@ -41,3 +41,22 @@ def saveMatrixFile(tensor, parent: Optional[MatrixListModel] = None):
         QMessageBox.information(parent, 'Saved', f'Tensor saved to {filename}')
     except Exception as e:
         QMessageBox.critical(parent, 'Error', f'Error saving tensor: {str(e)}')
+
+
+
+def getMatrixFromFile(parent: Optional[MatrixListModel] = None):
+    filename, status = QFileDialog.getOpenFileName(
+        parent, 'Open tensor', os.getcwd(), 'TSR files (*.tsr)'
+    )
+
+    # Check if the user cancelled the dialog box
+    if not filename:
+        return
+
+    try:
+        # Load the tensor from the selected file
+        tensor = torch.load(filename)
+        return tensor
+    except Exception as e:
+        QMessageBox.critical(parent, 'Error', f'Error loading tensor: {str(e)}')
+        return None

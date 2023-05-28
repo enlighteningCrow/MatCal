@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QGroupBox" name="gbAccounts">
+     <property name="title">
+      <string>Accounts</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QListView" name="lvAccounts"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbDelAcc">
+        <property name="text">
+         <string>Delete Account</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="gbHistory">
+     <property name="title">
+      <string>History</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QListView" name="lvHistory"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pbDelAcc</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>deleteSelectedAccount()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>131</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>deleteSelectedAccount()</slot>
+ </slots>
+</ui>

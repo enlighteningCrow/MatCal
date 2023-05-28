@@ -23,7 +23,7 @@ from ui.models.MatrixListModel import MatrixListModel
 
 from ui.views.SearchListView import NameProxy
 
-from ui.dialogs.MatrixListDialogs import saveMatrix
+from ui.dialogs.MatrixListDialogs import saveMatrix, saveMatrixFile#, loadMatrixFile
 
 from ui.utils import setMaxWidth
 
@@ -89,12 +89,14 @@ class MatrixEditor(CommWidg):
         self.__ui.dimCountSpinBox.valueChanged.connect(self.changeDimensions)
 
         self._frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
+        self.__ui.pbLoadFile.setVisible(False)
         self.initialized = True
+
 
     # TODO: Make a system to check if last change was saved
 
     def setMainWindow(self, mainwindow: 'MainWindow') -> None:
-        self.__mainwindow = mainwindow
+        self._mainwindow = mainwindow
         mainwindow.connectSelectionChangedSignal(self.updateLoadVisibility)
         self.__ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
         self.__ui.saveMatrixButton.clicked.connect(self.saveMatrix)
@@ -102,11 +104,11 @@ class MatrixEditor(CommWidg):
 
     def updateLoadVisibility(self):
         self.__ui.loadMatrixButton.setEnabled(
-            len(self.__mainwindow.getSelectedMatrix()) == 1
+            len(self._mainwindow.getSelectedMatrix()) == 1
         )
 
     def saveMatrix(self):
-        saveMatrix(self._matrix, self.__mainwindow, self)
+        saveMatrix(self._matrix, self._mainwindow, self)
         # result, status = QInputDialog.getText(
         #     self, "Matrix Name", "Enter matrix name:"
         # )
@@ -119,9 +121,10 @@ class MatrixEditor(CommWidg):
         #         QMessageBox.warning(self, "Error", str(e))
         #     except EmptyNameError as e:
         #         QMessageBox.warning(self, "Error", str(e))
+        self.isChanged.emit(self)
 
     def setSelectedMatrix(self):
-        sel = self.__mainwindow.getSelectedMatrix()
+        sel = self._mainwindow.getSelectedMatrix()
         if len(sel) == 1:
             proxyS: QSortFilterProxyModel = sel[0].model()
             indexS: QModelIndex = proxyS.mapToSource(sel[0])
@@ -313,10 +316,27 @@ class MatrixEditor(CommWidg):
             )
 
     def getMainWindow(self):
-        return self.__mainwindow
+        return self._mainwindow
 
     def needsTensorsTab(self) -> bool:
         return True
+
+    def useGPU(self, use: bool):
+        if use:
+            self._matrix = self._matrix.to("cuda")
+        else:
+            self._matrix = self._matrix.to("cpu")
+        # self._frameEditor.updateMatrix(self._matrix[self.getCurrentFrame()].T)
+        self.updateFrameMatrix(
+            self.dim0 == self.dim1,
+            (self.dim0 is not None and self.dim1 is not None) and
+            self.dim0 > self.dim1
+        )
+        self.__ui.gpuCheckBox.setText("Use GPU" if use else "Use CPU")
+
+
+    def saveFile(self):
+        saveMatrixFile(self._matrix.clone(), self._mainwindow)
 
 
 class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
@@ -332,11 +352,10 @@ class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
         #     "frameEditor": self._frameEditor.saveState()
         # }
         s = SimpleNamespace()
-        smat, s.matrix = self._matrix
+        s.matrix = self._matrix.to("cpu").clone()
         smodel, s.dimensions = self._model.saveState()
         sframeEditor, s.frameEditor = self._frameEditor.saveState()
         return sframeEditor, s
-
 
     # Restore the state of the widget and all of the models and views of the widget
     def loadState(self, state: SimpleNamespace):
@@ -346,8 +365,11 @@ class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
         self.setMatrix(state.matrix)
         self._model.loadState(state.dimensions)
         self._frameEditor.loadState(state.frameEditor)
+        self.__ui.gpuCheckBox.setChecked(self._matrix.is_cuda)
         # self._frameEditor.updateMatrix(self._matrix[self.getCurrentFrame()].T)
 
+    # def loadFile(self):
+    #     self.loadS
 
 
 # TODO: Continue implementing this to support having states stored to a list (Use copilot)

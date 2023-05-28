@@ -208,7 +208,7 @@ class NNIntSIM(QStandardItemModel, CommWidgPersistent):
                     row_data.append(None)
             dlist.append(row_data)
 
-        s.data_list = dlist
+        s.dlist = dlist
         
         # Return the list as the saved state
         return "NNIntSIM", s

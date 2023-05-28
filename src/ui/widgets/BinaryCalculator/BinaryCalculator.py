@@ -3,7 +3,7 @@
 from types import SimpleNamespace
 from typing import Optional, Tuple
 import PySide6.QtCore
-from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget, QMessageBox
 
 from ui.CommWidg import CommWidg, CommWidgPersistent
 
@@ -120,16 +120,23 @@ class BinaryCalculator(CommWidg):
     def _updateBinaryRepresentation(self):
         self._ui.bNum0.setText(bin(self._ui.sbNum0.value()))
         self._ui.bNum1.setText(bin(self._ui.sbNum1.value()))
+        self._ui.lNumRes.setText(bin(self._ui.sbNumRes.value()))
 
 
     def calculate(self):
         operation = BinaryOperation(self._ui.sbNum0.value(), self._ui.sbNum1.value(), self._binaryOperationMenu.getOperations()[self._ui.cbOpr.currentText()])
         # self._ui.sbNumRes.setValue(self._binaryOperationMenu.calculate(self._ui.cbOpr.currentText(), self._ui.sbNum0.value(), self._ui.sbNum1.value()))
-        operation.performOperation()
-        result = operation.getResult()
-        self._ui.sbNumRes.setValue(result)
-        self._ui.lNumRes.setText(bin(self._ui.sbNumRes.value()))
-        self.isChanged.emit(self)
+        try:
+            operation.performOperation()
+            result = operation.getResult()
+            if result > 2147483647 or result < -2147483648:
+                raise OverflowError("Result is too big to be represented as a 32-bit signed integer")
+            self._ui.sbNumRes.setValue(result)
+            self._ui.lNumRes.setText(bin(self._ui.sbNumRes.value()))
+            self.isChanged.emit(self)
+        except OverflowError as e:
+            QMessageBox.critical(self, "Error", str(e))
+            return
 
     def setMainWindow(self, mainwindow):
         self.__mainWindow = mainwindow
@@ -139,8 +146,6 @@ class BinaryCalculator(CommWidg):
 
     def needsTensorsTab(self) -> bool:
         return False
-
-    
         
 
 class BinaryCalculatorPersistent(BinaryCalculator, CommWidgPersistent):
@@ -153,13 +158,15 @@ class BinaryCalculatorPersistent(BinaryCalculator, CommWidgPersistent):
         s.num0 = self._ui.sbNum0.value()
         s.num1 = self._ui.sbNum1.value()
         s.opr = self._ui.cbOpr.currentText()[:]
-        return "BinaryCalculator", s
+        s.results = self._ui.sbNumRes.value()
+        return f"BinaryCalculator: {s.num0} {s.opr} {s.num1} = {s.results}", s
     
     def loadState(self, state: SimpleNamespace):
         self.__savingDisabled = True
         self._ui.sbNum0.setValue(state.num0)
         self._ui.sbNum1.setValue(state.num1)
         self._ui.cbOpr.setCurrentText(state.opr)
+        self._ui.sbNumRes.setValue(state.results)
         self.__savingDisabled = False
 
     def enableSaving(self):
