@@ -16,9 +16,7 @@ class MatrixEditor(QWidget, CommWidgPersistent):
         self.__ui = Ui_Form()
         self.__ui.setupUi(self)
         print(type(self.__ui.frameEditor))
-        # self.__ui.frameEditor.updateMatrix(torch.tensor([[]]))
         self.__ui.frameEditor.updateMatrix(torch.empty((0, 0)))
-        # self
 
     def increaseRows(self):
         print("increaseRows")
@@ -48,7 +46,6 @@ class MatrixEditor(QWidget, CommWidgPersistent):
 
     def loadState(self, state: SimpleNamespace):
         return self.__ui.frameEditor.loadState(state)
-        # raise NotImplementedError()
 
     def disableSaving(self):
         return self.__ui.frameEditor.disableSaving()

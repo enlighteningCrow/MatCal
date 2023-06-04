@@ -11,9 +11,7 @@ class InputDelegate():
         return {}
 
     def getData(self):
-        # assert(type(self.data) in self.promptTypes())
         return None
-        # return self.data
 
     def loadData(self, data):
         pass
@@ -80,5 +78,3 @@ class BinaryInputDelegate(InputDelegate, QLineEdit):
 
     def loadData(self, data):
         self.setText(bin(data)[2:])
-
-# class HexInputDelegate(InputDelegate, )

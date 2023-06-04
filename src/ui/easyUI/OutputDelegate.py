@@ -1,5 +1,4 @@
 from PySide6.QtWidgets import *
-# from torch import Tensor
 
 # Cannot inherit from ABC as that will conflict with QT internal implementation
 class OutputDelegate(): 
@@ -7,6 +6,7 @@ class OutputDelegate():
     def displayTypes():
         return {}
 
+    # @abstractmethod
     def showData(self, data):
         self.data = data
         assert(type(self.data).__name__ in type(self).displayTypes())

@@ -8,15 +8,6 @@ from typing import Optional
 
 # Cannot inherit from ABC as that will conflict with QT internal implementation
 class OutputWidget(QWidget):
-    # def displayTypes():
-    #     return set()
-
-    # def getOutputWidget(data):
-    #     # raise NotImplementedError()
-    #     for i in OutputWidget.__subclasses__():
-    #         if type(data) in i.displayTypes():
-    #             return i.showData(data)
-
     def __init__(self, parent = None):
         super().__init__(parent)
         self.sl = QStackedLayout()
@@ -27,8 +18,6 @@ class OutputWidget(QWidget):
         self.data = None
 
     def showData(self, data, dataType : Optional[str] = None):
-        # assert(type(data) in displayTypes())
-        # raise NotImplementedError()
         self.data = data
         if dataType is None:
             dataType = type(data).__name__

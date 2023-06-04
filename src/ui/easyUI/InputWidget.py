@@ -15,15 +15,12 @@ class InputWidget(QWidget):
         self.setLayout(self.sl)
 
     def getData(self):
-        # raise NotImplementedError()
         return self.sl.currentWidget().getData()
 
     def loadData(self, data):
-        # raise NotImplementedError()
         self.sl.currentWidget().loadData(data)
 
     def promptData(self, promptType : str):
-        # raise NotImplementedError()
         for i in range(self.sl.count()):
             if promptType in type(self.sl.widget(i)).promptTypes():
                 self.sl.setCurrentIndex(i)

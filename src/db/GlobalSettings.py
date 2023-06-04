@@ -15,53 +15,20 @@ class SettingsWrapper(QSettings):
         self.valueChanged.emit(key, value)
 
     def update(self):
-        # QSettings()
         for i in self.allKeys():
             self.valueChanged.emit(
                 i, self.value(i, type = type(settingEntries[i]))
             )
 
-
-# class GlobalSettings(QObject):
-#     settings = SettingsWrapper()
-#     settingsItems = defaultdict(set)
-#
-#
-#     @staticmethod
-#     def getSettingsItem(item):
-#         return GlobalSettings.GlobalSettingsItem(item)
-
-
 class GlobalSettings:
     instance: 'GlobalSettings' = None
 
-    # @property
-    # def instance():
-    #     if GlobalSettings.__instance is None:
-    #         GlobalSettings.__instance = GlobalSettings()
-    #     return GlobalSettings.__instance
-
     def __init__(self):
         self.settings = SettingsWrapper("MatCal", "preferences")
-        # self.settingsItems = defaultdict(set)
         self.settingsItems: Dict[str, 'GlobalSettingsItem'] = dict()
-
-    # @staticmethod
-    # def __setupInstance():
-    #     # if GlobalSettings.__gs is None:
-    #     #     GlobalSettings.__gs = GlobalSettings()
-    #     # return GlobalSettings.__gs
-    #     GlobalSettings.instance = GlobalSettings()
-    #
-    # __DISCARD_setup_instance_static__ = __setupInstance()
-
 
 if GlobalSettings.instance is None:
     GlobalSettings.instance = GlobalSettings()
-
-# def settings():
-#     return GlobalSettings.instance().settings
-
 
 def gsettings():
     return GlobalSettings.instance.settings
@@ -69,17 +36,6 @@ def gsettings():
 
 class GlobalSettingsItem(QObject):
     valueChanged = Signal(object)
-
-    # @staticmethod
-    # def __updateConnections(item, value):
-    #     if item in GlobalSettings.instance().settingsItems:
-    #         for settingsItem in GlobalSettings.instance().settingsItems[item]:
-    #             # settingsItem.valueChanged.emit(settings().value(item))
-    #             settingsItem.valueChanged.emit(value)
-    #
-    # __setupConnectDISCARD__ = GlobalSettings.instance(
-    # ).settings.valueChanged.connect(__updateConnections)
-
     def __init__(self, item: str):
         super().__init__()
         self.__item = item
@@ -102,10 +58,7 @@ class GlobalSettingsItemInterfacer:
         pass
 
     def item(self, item: str):
-        # if item in GlobalSettings.instance().settingsItems:
-        #     return GlobalSettings.instance().settingsItems[item]
         assert (item in GlobalSettings.instance.settingsItems)
-        # return GlobalSettingsItem(item)
         return GlobalSettings.instance.settingsItems[item]
 
     def create(self, item: str):
@@ -114,12 +67,6 @@ class GlobalSettingsItemInterfacer:
         return GlobalSettings.instance.settingsItems[item]
 
     instance: 'GlobalSettingsItemInterfacer' = None
-
-    # @staticmethod
-    # def _createItems():
-    #     GlobalSettingsItemInterfacer.instance = GlobalSettingsItemInterfacer()
-    #     for i in settingEntries:
-    #         GlobalSettingsItemInterfacer.instance.create(i)
 
     @staticmethod
     def _updateConnections(item, value):
@@ -139,10 +86,3 @@ if GlobalSettingsItemInterfacer.instance is None:
 def settings(item: str):
     assert (item in settingEntries)
     return GlobalSettingsItemInterfacer.instance.item(item)
-
-
-# @settings.register
-# def _(item: str):
-#     return GlobalSettingsItem(item)
-
-# def settings() -> GlobalSettings

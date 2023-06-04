@@ -15,5 +15,4 @@ class BinaryOperationMenu(OperationMenu):
             "Binary Xor" : lambda x, y: x ^ y,
             "Binary Left Shift" : lambda x, y: x << y,
             "Binary Right Shift" : lambda x, y: x >> y,
-            #List more binary operations that can be done with two operands
         }
