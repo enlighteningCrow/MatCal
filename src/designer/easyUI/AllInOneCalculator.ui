@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>624</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="3">
+    <widget class="QComboBox" name="opr1Type"/>
+   </item>
+   <item row="4" column="0" colspan="5">
+    <widget class="OutputWidget" name="resWidg" native="true"/>
+   </item>
+   <item row="1" column="3" colspan="2">
+    <widget class="InputWidget" name="opr1Widg" native="true"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QStackedWidget" name="opr0Unary">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="opr0UnaryPage1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="Negative">
+         <property name="text">
+          <string>Negative</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="BinaryNot">
+         <property name="text">
+          <string>Binary Not</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="opr0UnaryPage2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="Transpose">
+         <property name="text">
+          <string>Transpose</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Inverse">
+         <property name="text">
+          <string>Inverse</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QStackedWidget" name="oprBinary">
+     <widget class="QWidget" name="oprBinaryPage1">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="pbPlus">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QPushButton" name="pbDivide">
+         <property name="text">
+          <string>/</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="pbMatmul">
+         <property name="text">
+          <string>Matmul</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="pbDistance">
+         <property name="text">
+          <string>Distance</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pbMinus">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pbMultiply">
+         <property name="text">
+          <string>*</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QStackedWidget" name="opr1Unary">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="opr1UnaryPage1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QPushButton" name="Negative_2">
+         <property name="text">
+          <string>Negative</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="BinaryNot_2">
+         <property name="text">
+          <string>Binary Not</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="opr1UnaryPage2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPushButton" name="Transpose_2">
+         <property name="text">
+          <string>Transpose</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Inverse_2">
+         <property name="text">
+          <string>Inverse</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QComboBox" name="opr0Type"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="InputWidget" name="opr0Widg" native="true"/>
+   </item>
+   <item row="5" column="0" colspan="5">
+    <widget class="QStackedWidget" name="numpad">
+     <widget class="IntegerKeypad" name="integerKeypad"/>
+     <widget class="BinaryKeypad" name="binaryKeypad"/>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>OutputWidget</class>
+   <extends>QWidget</extends>
+   <header>ui.easyUI.OutputWidget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InputWidget</class>
+   <extends>QWidget</extends>
+   <header>ui.easyUI.InputWidget</header>
+   <container>1</container>
+   <slots>
+    <slot>promptData(QString)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>IntegerKeypad</class>
+   <extends>QWidget</extends>
+   <header>ui.easyUI.IntegerKeypad</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BinaryKeypad</class>
+   <extends>QWidget</extends>
+   <header>ui.easyUI.BinaryKeypad</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>opr0Type</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>opr0Widg</receiver>
+   <slot>promptData(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>60</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>opr1Type</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>opr1Widg</receiver>
+   <slot>promptData(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>323</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>382</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Transpose</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>transpose0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>34</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>34</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Inverse</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>inverse0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>113</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>102</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Transpose_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>transpose1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Inverse_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>inverse1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbPlus</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>plus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>176</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>171</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbMinus</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>minus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>211</x>
+     <y>187</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbMultiply</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>multiply()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>240</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbDivide</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>divide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>223</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>232</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbMatmul</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>matmul()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>82</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbDistance</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>distance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>166</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Negative</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>negative0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>16</x>
+     <y>172</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>BinaryNot</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>not0()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>91</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Negative_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>negative1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>312</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>148</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>BinaryNot_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Form</receiver>
+   <slot>not1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>118</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>calculate()</slot>
+  <slot>transpose0()</slot>
+  <slot>transpose1()</slot>
+  <slot>inverse0()</slot>
+  <slot>inverse1()</slot>
+  <slot>not0()</slot>
+  <slot>not1()</slot>
+  <slot>negative0()</slot>
+  <slot>negative1()</slot>
+  <slot>plus()</slot>
+  <slot>minus()</slot>
+  <slot>multiply()</slot>
+  <slot>divide()</slot>
+  <slot>matmul()</slot>
+  <slot>distance()</slot>
+ </slots>
+</ui>

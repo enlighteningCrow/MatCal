@@ -32,7 +32,7 @@ def compileAuto(
         Path("/usr/lib/qt6")
     ]
     foundCompilerPath = None
-    if not len(outputDirSuffix):
+    if isinstance(outputDirSuffix, str) and not len(outputDirSuffix):
         outputDirSuffix = inputDir.stem
     for prefix in compilerPrefixes:
         for pathCurrent in (

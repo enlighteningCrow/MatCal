@@ -7,7 +7,7 @@ from PySide6.QtWidgets import (
 )
 
 # In case you are reading this, there is NO ML or DL or any sort of AI in here; this is used solely for matrix calculations
-from torch import Tensor
+from torch import Tensor, empty
 
 from ui.models.MatrixDataModel import MatrixDataModel
 
@@ -25,7 +25,7 @@ from types import SimpleNamespace
 # TODO: Maybe rename to MatrixView
 class FrameEditor(QWidget, CommWidgPersistent):
 
-    def __init__(self, mat: Tensor, parent = None):
+    def __init__(self, parent = None, mat: Tensor = empty((0, 0))):
         self.initialized = False
         super().__init__()
         # self.matrix = mat

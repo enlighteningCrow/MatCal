@@ -139,7 +139,7 @@ class MatrixCalculationPersistent(MatrixCalculation, CommWidgPersistent):
         state.result = self.result
         state.stackedWidgetIndex = self._ui.stackedWidget.currentIndex()
 
-        return state
+        return self._ui.cbOpt.currentText() + " " + self._ui.cbOp1.currentText() + " and " + self._ui.cbOp2.currentText(), state
 
     def loadState(self, state: SimpleNamespace):
         self.result = state.result

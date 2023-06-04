@@ -17,7 +17,7 @@ from typing import List
 DEBUG = False
 
 class Account(persistent.Persistent):
-    accountTypes = {"Admin": ["AdminPage"], "School Student": ["Calculator", "LinearSolver"], "Computer Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "BinaryCalculator"], "Mathematician": ["Calculator", "LinearSolver"], "Data Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "LinearSolver", "BinaryCalculator"]}
+    # accountTypes = {"Admin": ["AdminPage"], "School Student": ["Calculator", "LinearSolver"], "Computer Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "BinaryCalculator"], "Mathematician": ["Calculator", "LinearSolver"], "Data Scientist": ["Calculator", "MatrixEditor", "MatrixCalculation", "LinearSolver", "BinaryCalculator"]}
     def __init__(self, username, password, account_type):
         self.username = username
         self.password = password
@@ -27,8 +27,35 @@ class Account(persistent.Persistent):
     def __str__(self):
         return f"Username: {self.username}\nPassword: {self.password}\nAccount Type: {self.account_type}"
 
+    # def getTabs(self):
+    #     return Account.accountTypes[self.account_type]
+
+    class Responder:
+        def __init__(self):
+            pass
+
+        def __contains__(self, item):
+            pass
+            # return True
+
+    class AdminResponder(Responder):
+        def __init__(self):
+            pass
+
+        def __contains__(self, item):
+            return item == 'AdminPage'
+
+    class NonAdminResponder(Responder):
+        def __init__(sefl):
+            pass
+
+        def __contains__(self, item):
+            return item != 'AdminPage'
+    accountTypes = {"Admin": AdminResponder(), "User": NonAdminResponder()}
+
     def getTabs(self):
         return Account.accountTypes[self.account_type]
+
 
 
 from ui.models.StatesListModel import State

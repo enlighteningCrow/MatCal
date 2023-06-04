@@ -45,24 +45,24 @@ class MatrixEditor(CommWidg):
         # QWidget.__init__(self, parent)
         self.initialized = False
         self._matrix = torch.zeros(())
-        self.__ui = Ui_Form()
-        self.__ui.setupUi(self)
+        self._ui = Ui_Form()
+        self._ui.setupUi(self)
         self._frameEditor = FrameEditor(self._matrix, self)
-        self.__ui.scrollAreaFE.setWidget(self._frameEditor)
+        self._ui.scrollAreaFE.setWidget(self._frameEditor)
         self.dim0 = None
         self.dim1 = None
 
-        self.xDimLabel = self.__ui.selectionXLabel
-        self.xDimSpin = self.__ui.selectionXSpinbox
+        self.xDimLabel = self._ui.selectionXLabel
+        self.xDimSpin = self._ui.selectionXSpinbox
         self.xDimSpin.valueChanged.connect(self.updateDimensions_t)
-        self.yDimLabel = self.__ui.selectionYLabel
-        self.yDimSpin = self.__ui.selectionYSpinbox
+        self.yDimLabel = self._ui.selectionYLabel
+        self.yDimSpin = self._ui.selectionYSpinbox
         self.yDimSpin.valueChanged.connect(self.updateDimensions_t)
 
-        self.__ui.dimensionsTable.horizontalHeader().geometriesChanged.connect(
+        self._ui.dimensionsTable.horizontalHeader().geometriesChanged.connect(
             self.udtmsImpl
         )
-        self.__ui.dimensionsTable.verticalHeader().geometriesChanged.connect(
+        self._ui.dimensionsTable.verticalHeader().geometriesChanged.connect(
             self.udtmsImpl
         )
         """
@@ -73,23 +73,23 @@ class MatrixEditor(CommWidg):
         """
         self._model = NNIntSIM(self)
         # self.model = QStandardItemModel(self)
-        self.__ui.dimensionsTable.setModel(self._model)
+        self._ui.dimensionsTable.setModel(self._model)
         self._model.setColumnCount(2)
         self._model.setHorizontalHeaderLabels(["Size", "Selection"])
 
-        self.changeDimensions(self.__ui.dimCountSpinBox.value())
-        spbidIndex = IndexSpinBoxDelegate(self.__ui.dimensionsTable)
-        spbidSize = SpinBoxDelegate(self.__ui.dimensionsTable, 1)
-        self.__ui.dimensionsTable.setItemDelegateForColumn(0, spbidSize)
-        self.__ui.dimensionsTable.setItemDelegateForColumn(1, spbidIndex)
+        self.changeDimensions(self._ui.dimCountSpinBox.value())
+        spbidIndex = IndexSpinBoxDelegate(self._ui.dimensionsTable)
+        spbidSize = SpinBoxDelegate(self._ui.dimensionsTable, 1)
+        self._ui.dimensionsTable.setItemDelegateForColumn(0, spbidSize)
+        self._ui.dimensionsTable.setItemDelegateForColumn(1, spbidIndex)
 
         self.updateDimensionsCount(self._model.rowCount())
         self._model.dataChanged.connect(self.modelUpdateHandler)
 
-        self.__ui.dimCountSpinBox.valueChanged.connect(self.changeDimensions)
+        self._ui.dimCountSpinBox.valueChanged.connect(self.changeDimensions)
 
         self._frameEditor.matrixModel.dataChanged.connect(self.logMatrix)
-        self.__ui.pbLoadFile.setVisible(False)
+        self._ui.pbLoadFile.setVisible(False)
         self.initialized = True
 
 
@@ -98,12 +98,12 @@ class MatrixEditor(CommWidg):
     def setMainWindow(self, mainwindow: 'MainWindow') -> None:
         self._mainwindow = mainwindow
         mainwindow.connectSelectionChangedSignal(self.updateLoadVisibility)
-        self.__ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
-        self.__ui.saveMatrixButton.clicked.connect(self.saveMatrix)
+        self._ui.loadMatrixButton.clicked.connect(self.setSelectedMatrix)
+        self._ui.saveMatrixButton.clicked.connect(self.saveMatrix)
         self.updateLoadVisibility()
 
     def updateLoadVisibility(self):
-        self.__ui.loadMatrixButton.setEnabled(
+        self._ui.loadMatrixButton.setEnabled(
             len(self._mainwindow.getSelectedMatrix()) == 1
         )
 
@@ -148,7 +148,7 @@ class MatrixEditor(CommWidg):
             self._model.appendRow([NNIntSI(i), NNIntSI(0)])
         self.dim0 = None
         self.dim1 = None
-        self.__ui.dimCountSpinBox.setValue(matrix.dim())
+        self._ui.dimCountSpinBox.setValue(matrix.dim())
         self.updateDimensions_t()
 
     def logMatrix(self):
@@ -184,7 +184,7 @@ class MatrixEditor(CommWidg):
         #         __ui.dimensionsTable.verticalScrollBar().isVisible() else 0
         #     )
         # )
-        setMaxWidth(self.__ui.dimensionWidget, self.__ui.dimensionsTable)
+        setMaxWidth(self._ui.dimensionWidget, self._ui.dimensionsTable)
 
     def getCurrentFrame(self) -> Tuple[Union[int, slice]]:
         currentFrame = []
@@ -332,7 +332,7 @@ class MatrixEditor(CommWidg):
             (self.dim0 is not None and self.dim1 is not None) and
             self.dim0 > self.dim1
         )
-        self.__ui.gpuCheckBox.setText("Use GPU" if use else "Use CPU")
+        self._ui.gpuCheckBox.setText("Use GPU" if use else "Use CPU")
 
 
     def saveFile(self):
@@ -365,7 +365,7 @@ class MatrixEditorPersistent(MatrixEditor, CommWidgPersistent):
         self.setMatrix(state.matrix)
         self._model.loadState(state.dimensions)
         self._frameEditor.loadState(state.frameEditor)
-        self.__ui.gpuCheckBox.setChecked(self._matrix.is_cuda)
+        self._ui.gpuCheckBox.setChecked(self._matrix.is_cuda)
         # self._frameEditor.updateMatrix(self._matrix[self.getCurrentFrame()].T)
 
     # def loadFile(self):

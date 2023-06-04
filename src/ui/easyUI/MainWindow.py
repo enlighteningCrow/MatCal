@@ -22,30 +22,16 @@ from ui.models.StatesListModel import State, StatesListModel
 if 0 != 0:
     from accounts.AccountCreation import Account 
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self, account : 'Account'):
         super().__init__()
         self.__ui = Ui_MainWindow()
         self.__ui.setupUi(self)
-        # self.setupUi(self)
-        # self.settings = QSettings()
-        # matrixList: List[MatrixPair] = []
-        # TODO: ZODB for matrixList
-        # try:
-        #     matrixList = self.settings.value('matrixList', [])
-        #     if not isinstance(matrixList, list):
-        #         raise RuntimeError("Settings for matrixList has invalid type")
-        # except Exception as e:
-        #     logging.error(str(e))
-        #     logging.error("Resetting value of matrixList to", [])
-        #     self.settings.clear()
-        #     matrixList = []
-        # matrixList = []
-        self.__matrixListModel = MatrixListModel(self.__ui.listView)
+        
+        # self.__matrixListModel = MatrixListModel(self.__ui.listView)
         # self.matrixList = ListModel(matrixList, self.__ui.listView)
-        self.__ui.listView.setModel(self.__matrixListModel)
+        # self.__ui.listView.setModel(self.__matrixListModel)
         self.pixmap = QPixmap(":/icons/MatCalIcon.png")
         self.icon = QIcon(self.pixmap)
         self.setWindowIcon(self.icon)
@@ -70,8 +56,8 @@ class MainWindow(QMainWindow):
         self.__matrixListModel.dataChanged.connect(self.saveList)
 
         self.__ui.tabWidget.currentChanged.connect(
-            lambda x: self.__ui.listView.show() if self.__ui.tabWidget.
-            widget(x).needsTensorsTab() else self.__ui.listView.hide()
+            # lambda x: self.__ui.listView.show() if self.__ui.tabWidget.
+            # widget(x).needsTensorsTab() else self.__ui.listView.hide()
         )
         self.__ui.tabWidget.currentChanged.emit(
             self.__ui.tabWidget.currentIndex()
@@ -123,13 +109,13 @@ class MainWindow(QMainWindow):
         # diag.show()
         # diag.exec()
 
-    def connectSelectionChangedSignal(self, slot):
-        # self.__ui.listView.selectionChanged.connect(slot)
-        self.__ui.listView.getListView().selectionModel(
-        ).selectionChanged.connect(slot)
+    # def connectSelectionChangedSignal(self, slot):
+    #     # self.__ui.listView.selectionChanged.connect(slot)
+    #     self.__ui.listView.getListView().selectionModel(
+    #     ).selectionChanged.connect(slot)
 
-    def getSelectedMatrix(self) -> List[QModelIndex]:
-        return self.__ui.listView.getListView().selectedIndexes()
+    # def getSelectedMatrix(self) -> List[QModelIndex]:
+    #     return self.__ui.listView.getListView().selectedIndexes()
         # self.
 
     def addMatrix(self, matrix: MatrixPair):
